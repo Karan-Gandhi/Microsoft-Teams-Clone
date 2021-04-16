@@ -1,0 +1,27 @@
+{
+  "name": "microsoft_teams_clone_server",
+  "version": "1.0.0",
+  "description": "This is a clone of the teams application owned by Microsoft",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Karan-Gandhi/Microsoft-Teams-Clone.git"
+  },
+  "keywords": [
+    "teams",
+    "clone",
+    "microsoft_teams"
+  ],
+  "author": "Karan Gandhi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Karan-Gandhi/Microsoft-Teams-Clone/issues"
+  },
+  "homepage": "https://github.com/Karan-Gandhi/Microsoft-Teams-Clone#readme",
+  "dependencies": {
+    "typescript": "^4.2.4"
+  }
+}
