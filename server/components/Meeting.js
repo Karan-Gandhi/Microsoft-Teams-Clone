@@ -18,7 +18,7 @@ class Meeting {
     }
 
     static createNewMeeting(title, teamID, startTime, duration, isReccuring) {
-        return new (uuid.v4(), title, teamID, startTime, duration, isReccuring, Time.now(), false, new Array());
+        return new Meeting(uuid.v4(), title, teamID, startTime, duration, isReccuring, Date.now(), false, new Array());
     }
 }
 

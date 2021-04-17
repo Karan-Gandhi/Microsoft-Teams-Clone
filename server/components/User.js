@@ -28,6 +28,10 @@ class User {
         // some firebase stuff
     }
 
+    static getUserFromID(userID) {
+        // some firebase stuff
+    }
+
     static createNewUser(name, email, password) {
         return new User(uuid.v4(), name, email, password, new Array());
     }

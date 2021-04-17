@@ -50,7 +50,7 @@ class Team {
     }
 
     static createNewTeam(title, admins, members) {
-        return new Team(uuid.v4(), admins, members, title, new Array(), new Array());
+        return new Team(uuid.v4(), admins, members, title, new Array(), new Array(), new Array());
     }
 
     static getTeamFromID(teamID) {

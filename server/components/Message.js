@@ -7,7 +7,7 @@ class Message {
     }
 
     static createNewMessage(teamID, messageBody, sentUserID) {
-        return new Message(teamID, messageBody, sentUserID, Time.now());
+        return new Message(teamID, messageBody, sentUserID, Date.now());
     }
 }
 
