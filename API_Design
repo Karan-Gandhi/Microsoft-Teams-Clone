@@ -1,0 +1,33 @@
+API:
+    - Team:
+        id
+        members
+        Name
+        Messages
+        activeMeetings
+        admins:
+
+        - Message:
+            teamid
+            Message
+            fromWho
+
+        - Meeting: (will be notified on the team)
+            id
+            Participants
+            teamid
+            schedule time
+            start time
+            duration
+            reoccuring?
+
+    - User:
+        id
+        Name
+        email
+        password
+        teams
+
+routes:
+    getTeamFromID: GET
+    getTeamJoinLink: GET
