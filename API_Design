@@ -5,21 +5,25 @@ API:
         Name
         Messages
         activeMeetings
-        admins:
+        admins
+        feed (consisting of messages and meetings)
 
         - Message:
             teamid
             Message
             fromWho
+            timeCreated
 
         - Meeting: (will be notified on the team)
             id
-            Participants
+            title
             teamid
-            schedule time
             start time
             duration
             reoccuring?
+            timeCreated
+            isStarted
+            participants
 
     - User:
         id
