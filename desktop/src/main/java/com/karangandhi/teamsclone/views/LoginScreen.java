@@ -1,28 +1,39 @@
 package com.karangandhi.teamsclone.views;
 
-import com.karangandhi.teamsclone.components.ContainerButton;
-import com.karangandhi.teamsclone.components.OutlineButton;
+import com.karangandhi.teamsclone.components.*;
 import com.karangandhi.teamsclone.components.TextField;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 public class LoginScreen {
     private static final Color rootBackgroundColour = new Color(44, 44, 44);
+    private static final Color foregroundColor = new Color(255, 255, 255);
 
     public static JPanel getLoginScreen(JFrame frame) {
         JPanel root = new JPanel();
-        root.setBackground(rootBackgroundColour);
+        JPanel loginPane = new JPanel();
+        JLabel loginText = new JLabel("Login");
+        TextField emailField = new TextField(30);
+        PasswordTextField passwordField = new PasswordTextField(30);
 
-//        OutlineButton button = new OutlineButton("Close");
-//        ContainerButton button1 = new ContainerButton("Join");
-//
-        TextField textField = new TextField(20);
-        textField.setPlaceHolder("Hello, world");
+        root.setBackground(LoginScreen.rootBackgroundColour);
+        loginPane.setBackground(LoginScreen.rootBackgroundColour);
 
-        root.add(textField);
+        emailField.setPlaceHolder("Email");
+        passwordField.setPlaceHolder("Password");
 
+        loginText.setFont(Fonts.Medium.deriveFont(30f));
+        loginText.setBackground(new Color(0, 0, 0, 0));
+        loginText.setForeground(LoginScreen.foregroundColor);
+
+        loginPane.setLayout(new BoxLayout(loginPane, BoxLayout.Y_AXIS));
+        root.setLayout(new BorderLayout());
+
+        loginPane.add(loginText);
+        loginPane.add(emailField);
+        loginPane.add(passwordField);
+        root.add(loginPane, BorderLayout.CENTER);
         return root;
     }
 }
