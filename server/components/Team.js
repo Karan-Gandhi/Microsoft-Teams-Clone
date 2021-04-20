@@ -1,5 +1,6 @@
 const uuid = require("uuid");
 const Message = require("./Message.js");
+const { addData, readData, deleteData } = require("../services/Firestore");
 
 class Team {
     constructor(id, admins, members, title, activeMeetings, messages, feed) {
@@ -36,25 +37,33 @@ class Team {
     }
 
     addMessage(message) {
-        this.messages.push(message);
-        this.feed.push(message);
+        this.messages.push(Object.assign({}, message));
+        this.feed.push(Object.assign({}, message));
     }
 
     addMeeting(meeting) {
         this.activeMeetings.push(meeting.id);
-        this.feed.push(meeting);
+        this.feed.push(Object.assign({}, meeting));
     }
 
-    updateDatabase() {
-        // some firebase stuff
+    async delete() {
+        return await deleteData("teams", this.id);
+    }
+
+    async updateDatabase() {
+        return await addData("teams", this.id, Object.assign({}, this));
     }
 
     static createNewTeam(title, admins, members) {
-        return new Team(uuid.v4(), admins, members, title, new Array(), new Array(), new Array());
+        return new Team(uuid.v4(), admins, members, title, [], [], []);
     }
 
-    static getTeamFromID(teamID) {
-        // some firebase stuff
+    static async getTeamFromID(teamID) {
+        return await readData("teams", teamID);
+    }
+
+    static async getAllTeams() {
+        return await readData("teams");
     }
 }
 

@@ -1,5 +1,6 @@
 const uuid = require("uuid");
 const Team = require("./Team.js");
+const { addData, readData, deleteData } = require("../services/Firestore.js");
 
 class User {
     constructor(id, name, email, password, teams) {
@@ -19,17 +20,21 @@ class User {
         // check if it is a valid team
         const teamToJoin = Team.getTeamFromID(teamID);
         if (teamToJoin == null) return new Error("Team dosen't exist");
-        
+
         teamToJoin.addMember(this.id);
         this.teams.push(teamID);
     }
 
-    updateDatabase() {
-        // some firebase stuff
+    async updateDatabase() {
+        return await addData("users", this.id, Object.assign({}, this));
     }
 
-    static getUserFromID(userID) {
-        // some firebase stuff
+    async delete() {
+        return await deleteData("users", this.id);
+    }
+
+    static async getUserFromID(userID) {
+        return await readData("users", userID);
     }
 
     static createNewUser(name, email, password) {

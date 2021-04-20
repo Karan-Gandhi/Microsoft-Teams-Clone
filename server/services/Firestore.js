@@ -32,7 +32,6 @@ const updateData = async (collection, document, data) => {
 };
 
 const deleteData = async (collection, document) => {
-    // console.log(typeof document);
     if (typeof document === "string" || document instanceof String) {
         return await db.collection(collection).doc(document).delete();
     } else {

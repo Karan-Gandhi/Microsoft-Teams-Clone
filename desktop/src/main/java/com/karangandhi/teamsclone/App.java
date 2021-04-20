@@ -21,12 +21,14 @@ public class App {
         JFrame frame = new JFrame("Microsoft Teams Clone");
         createUI(frame);
 
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setUndecorated(true);
         frame.setSize(1200, 800);
         frame.setVisible(true);
     }
 
     private static void createUI(JFrame frame) {
         // Login screen
-        frame.add(LoginScreen.getLoginScreen());
+        frame.add(LoginScreen.getLoginScreen(frame));
     }
 }
