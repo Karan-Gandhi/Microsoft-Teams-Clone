@@ -9,10 +9,6 @@ public class Fonts {
     public static Font Black, Bold, ExtraBold, ExtraLight, Light, Medium, Regular, SemiBold, Thin;
 
     public static void InitialiseFonts() throws IOException, FontFormatException {
-//        FileOutputStream testFile = new FileOutputStream("HELLO_WORLD");
-//        testFile.write(new String("Hello, world").getBytes());
-//        testFile.flush();
-//        testFile.close();
 
         File BlackFile = new File("./src/main/resources/Fonts/Poppins-Black.ttf");
         File BoldFile = new File("./src/main/resources/Fonts/Poppins-Bold.ttf");

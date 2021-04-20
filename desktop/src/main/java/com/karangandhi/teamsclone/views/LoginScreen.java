@@ -15,15 +15,13 @@ public class LoginScreen {
         JPanel root = new JPanel();
         root.setBackground(rootBackgroundColour);
 
-        OutlineButton button = new OutlineButton("Close");
-        ContainerButton button1 = new ContainerButton("Join");
-
-        TextField textField = new TextField();
+//        OutlineButton button = new OutlineButton("Close");
+//        ContainerButton button1 = new ContainerButton("Join");
+//
+        TextField textField = new TextField(20);
         textField.setPlaceHolder("Hello, world");
 
-        root.add(button1);
-        root.add(button);
-        root.add()
+        root.add(textField);
 
         return root;
     }
