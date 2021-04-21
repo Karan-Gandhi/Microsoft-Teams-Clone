@@ -12,13 +12,11 @@ public class LoginScreen {
 
     public static JPanel getLoginScreen(JFrame frame) {
         JPanel root = new JPanel();
-        JPanel loginPane = new JPanel();
         JLabel loginText = new JLabel("Login");
         TextField emailField = new TextField(30);
         PasswordTextField passwordField = new PasswordTextField(30);
 
         root.setBackground(LoginScreen.rootBackgroundColour);
-        loginPane.setBackground(LoginScreen.rootBackgroundColour);
 
         emailField.setPlaceHolder("Email");
         passwordField.setPlaceHolder("Password");
@@ -27,13 +25,7 @@ public class LoginScreen {
         loginText.setBackground(new Color(0, 0, 0, 0));
         loginText.setForeground(LoginScreen.foregroundColor);
 
-        loginPane.setLayout(new BoxLayout(loginPane, BoxLayout.Y_AXIS));
-        root.setLayout(new BorderLayout());
 
-        loginPane.add(loginText);
-        loginPane.add(emailField);
-        loginPane.add(passwordField);
-        root.add(loginPane, BorderLayout.CENTER);
         return root;
     }
 }
