@@ -1,0 +1,68 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+* {
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    margin: 0;
+}
+
+.login-wrapper {
+    width: 100%;
+    height: 100vh;
+    display: grid;
+    justify-content: center;
+    background-color: rgb(44, 44, 44);
+    align-content: center;
+}
+
+.login-container {
+    display: grid;
+    min-width: 500px;
+    padding: 48px 64px;
+    background-color: #ffffffff;
+    border-radius: 8px;
+}
+
+span.login-title {
+    display: grid;
+    justify-content: center;
+    font-size: 40px;
+    padding: 16px 32px;
+    font-weight: 400;
+}
+
+input.textfield {
+    padding: 8px 16px;
+    margin: 16px;
+}
+
+span.sign-up-text {
+    width: fit-content;
+    justify-self: self-end;
+    margin: 16px 32px;
+}
+
+button.login-button {
+    height: 50px;
+    padding: 8px 64px;
+    width: fit-content;
+    background: #6062a2;
+    border: none;
+    color: #ffff;
+    font-weight: 500;
+    border-radius: 2px;
+    justify-self: center;
+}
+
+a.sign-up {
+    text-decoration: none;
+    font-weight: 500;
+    color: rgb(66 68 132);
+}
+
+img.teams-logo {
+    width: 200px;
+    justify-self: center;
+}

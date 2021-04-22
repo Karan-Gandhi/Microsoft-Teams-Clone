@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <title>Login</title>
+
+        <link rel="stylesheet" href="css/login.css" />
+        <link rel="stylesheet" href="css/snackbar.css" />
+
+        <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+        <script src="js/snackbar.js"></script>
+        <script src="js/firebase.js"></script>
+    </head>
+    <body>
+        <div class="login-wrapper">
+            <div class="login-container">
+                <img src="/images/teams_logo.png" alt="" class="teams-logo" />
+                <span class="login-title">Login</span>
+                <br />
+                <input type="email" name="email" id="email" class="textfield" placeholder="Email" />
+                <input type="password" name="password" id="password" class="textfield" placeholder="Password" />
+                <span class="sign-up-text">Don't have a account <a href="/signup" class="sign-up">Sign Up</a></span>
+                <button class="login-button">Login&nbsp;&nbsp;→</button>
+            </div>
+        </div>
+
+        <script>
+            const login_button = document.getElementsByClassName("login-button")[0];
+            const email_field = document.getElementById("email");
+            const password_field = document.getElementById("password");
+
+            const login = e => {
+                const email = email_field.value;
+                const password = password_field.value;
+
+                if (email.indexOf("@") == -1 || email.indexOf(" ") != -1 || email.indexOf(".") == -1 || email.length == 0) {
+                    createSnackbar(4000, "Invalid Email Adress");
+                    return;
+                }
+
+                loginWithEmailAndPassword(
+                    email,
+                    password,
+                    err => createSnackbar(4000, "Login failed: Invalid email or password"),
+                    () => {
+                        window.location.href = "/home";
+                    }
+                );
+            };
+
+            window.onload = () => {
+                initializeFirebaseApp();
+
+                login_button.addEventListener("click", login);
+                email_field.addEventListener("keyup", e => {
+                    if (e.keyCode == 13) login(e);
+                });
+                password_field.addEventListener("keyup", e => {
+                    if (e.keyCode == 13) login(e);
+                });
+            };
+        </script>
+    </body>
+</html>

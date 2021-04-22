@@ -1,5 +1,5 @@
 const express = require("express");
-const bodyParser = requier("body-parser");
+const fs = require("fs");
 
 const Team = require("./components/Team.js");
 const User = require("./components/User.js");
@@ -10,10 +10,32 @@ const { registerApplication } = require("./services/Firestore.js");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(bodyParser);
-
 app.get("/", (req, res) => {
-    res.send("Hello, World");
+    res.sendFile("./src/views/index.html", { root: __dirname });
+});
+
+app.get("/:fileName", (req, res) => {
+    try {
+        if (fs.existsSync(`./src/views/${req.params.fileName}.html`)) {
+            res.sendFile(`./src/views/${req.params.fileName}.html`, { root: __dirname });
+        } else {
+            res.send("404 error");
+        }
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+app.get("/css/:fileName", (req, res) => {
+    res.sendFile(`./src/css/${req.params.fileName}`, { root: __dirname });
+});
+
+app.get("/js/:fileName", (req, res) => {
+    res.sendFile(`./src/js/${req.params.fileName}`, { root: __dirname });
+});
+
+app.get("/images/:fileName", (req, res) => {
+    res.sendFile(`./src/images/${req.params.fileName}`, { root: __dirname });
 });
 
 app.post("/createUser", (req, res) => {
@@ -24,6 +46,8 @@ app.post("/createUser", (req, res) => {
 
     res.json(user);
 });
+
+app.get("/getFirebase");
 
 app.listen(PORT, async () => {
     registerApplication();
