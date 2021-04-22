@@ -25,5 +25,12 @@ const loginWithGoogle = (errorCallback, successCallback) => {
 };
 
 const createUserWithEmailAndPassword = (email, password, errorCallback, sucessCallback) => {
-    firebase.auth().createUserWithEmailAndPassword(email, password).then(sucessCallback).catch(errorCallback);
+    firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(userCredentials => {
+            // TODO: Make a api request to the server to create the user in the database
+            sucessCallback(userCredentials);
+        })
+        .catch(errorCallback);
 };
