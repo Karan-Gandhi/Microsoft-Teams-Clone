@@ -15,8 +15,13 @@ const userLoggedIn = () => {
     return firebase.auth().currentUser != null;
 };
 
-const loginWithEmailAndPassword = (email, password, errorCallback, sucessCallback) => {
-    firebase.auth().signInWithEmailAndPassword(email, password).then(sucessCallback).catch(errorCallback);
+const loginWithEmailAndPassword = (email, password, errorCallback, successCallback) => {
+    firebase.auth().signInWithEmailAndPassword(email, password).then(successCallback).catch(errorCallback);
+};
+
+const loginWithGoogle = (errorCallback, successCallback) => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider).then(successCallback).catch(errorCallback);
 };
 
 const createUserWithEmailAndPassword = (email, password, errorCallback, sucessCallback) => {

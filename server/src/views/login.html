@@ -10,7 +10,8 @@
         <link rel="stylesheet" href="css/login.css" />
         <link rel="stylesheet" href="css/snackbar.css" />
 
-        <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
         <script src="js/snackbar.js"></script>
         <script src="js/firebase.js"></script>
     </head>
@@ -23,12 +24,16 @@
                 <input type="email" name="email" id="email" class="textfield" placeholder="Email" />
                 <input type="password" name="password" id="password" class="textfield" placeholder="Password" />
                 <span class="sign-up-text">Don't have a account <a href="/signup" class="sign-up">Sign Up</a></span>
-                <button class="login-button">Login&nbsp;&nbsp;→</button>
+                <div class="login-buttons">
+                    <button class="login-button">Login&nbsp;&nbsp;→</button>
+                    <button class="login-button">Login with Google&nbsp;&nbsp;→</button>
+                </div>
             </div>
         </div>
 
         <script>
             const login_button = document.getElementsByClassName("login-button")[0];
+            const google_login_button = document.getElementsByClassName("login-button")[1];
             const email_field = document.getElementById("email");
             const password_field = document.getElementById("password");
 
@@ -45,9 +50,14 @@
                     email,
                     password,
                     err => createSnackbar(4000, "Login failed: Invalid email or password"),
-                    () => {
-                        window.location.href = "/home";
-                    }
+                    () => (window.location.href = "/home")
+                );
+            };
+
+            const googleLogin = () => {
+                loginWithGoogle(
+                    () => createSnackbar(4000, "Login failed, please try again"),
+                    () => (window.location.href = "/home")
                 );
             };
 
@@ -61,6 +71,7 @@
                 password_field.addEventListener("keyup", e => {
                     if (e.keyCode == 13) login(e);
                 });
+                google_login_button.addEventListener("click", googleLogin);
             };
         </script>
     </body>

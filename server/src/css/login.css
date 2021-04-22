@@ -44,16 +44,23 @@ span.sign-up-text {
     margin: 16px 32px;
 }
 
+.login-buttons {
+    display: grid;
+    width: fit-content;
+    justify-self: center;
+}
+
 button.login-button {
     height: 50px;
     padding: 8px 64px;
-    width: fit-content;
+    width: 100%;
     background: #6062a2;
     border: none;
     color: #ffff;
     font-weight: 500;
     border-radius: 2px;
     justify-self: center;
+    margin: 8px;
 }
 
 a.sign-up {
