@@ -12,7 +12,7 @@
 
         <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
-        <script src="js/snackbar.js"></script>
+        <script src="js/components/snackbar.js"></script>
         <script src="js/firebase.js"></script>
         <script src="js/api.js"></script>
     </head>
@@ -72,7 +72,7 @@
                             password,
                             err => createSnackbar(snackbarTimeMedium, err.message),
                             () => {
-                                // window.location.href = "/home";
+                                window.location.href = "/home";
                             }
                         )
                 );
@@ -86,15 +86,15 @@
                             const { email, name } = credentials.additionalUserInfo.profile;
                             const password = "____GOOGLE_SIGNIN_PASSWORD_HIDDEN____";
                             const serverResponse = await createUser(email, password, name);
-                            console.log(serverResponse);
                         }
-                        // window.location.href = "/home";
+                        window.location.href = "/home";
                     }
                 );
             };
 
             window.onload = () => {
                 initializeFirebaseApp();
+                if (userLoggedIn()) window.location.href = "/home";
 
                 signup_button.addEventListener("click", signup);
                 google_signup_button.addEventListener("click", googleSignup);

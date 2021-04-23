@@ -42,11 +42,8 @@ app.get("/images/:fileName", (req, res) => {
 });
 
 app.post("/createUser", (req, res) => {
-    const { name, email, password } = req.body;
-
-    console.log({ name, email, password });
-
-    const user = User.createNewUser(name, email, password);
+    const { id, name, email, password } = req.body;
+    const user = User.createNewUser(id, name, email, password);
     user.updateDatabase();
 
     res.json(user);
