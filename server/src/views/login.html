@@ -42,22 +42,30 @@
                 const password = password_field.value;
 
                 if (email.indexOf("@") == -1 || email.indexOf(" ") != -1 || email.indexOf(".") == -1 || email.length == 0) {
-                    createSnackbar(4000, "Invalid Email Adress");
+                    createSnackbar(snackbarTimeMedium, "Invalid Email Adress");
                     return;
                 }
 
                 loginWithEmailAndPassword(
                     email,
                     password,
-                    err => createSnackbar(4000, "Login failed: Invalid email or password"),
+                    err => createSnackbar(snackbarTimeMedium, "Login failed: Invalid email or password"),
                     () => (window.location.href = "/home")
                 );
             };
 
             const googleLogin = () => {
                 loginWithGoogle(
-                    () => createSnackbar(4000, "Login failed, please try again"),
-                    () => (window.location.href = "/home")
+                    () => createSnackbar(snackbarTimeMedium, "Login failed, please try again"),
+                    () => credentials => {
+                        if (credentials.additionalUserInfo.isNewUser) {
+                            // TODO: Make a api call to the server
+                            const { email, name } = credentials.additionalUserInfo.profile;
+                            const password = "____GOOGLE_SIGNIN_PASSWORD_HIDDEN____";
+                        }
+                        console.log(credentials);
+                        // window.location.href = "/home";
+                    }
                 );
             };
 

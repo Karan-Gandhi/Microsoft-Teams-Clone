@@ -1,4 +1,5 @@
 const snackbars = [];
+const snackbarTimeMedium = 4000;
 
 const createSnackbar = (time, name, action, callback) => {
     let snackbar = document.createElement("div");

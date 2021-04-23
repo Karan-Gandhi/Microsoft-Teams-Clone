@@ -21,6 +21,7 @@ const loginWithEmailAndPassword = (email, password, errorCallback, successCallba
 
 const loginWithGoogle = (errorCallback, successCallback) => {
     const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ login_hint: "user@example.com" });
     firebase.auth().signInWithPopup(provider).then(successCallback).catch(errorCallback);
 };
 
