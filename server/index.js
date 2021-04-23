@@ -1,4 +1,5 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const fs = require("fs");
 
 const Team = require("./components/Team.js");
@@ -9,6 +10,8 @@ const { registerApplication } = require("./services/Firestore.js");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
     res.sendFile("./src/views/index.html", { root: __dirname });
@@ -40,6 +43,8 @@ app.get("/images/:fileName", (req, res) => {
 
 app.post("/createUser", (req, res) => {
     const { name, email, password } = req.body;
+
+    console.log({ name, email, password });
 
     const user = User.createNewUser(name, email, password);
     user.updateDatabase();

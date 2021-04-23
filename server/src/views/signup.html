@@ -14,6 +14,7 @@
         <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
         <script src="js/snackbar.js"></script>
         <script src="js/firebase.js"></script>
+        <script src="js/api.js"></script>
     </head>
     <body>
         <div class="signup-wrapper">
@@ -61,6 +62,7 @@
                 }
 
                 createUserWithEmailAndPassword(
+                    name,
                     email,
                     password,
                     err => createSnackbar(snackbarTimeMedium, err.message),
@@ -70,7 +72,7 @@
                             password,
                             err => createSnackbar(snackbarTimeMedium, err.message),
                             () => {
-                                window.location.href = "/home";
+                                // window.location.href = "/home";
                             }
                         )
                 );
@@ -79,13 +81,13 @@
             const googleSignup = () => {
                 loginWithGoogle(
                     () => createSnackbar(snackbarTimeMedium, "Signup failed, please try again"),
-                    credentials => {
+                    async credentials => {
                         if (credentials.additionalUserInfo.isNewUser) {
-                            // TODO: Make a api call to the server
                             const { email, name } = credentials.additionalUserInfo.profile;
                             const password = "____GOOGLE_SIGNIN_PASSWORD_HIDDEN____";
+                            const serverResponse = await createUser(email, password, name);
+                            console.log(serverResponse);
                         }
-                        console.log(credentials);
                         // window.location.href = "/home";
                     }
                 );

@@ -12,7 +12,16 @@ const initializeFirebaseApp = () => {
 };
 
 const userLoggedIn = () => {
-    return firebase.auth().currentUser != null;
+    return new Promise(resolve =>
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) resolve(true);
+            else resolve(false);
+        })
+    );
+};
+
+const getCurrentUser = () => {
+    return new Promise(resolve => firebase.auth().onAuthStateChanged(user => resolve(user)));
 };
 
 const loginWithEmailAndPassword = (email, password, errorCallback, successCallback) => {
@@ -25,12 +34,12 @@ const loginWithGoogle = (errorCallback, successCallback) => {
     firebase.auth().signInWithPopup(provider).then(successCallback).catch(errorCallback);
 };
 
-const createUserWithEmailAndPassword = (email, password, errorCallback, sucessCallback) => {
+const createUserWithEmailAndPassword = (name, email, password, errorCallback, sucessCallback) => {
     firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(userCredentials => {
-            // TODO: Make a api request to the server to create the user in the database
+        .then(async userCredentials => {
+            await createUser(email, password, name);
             sucessCallback(userCredentials);
         })
         .catch(errorCallback);
