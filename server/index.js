@@ -45,11 +45,14 @@ app.post("/createUser", (req, res) => {
     const { id, name, email, password } = req.body;
     const user = User.createNewUser(id, name, email, password);
     user.updateDatabase();
-
     res.json(user);
 });
 
-app.get("/getFirebase");
+app.get("/getUserData/:uid", async (req, res) => {
+    const userData = await User.getUserFromID(req.params.uid);
+    console.log(userData);
+    res.json(userData);
+});
 
 app.listen(PORT, async () => {
     registerApplication();

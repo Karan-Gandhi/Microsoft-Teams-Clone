@@ -37,8 +37,8 @@ class User {
         return await readData("users", userID);
     }
 
-    static createNewUser(name, email, password) {
-        return new User(uuid.v4(), name, email, password, new Array());
+    static createNewUser(id, name, email, password) {
+        return new User(id, name, email, password, new Array());
     }
 }
 

@@ -6,6 +6,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <title>Microsoft Teams Clone -&nbsp;</title>
+
+        <link rel="stylesheet" href="css/home.css" />
+        <link rel="stylesheet" href="css/snackbar.css" />
+
+        <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
+        <script src="js/snackbar.js"></script>
+        <script src="js/firebase.js"></script>
+        <script src="js/api.js"></script>
     </head>
     <body>
         <div class="nav-wrapper">
@@ -44,7 +53,31 @@
         </div>
 
         <script>
-            //
+            const profileColors = [
+                { backgroundColor: "ef9a9a", textColor: "b71c1c" },
+                { backgroundColor: "9fa8da", textColor: "1a237e" },
+                { backgroundColor: "90caf9", textColor: "0d47a1" },
+                { backgroundColor: "80cbc4", textColor: "004d40" },
+                { backgroundColor: "a5d6a7", textColor: "1b5e20" },
+                { backgroundColor: "ffcc80", textColor: "e65100" },
+                { backgroundColor: "ffab91", textColor: "bf360c" },
+                { backgroundColor: "bcaaa4", textColor: "3e2723" },
+            ];
+            let currentUser = null;
+
+            const buildProfilePicture = () => {
+                const colorCombinationIndex = Math.floor(Math.random() * profileColors.length);
+                let profileName = currentUser;
+            };
+
+            window.onload = () => {
+                initializeFirebaseApp();
+
+                if (userLoggedIn()) currentUser = getCurrentUser();
+                else window.location.href = "/login";
+
+                buildProfilePicture();
+            };
         </script>
     </body>
 </html>

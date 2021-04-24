@@ -20,13 +20,11 @@ const userLoggedIn = () => {
     );
 };
 
-const getCurrentUser = () => {
-    return new Promise(resolve => firebase.auth().onAuthStateChanged(user => resolve(user)));
-};
+const getUserUID = () => new Promise(resolve => firebase.auth().onAuthStateChanged(user => resolve(user.uid)));
 
-const loginWithEmailAndPassword = (email, password, errorCallback, successCallback) => {
-    firebase.auth().signInWithEmailAndPassword(email, password).then(successCallback).catch(errorCallback);
-};
+const getCurrentUser = async () => await getUserData(await getUserUID());
+
+const loginWithEmailAndPassword = (email, password, errorCallback, successCallback) => firebase.auth().signInWithEmailAndPassword(email, password).then(successCallback).catch(errorCallback);
 
 const loginWithGoogle = (errorCallback, successCallback) => {
     const provider = new firebase.auth.GoogleAuthProvider();
