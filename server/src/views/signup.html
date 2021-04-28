@@ -85,7 +85,7 @@
                         if (credentials.additionalUserInfo.isNewUser) {
                             const { email, name } = credentials.additionalUserInfo.profile;
                             const password = "____GOOGLE_SIGNIN_PASSWORD_HIDDEN____";
-                            const serverResponse = await createUser(email, password, name);
+                            const serverResponse = await createUser(email, password, name, credentials.user.uid);
                         }
                         window.location.href = "/home";
                     }

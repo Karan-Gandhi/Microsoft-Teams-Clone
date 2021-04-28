@@ -15,7 +15,7 @@ body {
     right: 0;
     height: 70px;
     display: grid;
-    padding: 0px 0px 0px 70px;
+    padding: 0px 10px 0px 10px;
     align-items: center;
     background-color: #b6b6b6;
     grid-template-columns: auto 70px 70px;
@@ -26,7 +26,7 @@ body {
     top: 70px;
     bottom: 0;
     width: 350px;
-    height: 100vh;
+    height: calc(100vh - 70px);
 }
 
 img.nav-logo {
@@ -42,4 +42,35 @@ img.nav-logo {
 .nav-title {
     padding: 0;
     font-size: 18px;
+}
+
+img#profile-picture {
+    height: 40px;
+}
+
+.dropdown-content {
+    position: absolute;
+    /* display: none; */
+    height: fit-content;
+    min-width: 130px;
+    margin-top: 20px;
+    background: grey;
+    padding: 8px 0;
+    display: none;
+}
+
+.nav-profile-dropdown-title.dropdown-title {
+    display: grid;
+}
+
+.dropdown-title {
+    cursor: pointer;
+}
+
+.dropdown-content-item {
+    padding: 8px 16px;
+}
+
+.dropdown-content.show {
+    display: block;
 }

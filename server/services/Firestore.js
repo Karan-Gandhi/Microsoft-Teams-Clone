@@ -1,4 +1,7 @@
 const admin = require("firebase-admin");
+const CacheStore = require("./cache.js");
+
+const cache = new CacheStore();
 let applicationRegistered = false;
 let db = null;
 
@@ -7,7 +10,7 @@ const registerApplication = () => {
     const serviceAccount = require("../keys/firebase-service-account-key.json");
 
     admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount)
+        credential: admin.credential.cert(serviceAccount),
     });
 
     applicationRegistered = true;
@@ -19,9 +22,9 @@ const addData = async (collection, document, data) => {
         return await db.collection(collection).doc(document).set(data);
     } else {
         data = document;
-        if (collection.indexOf('/') != -1) {
-            document = collection.substr(collection.indexOf('/') + 1, collection.length - collection.indexOf('/'));
-            collection = collection.substr(0, collection.indexOf('/'));
+        if (collection.indexOf("/") != -1) {
+            document = collection.substr(collection.indexOf("/") + 1, collection.length - collection.indexOf("/"));
+            collection = collection.substr(0, collection.indexOf("/"));
             return await db.collection(collection).doc(document).set(data);
         } else return await db.collection(collection).add(document);
     }
@@ -67,19 +70,24 @@ const deleteQueryBatch = async (query, resolve) => {
 
 const readData = async (collection, document) => {
     if (document) {
+        const path = collection + "/" + document;
+        if (cache.has(path)) return cache.getItem(path);
         const doc = await db.collection(collection).doc(document).get();
-        if (doc.exists) return doc;
+
+        if (doc.exists) return cache.addItem(path, doc.data());
         else return null;
     } else {
+        if (cache.has(collection)) return cache.getItem(collection).data();
+
         const snapshot = await db.collection(collection).get();
         let data = [];
 
         snapshot.forEach(doc => {
             data.push(doc.data());
-        })
+        });
 
-        return data;
+        return cache.addItem(collection, data);
     }
-}
+};
 
-module.exports = { registerApplication, addData, updateData, deleteData, readData }
+module.exports = { registerApplication, addData, updateData, deleteData, readData };

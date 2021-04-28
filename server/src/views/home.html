@@ -15,28 +15,23 @@
         <script src="js/snackbar.js"></script>
         <script src="js/firebase.js"></script>
         <script src="js/api.js"></script>
+        <script src="js/dropdown.js"></script>
     </head>
     <body>
         <div class="nav-wrapper">
             <div class="navbar">
-                <div class="sidebar-wrapper">
-                    <div class="sidebar-hamburger"></div>
-                    <div class="sidebar-content sidebar-open">
-                        <div class="sidebar-content-title">Teams</div>
-                        <div class="sidebar-content-item"></div>
-                    </div>
-                </div>
                 <div class="nav-title-and-logo nav-item">
                     <img src="images/teams_logo.png" alt="" class="nav-logo" />
                     <div class="nav-title">Microsoft Teams Clone</div>
                 </div>
                 <div class="nav-profile nav-item">
-                    <div class="nav-profile-image"></div>
                     <div class="nav-profile-dropdown dropdown-wrapper">
-                        <div class="nav-profile-dropdown-title dropdown-title"></div>
+                        <div class="nav-profile-dropdown-title dropdown-title">
+                            <img class="nav-profile-image dropdown-title-mask" id="profile-picture" />
+                        </div>
                         <div class="nav-profile-dropdown-content dropdown-content">
-                            <div id="profile" class="dropdown-content">Profile</div>
-                            <div id="logout" class="dropdown-content">Logout</div>
+                            <div id="profile" class="dropdown-content-item">Profile</div>
+                            <div id="logout" class="dropdown-content-item">Logout</div>
                         </div>
                     </div>
                 </div>
@@ -49,6 +44,14 @@
                     </div>
                     <div class="nav-current-theme"></div>
                 </div>
+            </div>
+        </div>
+        <div class="sidebar-wrapper">
+            <div class="sidebar-content sidebar-open">
+                <div class="sidebar-content-title">Teams</div>
+                <div class="sidebar-content-item">Team 1</div>
+                <div class="sidebar-content-item">Team 2</div>
+                <div class="sidebar-content-item">Team 3</div>
             </div>
         </div>
 
@@ -67,13 +70,17 @@
 
             const buildProfilePicture = () => {
                 const colorCombinationIndex = Math.floor(Math.random() * profileColors.length);
-                let profileName = currentUser;
+                let profileName = currentUser.name;
+                profileName = profileName.replaceAll(" ", "%20");
+                const { backgroundColor, textColor } = profileColors[colorCombinationIndex];
+                const profilePictureURL = `https://ui-avatars.com/api/?name=${profileName}&font-size=0.33&size=512&background=${backgroundColor}&color=${textColor}`;
+                document.getElementById("profile-picture").src = profilePictureURL;
             };
 
-            window.onload = () => {
+            window.onload = async () => {
                 initializeFirebaseApp();
 
-                if (userLoggedIn()) currentUser = getCurrentUser();
+                if (await userLoggedIn()) currentUser = await getCurrentUser();
                 else window.location.href = "/login";
 
                 buildProfilePicture();

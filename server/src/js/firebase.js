@@ -37,8 +37,13 @@ const createUserWithEmailAndPassword = (name, email, password, errorCallback, su
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then(async userCredentials => {
-            await createUser(email, password, name);
+            console.log(userCredentials);
+            await createUser(email, password, name, userCredentials.user.uid);
             sucessCallback(userCredentials);
         })
         .catch(errorCallback);
+};
+
+const signOutUser = (errorCallback, successCallback) => {
+    firebase.auth().signOut().then(successCallback).catch(errorCallback);
 };

@@ -1,6 +1,6 @@
-const createUser = async (email, password, name) => {
+const createUser = async (email, password, name, id) => {
     const API = "/createUser";
-    const data = { email, password, name };
+    const data = { email, password, name, id };
     const options = { method: "POST", headers: { "Content-type": "application/json" }, body: JSON.stringify(data) };
     const response = await fetch(API, options);
     return await response.json();
