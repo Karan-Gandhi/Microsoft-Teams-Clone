@@ -73,7 +73,7 @@
                 let profileName = currentUser.name;
                 profileName = profileName.replaceAll(" ", "%20");
                 const { backgroundColor, textColor } = profileColors[colorCombinationIndex];
-                const profilePictureURL = `https://ui-avatars.com/api/?name=${profileName}&font-size=0.33&size=512&background=${backgroundColor}&color=${textColor}`;
+                const profilePictureURL = `https://ui-avatars.com/api/?name=${profileName}&font-size=0.33&size=64&background=${backgroundColor}&color=${textColor}`;
                 document.getElementById("profile-picture").src = profilePictureURL;
             };
 
