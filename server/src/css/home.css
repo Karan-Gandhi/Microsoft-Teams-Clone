@@ -27,6 +27,7 @@ body {
     bottom: 0;
     width: 350px;
     height: calc(100vh - 70px);
+    background-color: #b6b6b6;
 }
 
 img.nav-logo {
@@ -46,6 +47,7 @@ img.nav-logo {
 
 img#profile-picture {
     height: 40px;
+    border-radius: 100%;
 }
 
 .dropdown-content {
