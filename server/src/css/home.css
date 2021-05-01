@@ -17,8 +17,9 @@ body {
     display: grid;
     padding: 0px 10px 0px 10px;
     align-items: center;
-    background-color: #b6b6b6;
+    background-color: #0a0a0a;
     grid-template-columns: auto 70px 70px;
+    color: #fff;
 }
 
 .sidebar-wrapper {
@@ -27,11 +28,12 @@ body {
     bottom: 0;
     width: 350px;
     height: calc(100vh - 70px);
-    background-color: #b6b6b6;
+    background-color: #141414;
+    color: #fff;
 }
 
 img.nav-logo {
-    height: 60px;
+    height: 50px;
 }
 
 .nav-title-and-logo {
@@ -50,29 +52,6 @@ img#profile-picture {
     border-radius: 100%;
 }
 
-.dropdown-content {
-    position: absolute;
-    /* display: none; */
-    height: fit-content;
-    min-width: 130px;
-    margin-top: 20px;
-    background: grey;
-    padding: 8px 0;
-    display: none;
-}
-
 .nav-profile-dropdown-title.dropdown-title {
     display: grid;
-}
-
-.dropdown-title {
-    cursor: pointer;
-}
-
-.dropdown-content-item {
-    padding: 8px 16px;
-}
-
-.dropdown-content.show {
-    display: block;
 }

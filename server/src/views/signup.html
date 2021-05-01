@@ -12,7 +12,7 @@
 
         <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
-        <script src="js/components/snackbar.js"></script>
+        <script src="js/snackbar.js"></script>
         <script src="js/firebase.js"></script>
         <script src="js/api.js"></script>
     </head>
@@ -25,7 +25,7 @@
                 <input type="text" name="name" id="name" class="textfield" placeholder="Name" />
                 <input type="email" name="email" id="email" class="textfield" placeholder="Email" />
                 <input type="password" name="password" id="password" class="textfield" placeholder="Password" />
-                <span class="login-text">Already have a account? <a href="/signup" class="sign-up">Login</a></span>
+                <span class="login-text">Already have a account? <a href="/login" class="sign-up">Login</a></span>
                 <div class="signup-buttons">
                     <button class="signup-button">Sign up&nbsp;&nbsp;→</button>
                     <button class="signup-button">Sign up with Google&nbsp;&nbsp;→</button>
@@ -92,9 +92,9 @@
                 );
             };
 
-            window.onload = () => {
+            window.onload = async () => {
                 initializeFirebaseApp();
-                if (userLoggedIn()) window.location.href = "/home";
+                if (await userLoggedIn()) window.location.href = "/home";
 
                 signup_button.addEventListener("click", signup);
                 google_signup_button.addEventListener("click", googleSignup);
