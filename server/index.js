@@ -56,7 +56,7 @@ app.get("/getUserData/:uid", async (req, res) => {
 
 app.listen(PORT, async () => {
     registerApplication();
-    console.log("Listening on: " + PORT);
+    console.log("Listening on: " + PORT + "!");
 
     // const testUser = User.createNewUser("Test user", "test@test.com", "helloworld");
     // const testTeam = Team.createNewTeam("Test Team", [testUser.id], []);

@@ -4,7 +4,8 @@
   "description": "This is the server for the Microsoft Teams Clone",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -26,5 +27,8 @@
     "express": "^4.17.1",
     "firebase-admin": "^9.6.0",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }
