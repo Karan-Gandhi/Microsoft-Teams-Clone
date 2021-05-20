@@ -41,17 +41,27 @@ app.get("/images/:fileName", (req, res) => {
     res.sendFile(`./src/images/${req.params.fileName}`, { root: __dirname });
 });
 
-app.post("/createUser", (req, res) => {
+app.post("/api/createUser", (req, res) => {
     const { id, name, email, password } = req.body;
     const user = User.createNewUser(id, name, email, password);
     user.updateDatabase();
     res.json(user);
 });
 
-app.get("/getUserData/:uid", async (req, res) => {
+app.get("/api/getUserData/:uid", async (req, res) => {
     const userData = await User.getUserFromID(req.params.uid);
     console.log(userData);
     res.json(userData);
+});
+
+app.get("/api/getAllUsers", async (req, res) => {
+    const users = await User.getAllUsers();
+    console.log(users);
+    const resp = [];
+    for (let user of users) {
+        resp.push(user.name);
+    }
+    res.json({ users: resp });
 });
 
 app.listen(PORT, async () => {

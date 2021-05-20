@@ -77,7 +77,7 @@ const readData = async (collection, document) => {
         if (doc.exists) return cache.addItem(path, doc.data());
         else return null;
     } else {
-        if (cache.has(collection)) return cache.getItem(collection).data();
+        if (cache.has(collection)) return cache.getItem(collection);
 
         const snapshot = await db.collection(collection).get();
         let data = [];

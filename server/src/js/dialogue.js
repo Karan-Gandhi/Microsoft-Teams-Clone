@@ -55,4 +55,11 @@ class PopupDialogueBox {
             10
         );
     }
+
+    addContent(domContent) {
+        const content = this.domRoot.getElementsByClassName("dialogue-box-content")[0];
+        if (typeof domContent !== "string") content.appendChild(domContent);
+        else content.innerHTML = domContent;
+        console.log(domContent);
+    }
 }

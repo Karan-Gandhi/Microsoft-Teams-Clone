@@ -14,7 +14,7 @@
 }
 
 .dialogue-box {
-    min-width: 800px;
+    width: 800px;
     height: fit-content;
     padding: 0 48px;
     display: grid;

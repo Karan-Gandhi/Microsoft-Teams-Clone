@@ -55,3 +55,34 @@ img#profile-picture {
 .nav-profile-dropdown-title.dropdown-title {
     display: grid;
 }
+
+.autocomplete {
+    position: relative;
+    display: inline-block;
+}
+
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #2d2c2c;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    box-shadow: 0px 10px 20px #0000005c;
+}
+
+.autocomplete-items div {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #2d2c2c;
+    border-bottom: 1px solid #232323;
+    font-size: 14px;
+}
+
+.autocomplete-items div:hover {
+    background-color: #232323;
+}
+
+.autocomplete-active {
+    background-color: #191919 !important;
+    color: #ffffff;
+}

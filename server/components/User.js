@@ -37,6 +37,10 @@ class User {
         return await readData("users", userID);
     }
 
+    static async getAllUsers() {
+        return await readData("users");
+    }
+
     static createNewUser(id, name, email, password) {
         return new User(id, name, email, password, new Array());
     }
