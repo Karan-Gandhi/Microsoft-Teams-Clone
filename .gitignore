@@ -1,2 +1,2 @@
-/server/node_modules
-/server/keys/firebase-service-account-key.json
+/server 1.0/node_modules
+/server 1.0/keys/firebase-service-account-key.json
