@@ -39,55 +39,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
-var AuthUtils_1 = require("../utils/AuthUtils");
-var router = express_1.default.Router();
-router.get("/", function (_, res) {
-    res.send("Hello world from auth");
-});
-router.post("/loginWithEmailAndPassword", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, email, password, accessToken, error_1;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+exports.createUserWithEmailAndPassword = exports.loginWithEmailAndPassword = void 0;
+var uuid_1 = require("uuid");
+var FirestoreCollections_1 = __importDefault(require("../types/FirestoreCollections"));
+var AuthErrors_1 = require("./AuthErrors");
+var Firestore_1 = require("../services/Firestore");
+var loginWithEmailAndPassword = function (email, password) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+    return [2 /*return*/];
+}); }); };
+exports.loginWithEmailAndPassword = loginWithEmailAndPassword;
+var createUserWithEmailAndPassword = function (name, email, password) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, user, existingUsers;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _a = req.body, email = _a.email, password = _a.password;
-                _b.label = 1;
+                id = (0, uuid_1.v4)();
+                user = { id: id, name: name, email: email, password: password, teams: [] };
+                return [4 /*yield*/, (0, Firestore_1.readDataWhere)(FirestoreCollections_1.default.USERS, "email", "==", email)];
             case 1:
-                _b.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, (0, AuthUtils_1.loginWithEmailAndPassword)(email, password)];
+                existingUsers = _a.sent();
+                // Email validation will be done at the client side only
+                if (existingUsers.length !== 0) {
+                    throw AuthErrors_1.EmailAlreadyExistError;
+                }
+                return [4 /*yield*/, (0, Firestore_1.addData)(FirestoreCollections_1.default.USERS, id, user)];
             case 2:
-                accessToken = _b.sent();
-                res.json(accessToken);
-                return [3 /*break*/, 4];
-            case 3:
-                error_1 = _b.sent();
-                res.send(error_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                _a.sent();
+                return [2 /*return*/];
         }
     });
-}); });
-// This will return the logged in user including the access token
-router.post("/createUserWithEmailAndPassword", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, name, email, password, accessToken, error_2;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _a = req.body, name = _a.name, email = _a.email, password = _a.password;
-                _b.label = 1;
-            case 1:
-                _b.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, (0, AuthUtils_1.createUserWithEmailAndPassword)(name, email, password)];
-            case 2:
-                accessToken = _b.sent();
-                res.json(accessToken);
-                return [3 /*break*/, 4];
-            case 3:
-                error_2 = _b.sent();
-                res.send(error_2);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); });
-exports.default = router;
+}); };
+exports.createUserWithEmailAndPassword = createUserWithEmailAndPassword;

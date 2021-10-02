@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -39,14 +58,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUserWithEmailAndPassword = exports.loginWithEmailAndPassword = void 0;
+exports.getAccessToken = exports.createUserWithEmailAndPassword = exports.loginWithEmailAndPassword = void 0;
+var jwt = __importStar(require("jsonwebtoken"));
 var uuid_1 = require("uuid");
 var FirestoreCollections_1 = __importDefault(require("../types/FirestoreCollections"));
 var AuthErrors_1 = require("./AuthErrors");
-var Firestore_1 = require("./Firestore");
-var loginWithEmailAndPassword = function (email, password) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/];
-}); }); };
+var Firestore_1 = require("../services/Firestore");
+var AccessToken_1 = require("../types/AccessToken");
+var loginWithEmailAndPassword = function (email, password) { return __awaiter(void 0, void 0, void 0, function () {
+    var existingUsers, user;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, Firestore_1.readDataWhere)(FirestoreCollections_1.default.USERS, "email", "==", email)];
+            case 1:
+                existingUsers = _a.sent();
+                if (existingUsers.length !== 1) {
+                    throw AuthErrors_1.InvalidEmailOrPassword;
+                }
+                user = existingUsers[0];
+                if (user.password !== password) {
+                    throw AuthErrors_1.InvalidEmailOrPassword;
+                }
+                return [2 /*return*/, (0, exports.getAccessToken)(user)];
+        }
+    });
+}); };
 exports.loginWithEmailAndPassword = loginWithEmailAndPassword;
 var createUserWithEmailAndPassword = function (name, email, password) { return __awaiter(void 0, void 0, void 0, function () {
     var id, user, existingUsers;
@@ -65,8 +101,13 @@ var createUserWithEmailAndPassword = function (name, email, password) { return _
                 return [4 /*yield*/, (0, Firestore_1.addData)(FirestoreCollections_1.default.USERS, id, user)];
             case 2:
                 _a.sent();
-                return [2 /*return*/];
+                return [2 /*return*/, (0, exports.getAccessToken)(user)];
         }
     });
 }); };
 exports.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+var getAccessToken = function (user) {
+    var token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "2h" });
+    return { token: token, type: AccessToken_1.AccessTokenTypes.BEARER };
+};
+exports.getAccessToken = getAccessToken;
