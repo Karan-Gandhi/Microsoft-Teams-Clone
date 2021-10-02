@@ -37,15 +37,82 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteData = exports.readData = exports.addData = void 0;
-var addData = function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/];
-}); }); };
+var firebase_1 = require("./firebase");
+var addData = function (collection, document, data) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, firebase_1.db.collection(collection).doc(document).set(data)];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
 exports.addData = addData;
-var readData = function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/];
-}); }); };
+var readData = function (collection, document) { return __awaiter(void 0, void 0, void 0, function () {
+    var snapshots, res_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!!!document) return [3 /*break*/, 2];
+                return [4 /*yield*/, firebase_1.db.collection(collection).doc(document).get()];
+            case 1: return [2 /*return*/, (_a.sent()).data()];
+            case 2: return [4 /*yield*/, firebase_1.db.collection(collection).get()];
+            case 3:
+                snapshots = _a.sent();
+                res_1 = [];
+                snapshots.forEach(function (snapshot) { return res_1.push(snapshot.data()); });
+                return [2 /*return*/, res_1];
+        }
+    });
+}); };
 exports.readData = readData;
-var deleteData = function () { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/];
-}); }); };
+var deleteData = function (collection, document) { return __awaiter(void 0, void 0, void 0, function () {
+    var deleteCollection, deleteQueryBatch_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!!!document) return [3 /*break*/, 2];
+                return [4 /*yield*/, firebase_1.db.collection(collection).doc(document).delete()];
+            case 1: return [2 /*return*/, _a.sent()];
+            case 2:
+                deleteCollection = function (collectionPath, batchSize) { return __awaiter(void 0, void 0, void 0, function () {
+                    var collectionRef, query;
+                    return __generator(this, function (_a) {
+                        collectionRef = firebase_1.db.collection(collectionPath);
+                        query = collectionRef.orderBy("__name__").limit(batchSize);
+                        return [2 /*return*/, new Promise(function (resolve, reject) {
+                                deleteQueryBatch_1(query, resolve).catch(reject);
+                            })];
+                    });
+                }); };
+                deleteQueryBatch_1 = function (query, resolve) { return __awaiter(void 0, void 0, void 0, function () {
+                    var snapshot, batchSize, batch;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, query.get()];
+                            case 1:
+                                snapshot = _a.sent();
+                                batchSize = snapshot.size;
+                                if (batchSize === 0) {
+                                    resolve();
+                                    return [2 /*return*/];
+                                }
+                                batch = firebase_1.db.batch();
+                                snapshot.docs.forEach(function (doc) {
+                                    batch.delete(doc.ref);
+                                });
+                                return [4 /*yield*/, batch.commit()];
+                            case 2:
+                                _a.sent();
+                                process.nextTick(function () {
+                                    deleteQueryBatch_1(query, resolve);
+                                });
+                                return [2 /*return*/];
+                        }
+                    });
+                }); };
+                return [4 /*yield*/, deleteCollection(collection, 10)];
+            case 3: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
 exports.deleteData = deleteData;
