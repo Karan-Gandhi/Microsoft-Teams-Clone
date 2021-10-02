@@ -1,4 +1,4 @@
-import { db } from "./Firebase";
+import { db } from "./firebase";
 
 export const addData = async <T>(collection: string, document: string, data: T): Promise<FirebaseFirestore.WriteResult> => {
 	return await db.collection(collection).doc(document).set(data);
