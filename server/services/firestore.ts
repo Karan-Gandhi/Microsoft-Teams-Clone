@@ -50,3 +50,12 @@ export const deleteData = async (collection: string, document?: string) => {
 		return await deleteCollection(collection, 10);
 	}
 };
+
+export const readDataWhere = async <T>(collection: string, fieldPath: string, opStr: FirebaseFirestore.WhereFilterOp, value: any) => {
+	const snapshots = await db.collection(collection).where(fieldPath, opStr, value).get();
+	const res: T[] = [];
+
+	snapshots.forEach(snapshot => res.push(snapshot.data() as T));
+
+	return res;
+};

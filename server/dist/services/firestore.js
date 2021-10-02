@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteData = exports.readData = exports.addData = void 0;
+exports.readDataWhere = exports.deleteData = exports.readData = exports.addData = void 0;
 var firebase_1 = require("./firebase");
 var addData = function (collection, document, data) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
@@ -116,3 +116,17 @@ var deleteData = function (collection, document) { return __awaiter(void 0, void
     });
 }); };
 exports.deleteData = deleteData;
+var readDataWhere = function (collection, fieldPath, opStr, value) { return __awaiter(void 0, void 0, void 0, function () {
+    var snapshots, res;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, firebase_1.db.collection(collection).where(fieldPath, opStr, value).get()];
+            case 1:
+                snapshots = _a.sent();
+                res = [];
+                snapshots.forEach(function (snapshot) { return res.push(snapshot.data()); });
+                return [2 /*return*/, res];
+        }
+    });
+}); };
+exports.readDataWhere = readDataWhere;
