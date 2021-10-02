@@ -35,3 +35,9 @@ API:
 routes:
     getTeamFromID: GET
     getTeamJoinLink: GET
+
+Server:
+    some other place
+
+Web:
+    netlify
