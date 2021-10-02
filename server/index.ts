@@ -1,5 +1,5 @@
 import express from "express";
-import authRouter from "./routes/auth";
+import AuthRouter from "./routes/AuthRoutes";
 import { config } from "dotenv";
 
 const PORT = 5000;
@@ -12,6 +12,6 @@ app.get("/", (_, res) => {
 	res.send("Hello, world ");
 });
 
-app.use("/auth", authRouter);
+app.use("/auth", AuthRouter);
 
 app.listen(PORT, () => console.log("Server started at port: " + PORT));
