@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -58,13 +69,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAccessToken = exports.createUserWithEmailAndPassword = exports.loginWithEmailAndPassword = void 0;
+exports.logout = exports.getRefreshToken = exports.getAccessToken = exports.createUserWithEmailAndPassword = exports.loginWithEmailAndPassword = void 0;
 var jwt = __importStar(require("jsonwebtoken"));
 var uuid_1 = require("uuid");
 var FirestoreCollections_1 = __importDefault(require("../types/FirestoreCollections"));
 var AuthErrors_1 = require("./AuthErrors");
 var Firestore_1 = require("../services/Firestore");
-var AccessToken_1 = require("../types/AccessToken");
+var Tokens_1 = require("../types/Tokens");
 var loginWithEmailAndPassword = function (email, password) { return __awaiter(void 0, void 0, void 0, function () {
     var existingUsers, user;
     return __generator(this, function (_a) {
@@ -79,7 +90,7 @@ var loginWithEmailAndPassword = function (email, password) { return __awaiter(vo
                 if (user.password !== password) {
                     throw AuthErrors_1.InvalidEmailOrPassword;
                 }
-                return [2 /*return*/, (0, exports.getAccessToken)(user)];
+                return [2 /*return*/, __assign(__assign({}, (0, exports.getAccessToken)(user)), { refreshToken: (0, exports.getRefreshToken)(user) })];
         }
     });
 }); };
@@ -101,13 +112,23 @@ var createUserWithEmailAndPassword = function (name, email, password) { return _
                 return [4 /*yield*/, (0, Firestore_1.addData)(FirestoreCollections_1.default.USERS, id, user)];
             case 2:
                 _a.sent();
-                return [2 /*return*/, (0, exports.getAccessToken)(user)];
+                return [2 /*return*/, __assign(__assign({}, (0, exports.getAccessToken)(user)), { refreshToken: (0, exports.getRefreshToken)(user) })];
         }
     });
 }); };
 exports.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
 var getAccessToken = function (user) {
-    var token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "2h" });
-    return { accessToken: token, type: AccessToken_1.AccessTokenTypes.BEARER };
+    var token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "45s" });
+    return { accessToken: token, type: Tokens_1.AccessTokenTypes.BEARER };
 };
 exports.getAccessToken = getAccessToken;
+var getRefreshToken = function (user) {
+    var refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
+    (0, Firestore_1.addData)(FirestoreCollections_1.default.REFRESH_TOKENS, refreshToken, {});
+    return refreshToken;
+};
+exports.getRefreshToken = getRefreshToken;
+var logout = function (token) {
+    (0, Firestore_1.deleteData)(FirestoreCollections_1.default.REFRESH_TOKENS, token);
+};
+exports.logout = logout;

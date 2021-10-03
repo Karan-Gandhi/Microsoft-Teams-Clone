@@ -1,6 +1,9 @@
+import * as jwt from "jsonwebtoken";
 import express from "express";
-import AccessToken from "../types/AccessToken";
-import { createUserWithEmailAndPassword, loginWithEmailAndPassword } from "../utils/AuthUtils";
+import { readData } from "../services/Firestore";
+import FirestoreCollections from "../types/FirestoreCollections";
+import { createUserWithEmailAndPassword, getAccessToken, loginWithEmailAndPassword, logout } from "../utils/AuthUtils";
+import User from "../types/User";
 
 const router = express.Router();
 
@@ -12,8 +15,8 @@ router.post("/loginWithEmailAndPassword", async (req, res) => {
 	const { email, password } = req.body;
 
 	try {
-		const accessToken: AccessToken = await loginWithEmailAndPassword(email, password);
-		res.json(accessToken);
+		const tokens = await loginWithEmailAndPassword(email, password);
+		res.json(tokens);
 	} catch (error: any) {
 		res.status(403);
 		res.send({ message: error.message });
@@ -24,12 +27,33 @@ router.post("/loginWithEmailAndPassword", async (req, res) => {
 router.post("/createUserWithEmailAndPassword", async (req, res) => {
 	const { name, email, password } = req.body;
 	try {
-		const accessToken: AccessToken = await createUserWithEmailAndPassword(name, email, password);
-		res.json(accessToken);
+		const tokens = await createUserWithEmailAndPassword(name, email, password);
+		res.json(tokens);
 	} catch (error: any) {
 		res.status(403);
 		res.send({ message: error.message });
 	}
+});
+
+router.post("/accessToken", async (req, res) => {
+	const { refreshToken } = req.body;
+	if (refreshToken == null) return res.sendStatus(401);
+	const tokenExists = await readData(FirestoreCollections.REFRESH_TOKENS, refreshToken);
+	if (!tokenExists) return res.sendStatus(403);
+
+	jwt.verify(refreshToken as string, process.env.REFRESH_TOKEN_SECRET as string, (err, user) => {
+		if (err) return res.sendStatus(403);
+		delete user?.iat;
+		const accessToken = getAccessToken(user as User);
+		res.json(accessToken);
+	});
+});
+
+router.delete("/logout", (req, res) => {
+	const { refreshToken } = req.body;
+	if (!refreshToken) return res.sendStatus(401);
+	logout(refreshToken);
+	res.sendStatus(204);
 });
 
 export default router;

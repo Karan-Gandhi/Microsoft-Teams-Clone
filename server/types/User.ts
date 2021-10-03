@@ -3,9 +3,9 @@ import { TeamID } from "./Team";
 export type UserID = string;
 
 export default interface User {
-	id: UserID;
+	readonly id: UserID;
 	name: string;
 	email: string;
-	password: string;
+	readonly password: string;
 	teams: TeamID[];
 }

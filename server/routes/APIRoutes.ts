@@ -8,11 +8,8 @@ router.use((req, res, next) => {
 	const [type, token] = req.headers.authorization.split(" ");
 	if (!token) return res.sendStatus(401);
 
-	console.log(type);
-
-	jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || "", (err, user) => {
+	jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string, (err, user) => {
 		if (err) return res.sendStatus(403);
-		console.log(user);
 		next();
 	});
 });

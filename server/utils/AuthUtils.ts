@@ -2,9 +2,9 @@ import * as jwt from "jsonwebtoken";
 import { v4, validate } from "uuid";
 import FirestoreCollections from "../types/FirestoreCollections";
 import User, { UserID } from "../types/User";
-import { EmailAlreadyExistError, InvalidAccessToken, InvalidEmailOrPassword } from "./AuthErrors";
-import { addData, readDataWhere } from "../services/Firestore";
-import AccessToken, { AccessTokenTypes, Token } from "../types/AccessToken";
+import { EmailAlreadyExistError, InvalidEmailOrPassword } from "./AuthErrors";
+import { addData, deleteData, readDataWhere } from "../services/Firestore";
+import { AccessToken, AccessTokenTypes, RefreshToken, Token } from "../types/Tokens";
 
 export const loginWithEmailAndPassword = async (email: string, password: string) => {
 	const existingUsers = await readDataWhere<User>(FirestoreCollections.USERS, "email", "==", email);
@@ -17,7 +17,7 @@ export const loginWithEmailAndPassword = async (email: string, password: string)
 		throw InvalidEmailOrPassword;
 	}
 
-	return getAccessToken(user);
+	return { ...getAccessToken(user), refreshToken: getRefreshToken(user) };
 };
 
 export const createUserWithEmailAndPassword = async (name: string, email: string, password: string) => {
@@ -33,10 +33,20 @@ export const createUserWithEmailAndPassword = async (name: string, email: string
 
 	await addData<User>(FirestoreCollections.USERS, id, user);
 
-	return getAccessToken(user);
+	return { ...getAccessToken(user), refreshToken: getRefreshToken(user) };
 };
 
 export const getAccessToken = (user: User): AccessToken => {
-	const token: Token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: "2h" });
+	const token: Token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: "45s" });
 	return { accessToken: token, type: AccessTokenTypes.BEARER };
+};
+
+export const getRefreshToken = (user: User): RefreshToken => {
+	const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET as string);
+	addData(FirestoreCollections.REFRESH_TOKENS, refreshToken, {});
+	return refreshToken;
+};
+
+export const logout = (token: RefreshToken) => {
+	deleteData(FirestoreCollections.REFRESH_TOKENS, token);
 };

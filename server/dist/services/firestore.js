@@ -48,13 +48,18 @@ var addData = function (collection, document, data) { return __awaiter(void 0, v
 }); };
 exports.addData = addData;
 var readData = function (collection, document) { return __awaiter(void 0, void 0, void 0, function () {
-    var snapshots, res_1;
+    var doc, snapshots, res_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 if (!!!document) return [3 /*break*/, 2];
                 return [4 /*yield*/, Firebase_1.db.collection(collection).doc(document).get()];
-            case 1: return [2 /*return*/, (_a.sent()).data()];
+            case 1:
+                doc = _a.sent();
+                if (!doc.exists) {
+                    return [2 /*return*/, null];
+                }
+                return [2 /*return*/, doc.data()];
             case 2: return [4 /*yield*/, Firebase_1.db.collection(collection).get()];
             case 3:
                 snapshots = _a.sent();

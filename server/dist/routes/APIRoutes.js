@@ -31,11 +31,9 @@ router.use(function (req, res, next) {
     var _a = req.headers.authorization.split(" "), type = _a[0], token = _a[1];
     if (!token)
         return res.sendStatus(401);
-    console.log(type);
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || "", function (err, user) {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, user) {
         if (err)
             return res.sendStatus(403);
-        console.log(user);
         next();
     });
 });
