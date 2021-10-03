@@ -47,6 +47,6 @@ export const getRefreshToken = (user: User): RefreshToken => {
 	return refreshToken;
 };
 
-export const logout = (token: RefreshToken) => {
+export const revokeRefreshToken = (token: RefreshToken) => {
 	deleteData(FirestoreCollections.REFRESH_TOKENS, token);
 };

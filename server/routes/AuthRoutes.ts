@@ -2,7 +2,7 @@ import * as jwt from "jsonwebtoken";
 import express from "express";
 import { readData } from "../services/Firestore";
 import FirestoreCollections from "../types/FirestoreCollections";
-import { createUserWithEmailAndPassword, getAccessToken, loginWithEmailAndPassword, logout } from "../utils/AuthUtils";
+import { createUserWithEmailAndPassword, getAccessToken, getRefreshToken, loginWithEmailAndPassword, revokeRefreshToken } from "../utils/AuthUtils";
 import User from "../types/User";
 
 const router = express.Router();
@@ -45,14 +45,16 @@ router.post("/accessToken", async (req, res) => {
 		if (err) return res.sendStatus(403);
 		delete user?.iat;
 		const accessToken = getAccessToken(user as User);
-		res.json(accessToken);
+		const newRefreshToken = getRefreshToken(user as User);
+		revokeRefreshToken(refreshToken);
+		res.json({ ...accessToken, newRefreshToken });
 	});
 });
 
 router.delete("/logout", (req, res) => {
 	const { refreshToken } = req.body;
 	if (!refreshToken) return res.sendStatus(401);
-	logout(refreshToken);
+	revokeRefreshToken(refreshToken);
 	res.sendStatus(204);
 });
 
