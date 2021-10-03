@@ -1,10 +1,10 @@
 import * as jwt from "jsonwebtoken";
-import { v4 } from "uuid";
+import { v4, validate } from "uuid";
 import FirestoreCollections from "../types/FirestoreCollections";
 import User, { UserID } from "../types/User";
-import { EmailAlreadyExistError, InvalidEmailOrPassword } from "./AuthErrors";
+import { EmailAlreadyExistError, InvalidAccessToken, InvalidEmailOrPassword } from "./AuthErrors";
 import { addData, readDataWhere } from "../services/Firestore";
-import { AccessTokenTypes, Token } from "../types/AccessToken";
+import AccessToken, { AccessTokenTypes, Token } from "../types/AccessToken";
 
 export const loginWithEmailAndPassword = async (email: string, password: string) => {
 	const existingUsers = await readDataWhere<User>(FirestoreCollections.USERS, "email", "==", email);
@@ -36,7 +36,7 @@ export const createUserWithEmailAndPassword = async (name: string, email: string
 	return getAccessToken(user);
 };
 
-export const getAccessToken = (user: User) => {
+export const getAccessToken = (user: User): AccessToken => {
 	const token: Token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: "2h" });
-	return { token, type: AccessTokenTypes.BEARER };
+	return { accessToken: token, type: AccessTokenTypes.BEARER };
 };

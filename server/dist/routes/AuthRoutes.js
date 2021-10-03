@@ -61,7 +61,8 @@ router.post("/loginWithEmailAndPassword", function (req, res) { return __awaiter
                 return [3 /*break*/, 4];
             case 3:
                 error_1 = _b.sent();
-                res.send(error_1);
+                res.status(403);
+                res.send({ message: error_1.message });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -84,7 +85,8 @@ router.post("/createUserWithEmailAndPassword", function (req, res) { return __aw
                 return [3 /*break*/, 4];
             case 3:
                 error_2 = _b.sent();
-                res.send(error_2);
+                res.status(403);
+                res.send({ message: error_2.message });
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }

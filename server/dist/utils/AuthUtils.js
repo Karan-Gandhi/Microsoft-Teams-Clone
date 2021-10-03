@@ -108,6 +108,6 @@ var createUserWithEmailAndPassword = function (name, email, password) { return _
 exports.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
 var getAccessToken = function (user) {
     var token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "2h" });
-    return { token: token, type: AccessToken_1.AccessTokenTypes.BEARER };
+    return { accessToken: token, type: AccessToken_1.AccessTokenTypes.BEARER };
 };
 exports.getAccessToken = getAccessToken;

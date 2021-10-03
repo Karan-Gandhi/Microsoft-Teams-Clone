@@ -14,8 +14,9 @@ router.post("/loginWithEmailAndPassword", async (req, res) => {
 	try {
 		const accessToken: AccessToken = await loginWithEmailAndPassword(email, password);
 		res.json(accessToken);
-	} catch (error) {
-		res.send(error);
+	} catch (error: any) {
+		res.status(403);
+		res.send({ message: error.message });
 	}
 });
 
@@ -25,8 +26,9 @@ router.post("/createUserWithEmailAndPassword", async (req, res) => {
 	try {
 		const accessToken: AccessToken = await createUserWithEmailAndPassword(name, email, password);
 		res.json(accessToken);
-	} catch (error) {
-		res.send(error);
+	} catch (error: any) {
+		res.status(403);
+		res.send({ message: error.message });
 	}
 });
 
