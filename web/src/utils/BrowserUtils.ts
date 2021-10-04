@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 export enum CookieNames {
 	ACCESS_TOKEN_COOKIE_NAME = "access_token",
 	REFRESH_TOKEN_COOKIE_NAME = "refresh_token",
+	ACCESS_TOKEN_TYPE_COOKIE_NAME = "access_token_type",
 }
 
 export const setCookie = (name: CookieNames, value: string) => Cookies.set(name, value);
