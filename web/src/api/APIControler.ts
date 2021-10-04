@@ -1,20 +1,27 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { CookieNames, getCookie } from "../utils/BrowserUtils";
 import APIRoutes from "./APIRoutes";
 
 const AXIOS_REQUEST_TIMEOUT = 5000;
 
-const instance = axios.create({
+export const getAPIConfiguration = (noAuthorization?: boolean): AxiosRequestConfig => ({
 	timeout: AXIOS_REQUEST_TIMEOUT,
-	headers: { Authorization: `${getCookie(CookieNames.ACCESS_TOKEN_TYPE_COOKIE_NAME)} ${getCookie(CookieNames.ACCESS_TOKEN_COOKIE_NAME)}` },
+	baseURL: "http://localhost:5000/",
+	headers:
+		(!noAuthorization && {
+			Authorization: `${getCookie(CookieNames.ACCESS_TOKEN_TYPE_COOKIE_NAME)} ${getCookie(CookieNames.ACCESS_TOKEN_COOKIE_NAME)}`,
+		}) ||
+		{},
 });
 
-export const fetchUsingPOST = async <T, U>(route: APIRoutes, body: T, params?: string[]) =>
-	await instance.post<T, U>(route.concat(params?.join("") || ""), body);
+export const fetchUsingPOST = async <T, U>(config: AxiosRequestConfig, route: APIRoutes, body: T, params?: string[]) =>
+	await axios.post<T, AxiosResponse<U>>(route.concat(params?.join("") || ""), body, config);
 
-export const fetchUsingGET = async <T>(route: APIRoutes, params?: string[]) => await instance.get<unknown, T>(route.concat(params?.join("") || ""));
+export const fetchUsingGET = async <T>(config: AxiosRequestConfig, route: APIRoutes, params?: string[]) =>
+	await axios.get<T>(route.concat(params?.join("") || ""), config);
 
-export const fetchUsingPut = async <T, U>(route: APIRoutes, body?: T, params?: string[]) =>
-	await instance.put<T, U>(route.concat(params?.join("") || ""), body);
+export const fetchUsingPut = async <T, U>(config: AxiosRequestConfig, route: APIRoutes, body?: T, params?: string[]) =>
+	await axios.put<T, AxiosResponse<U>>(route.concat(params?.join("") || ""), body, config);
 
-export const fetchUsingDelete = async <T>(route: APIRoutes, params?: string[]) => await instance.delete<T>(route);
+export const fetchUsingDelete = async <T>(config: AxiosRequestConfig, route: APIRoutes, body?: T, params?: string[]) =>
+	await axios.delete<T>(route.concat(params?.join("") || ""), { ...config, data: body });

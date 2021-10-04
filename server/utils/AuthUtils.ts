@@ -37,7 +37,7 @@ export const createUserWithEmailAndPassword = async (name: string, email: string
 };
 
 export const getAccessToken = (user: User): AccessToken => {
-	const token: Token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: "45s" });
+	const token: Token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: "15s" });
 	return { accessToken: token, type: AccessTokenTypes.BEARER };
 };
 

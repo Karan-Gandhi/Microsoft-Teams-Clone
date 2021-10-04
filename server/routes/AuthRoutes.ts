@@ -47,12 +47,13 @@ router.post("/accessToken", async (req, res) => {
 		const accessToken = getAccessToken(user as User);
 		const newRefreshToken = getRefreshToken(user as User);
 		revokeRefreshToken(refreshToken);
-		res.json({ ...accessToken, newRefreshToken });
+		res.json({ ...accessToken, refreshToken: newRefreshToken });
 	});
 });
 
 router.delete("/logout", (req, res) => {
 	const { refreshToken } = req.body;
+	console.log(refreshToken);
 	if (!refreshToken) return res.sendStatus(401);
 	revokeRefreshToken(refreshToken);
 	res.sendStatus(204);

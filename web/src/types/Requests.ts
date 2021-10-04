@@ -14,3 +14,7 @@ export interface CreateUserRequest {
 	email: string;
 	password: string;
 }
+
+export interface LogoutRequest {
+	refreshToken: RefreshToken;
+}

@@ -69,7 +69,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logout = exports.getRefreshToken = exports.getAccessToken = exports.createUserWithEmailAndPassword = exports.loginWithEmailAndPassword = void 0;
+exports.revokeRefreshToken = exports.getRefreshToken = exports.getAccessToken = exports.createUserWithEmailAndPassword = exports.loginWithEmailAndPassword = void 0;
 var jwt = __importStar(require("jsonwebtoken"));
 var uuid_1 = require("uuid");
 var FirestoreCollections_1 = __importDefault(require("../types/FirestoreCollections"));
@@ -118,7 +118,7 @@ var createUserWithEmailAndPassword = function (name, email, password) { return _
 }); };
 exports.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
 var getAccessToken = function (user) {
-    var token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "45s" });
+    var token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15s" });
     return { accessToken: token, type: Tokens_1.AccessTokenTypes.BEARER };
 };
 exports.getAccessToken = getAccessToken;
@@ -128,7 +128,7 @@ var getRefreshToken = function (user) {
     return refreshToken;
 };
 exports.getRefreshToken = getRefreshToken;
-var logout = function (token) {
+var revokeRefreshToken = function (token) {
     (0, Firestore_1.deleteData)(FirestoreCollections_1.default.REFRESH_TOKENS, token);
 };
-exports.logout = logout;
+exports.revokeRefreshToken = revokeRefreshToken;
