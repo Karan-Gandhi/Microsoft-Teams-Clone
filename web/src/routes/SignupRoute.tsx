@@ -48,7 +48,7 @@ const SignupRoute: React.FC<SignupRouteProps> = () => {
 
 	return (
 		<div className="flex w-full h-screen items-center justify-center bg-white">
-			<div className="lg:w-1/3 lg:min-w-fit w-full bg-white h-fit px-16 py-14 flex flex-col justify-center items-center lg:border lg:rounded-lg">
+			<div className="lg:w-1/3 lg:min-w-128 w-full bg-white h-fit px-16 py-14 flex flex-col justify-center items-center lg:border lg:rounded-lg">
 				<div className="flex flex-col items-center min-w-full">
 					<div className="text-4xl font-bold mb-8">
 						<span>Sign up</span>

@@ -46,7 +46,7 @@ const LoginRoute: React.FC<LoginRouteProps> = () => {
 
 	return (
 		<div className="flex w-full h-screen items-center justify-center bg-white">
-			<div className="w-full lg:w-1/3 lg:min-w-fit bg-white h-fit px-16 py-14 flex flex-col justify-center items-center lg:border lg:rounded-lg">
+			<div className="w-full lg:w-1/3 lg:min-w-128 bg-white h-fit px-16 py-14 flex flex-col justify-center items-center lg:border lg:rounded-lg">
 				<div className="flex flex-col items-center min-w-full">
 					<div className="text-4xl font-bold mb-8">
 						<span>Login</span>
