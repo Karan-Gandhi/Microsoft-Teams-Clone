@@ -1,13 +1,36 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Textfield from "../components/Textfield";
 import Button from "../components/Button";
 import { Link } from "react-router-dom";
-import LoginImage from "../assets/images/Group 1.svg";
+import { useSnackbar } from "../Snackbar";
+import { validate } from "../utils/AuthUtils";
 
 interface LoginRouteProps {}
 
 const LoginRoute: React.FC<LoginRouteProps> = () => {
-	const handleSubmit = useCallback(() => {}, []);
+	const { enqueueSnackbar } = useSnackbar();
+
+	const [email, setEmail] = useState<string>("");
+	const [password, setPassword] = useState<string>("");
+
+	const handleSubmit = useCallback(
+		(e: any) => {
+			e.preventDefault();
+			// console.log("Hello world");
+			const validationSuccess = validate(
+				errorMessage => {
+					enqueueSnackbar(errorMessage);
+				},
+				email,
+				password
+			);
+
+			if (validationSuccess) {
+				// login
+			}
+		},
+		[enqueueSnackbar, email, password]
+	);
 
 	return (
 		<div className="flex w-full h-screen items-center justify-center bg-white">
@@ -18,15 +41,29 @@ const LoginRoute: React.FC<LoginRouteProps> = () => {
 					</div>
 					<form onSubmit={handleSubmit} className="w-full flex gap-2 flex-col">
 						<div>
-							<Textfield onChange={value => {}} label="Email" placeholder="example@domain.com" />
+							<Textfield
+								onChange={value => {
+									setEmail(value);
+								}}
+								label="Email"
+								placeholder="example@domain.com"
+							/>
 						</div>
 						<div>
-							<Textfield type="password" onChange={value => {}} label="Password" placeholder="Password" hintText="Must be 8 characters at least" />
+							<Textfield
+								type="password"
+								onChange={value => {
+									setPassword(value);
+								}}
+								label="Password"
+								placeholder="Password"
+								hintText="Must be 8 characters at least"
+							/>
 						</div>
 						<div className="mb-2 mt-2	flex">
 							<div className="flex items-center gap-3 cursor-pointer flex-grow">
 								<input id="remember-me-checkbox" type="checkbox" />
-								<label htmlFor="remember-me-checkbox" className="font-medium" style={{ color: "#4a4d50" }}>
+								<label htmlFor="remember-me-checkbox" className="font-medium cursor-pointer" style={{ color: "#4a4d50" }}>
 									Remember Me
 								</label>
 							</div>

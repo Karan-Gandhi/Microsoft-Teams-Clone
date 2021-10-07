@@ -24,9 +24,8 @@ const Button: React.FC<ButtonProps> = ({
 	return (
 		<div>
 			<button
-				className={`px-8 py-3 transition duration-300 hover:shadow-lg rounded-lg font-medium w-full disabled:opacity-50 ${className}`}
+				className={`px-8 py-3 transition duration-300 hover:shadow-lg rounded-lg font-medium w-full ${className}`}
 				type={type}
-				disabled
 				style={style}
 				onMouseEnter={() => {
 					setStyle({ backgroundColor: hoverBackgroudColor, color: hoverColor });
