@@ -5,6 +5,13 @@ export const validate = (
 	name?: string,
 	confirmPassword?: string
 ): boolean => {
+	if (typeof name === "string") {
+		if (name.length === 0) {
+			errorCallback("Please provide a name");
+			return false;
+		}
+	}
+
 	if (email.length === 0) {
 		errorCallback("Please provide a email");
 		return false;
@@ -25,14 +32,7 @@ export const validate = (
 		return false;
 	}
 
-	if (name) {
-		if (name.length === 0) {
-			errorCallback("Please provide a name");
-			return false;
-		}
-	}
-
-	if (confirmPassword) {
+	if (typeof confirmPassword === "string") {
 		if (password !== confirmPassword) {
 			errorCallback("The given passwords don't match");
 			return false;

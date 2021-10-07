@@ -3,7 +3,7 @@ import { TokensResponse } from "../types/Responses";
 import { AccessToken, RefreshToken } from "../types/Tokens";
 import { CookieNames, getCookie, removeCookie, setCookie } from "../utils/BrowserUtils";
 import { fetchUsingDelete, fetchUsingGET, fetchUsingPOST, getAPIConfiguration } from "./APIControler";
-import { REFRESH_TOKEN_EXPIRED } from "./AuthErrors";
+import { NO_INTERNET, REFRESH_TOKEN_EXPIRED } from "./AuthErrors";
 import APIRoutes from "./APIRoutes";
 
 export const accessTokenIsValid = async (): Promise<boolean> => {
@@ -73,7 +73,9 @@ export const createUserWithEmailAndPassword = async (name: string, email: string
 		setCookie(CookieNames.ACCESS_TOKEN_COOKIE_NAME, data.accessToken as string);
 		setCookie(CookieNames.REFRESH_TOKEN_COOKIE_NAME, data.refreshToken as string);
 		setCookie(CookieNames.ACCESS_TOKEN_TYPE_COOKIE_NAME, data.type);
+		return true;
 	} catch (error: any) {
+		if (error.message === "Network Error") throw NO_INTERNET;
 		throw new Error(error.response.data.message);
 	}
 };
