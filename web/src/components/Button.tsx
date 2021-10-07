@@ -8,6 +8,7 @@ interface ButtonProps {
 	hoverColor?: string;
 	className?: string;
 	hintText?: string;
+	onClick?: () => any;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -18,6 +19,7 @@ const Button: React.FC<ButtonProps> = ({
 	className = "",
 	hoverBackgroudColor = "#3357e4",
 	hoverColor = "#fff",
+	onClick = () => {},
 }) => {
 	const [style, setStyle] = useState<React.CSSProperties>({ backgroundColor, color });
 
@@ -33,6 +35,7 @@ const Button: React.FC<ButtonProps> = ({
 				onMouseLeave={() => {
 					setStyle({ backgroundColor, color });
 				}}
+				onClick={onClick}
 			>
 				{children}
 			</button>

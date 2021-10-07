@@ -20,7 +20,7 @@ export const validate = (
 		return false;
 	}
 
-	if (password.length < 8) {
+	if (confirmPassword && password.length < 8) {
 		errorCallback("The password must be at least 8 characters long");
 		return false;
 	}

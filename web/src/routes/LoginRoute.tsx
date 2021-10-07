@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import Textfield from "../components/Textfield";
 import Button from "../components/Button";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { useSnackbar } from "../Snackbar";
 import { validate } from "../utils/AuthUtils";
+import { loginWithEmailAndPassword, userIsLoggedIn } from "../api/Auth";
 
 interface LoginRouteProps {}
 
@@ -12,25 +13,37 @@ const LoginRoute: React.FC<LoginRouteProps> = () => {
 
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
+	const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
+
+	useEffect(() => {
+		userIsLoggedIn()
+			.then(status => {
+				setUserLoggedIn(status);
+			})
+			.catch(error => console.log(error));
+	}, []);
 
 	const handleSubmit = useCallback(
 		(e: any) => {
 			e.preventDefault();
 			// console.log("Hello world");
-			const validationSuccess = validate(
-				errorMessage => {
-					enqueueSnackbar(errorMessage);
-				},
-				email,
-				password
-			);
+			const validationSuccess = validate(errorMessage => enqueueSnackbar(errorMessage), email, password);
 
 			if (validationSuccess) {
-				// login
+				loginWithEmailAndPassword(email, password)
+					.then(status => setUserLoggedIn(status))
+					.catch(error => {
+						if (error.message === "Network Error") return enqueueSnackbar("No internet connection");
+						enqueueSnackbar("Invalid email or password");
+					});
 			}
 		},
 		[enqueueSnackbar, email, password]
 	);
+
+	if (userLoggedIn) {
+		return <Redirect to="/home" />;
+	}
 
 	return (
 		<div className="flex w-full h-screen items-center justify-center bg-white">
@@ -60,13 +73,13 @@ const LoginRoute: React.FC<LoginRouteProps> = () => {
 								hintText="Must be 8 characters at least"
 							/>
 						</div>
-						<div className="mb-2 mt-2	flex">
-							<div className="flex items-center gap-3 cursor-pointer flex-grow">
+						<div className="mb-2 mt-2	flex justify-end">
+							{/* <div className="flex items-center gap-3 cursor-pointer flex-grow">
 								<input id="remember-me-checkbox" type="checkbox" />
 								<label htmlFor="remember-me-checkbox" className="font-medium cursor-pointer" style={{ color: "#4a4d50" }}>
 									Remember Me
 								</label>
-							</div>
+							</div> */}
 							<div className="font-medium ml-8" style={{ color: "#000" }}>
 								<Link to="/signup">
 									<span className="nav-link">Already have a account?</span>
