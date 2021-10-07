@@ -5,7 +5,9 @@ export enum AccessTokenTypes {
 	BEARER = "Bearer",
 }
 
-export default interface AccessToken {
+export interface AccessToken {
 	type: AccessTokenTypes;
 	accessToken: Token;
 }
+
+export type RefreshToken = string;

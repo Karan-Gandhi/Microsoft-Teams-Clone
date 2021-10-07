@@ -1,4 +1,34 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -39,14 +69,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var jwt = __importStar(require("jsonwebtoken"));
 var express_1 = __importDefault(require("express"));
+var Firestore_1 = require("../services/Firestore");
+var FirestoreCollections_1 = __importDefault(require("../types/FirestoreCollections"));
 var AuthUtils_1 = require("../utils/AuthUtils");
 var router = express_1.default.Router();
 router.get("/", function (_, res) {
     res.send("Hello world from auth");
 });
 router.post("/loginWithEmailAndPassword", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, email, password, accessToken, error_1;
+    var _a, email, password, tokens, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -56,8 +89,8 @@ router.post("/loginWithEmailAndPassword", function (req, res) { return __awaiter
                 _b.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, (0, AuthUtils_1.loginWithEmailAndPassword)(email, password)];
             case 2:
-                accessToken = _b.sent();
-                res.json(accessToken);
+                tokens = _b.sent();
+                res.json(tokens);
                 return [3 /*break*/, 4];
             case 3:
                 error_1 = _b.sent();
@@ -70,7 +103,7 @@ router.post("/loginWithEmailAndPassword", function (req, res) { return __awaiter
 }); });
 // This will return the logged in user including the access token
 router.post("/createUserWithEmailAndPassword", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, name, email, password, accessToken, error_2;
+    var _a, name, email, password, tokens, error_2;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -80,8 +113,8 @@ router.post("/createUserWithEmailAndPassword", function (req, res) { return __aw
                 _b.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, (0, AuthUtils_1.createUserWithEmailAndPassword)(name, email, password)];
             case 2:
-                accessToken = _b.sent();
-                res.json(accessToken);
+                tokens = _b.sent();
+                res.json(tokens);
                 return [3 /*break*/, 4];
             case 3:
                 error_2 = _b.sent();
@@ -92,4 +125,37 @@ router.post("/createUserWithEmailAndPassword", function (req, res) { return __aw
         }
     });
 }); });
+router.post("/accessToken", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var refreshToken, tokenExists;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                refreshToken = req.body.refreshToken;
+                if (refreshToken == null)
+                    return [2 /*return*/, res.sendStatus(401)];
+                return [4 /*yield*/, (0, Firestore_1.readData)(FirestoreCollections_1.default.REFRESH_TOKENS, refreshToken)];
+            case 1:
+                tokenExists = _a.sent();
+                if (!tokenExists)
+                    return [2 /*return*/, res.sendStatus(403)];
+                jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, function (err, user) {
+                    if (err)
+                        return res.sendStatus(403);
+                    user === null || user === void 0 ? true : delete user.iat;
+                    var accessToken = (0, AuthUtils_1.getAccessToken)(user);
+                    var newRefreshToken = (0, AuthUtils_1.getRefreshToken)(user);
+                    (0, AuthUtils_1.revokeRefreshToken)(refreshToken);
+                    res.json(__assign(__assign({}, accessToken), { refreshToken: newRefreshToken }));
+                });
+                return [2 /*return*/];
+        }
+    });
+}); });
+router.delete("/logout", function (req, res) {
+    var refreshToken = req.body.refreshToken;
+    if (!refreshToken)
+        return res.sendStatus(401);
+    (0, AuthUtils_1.revokeRefreshToken)(refreshToken);
+    res.sendStatus(204);
+});
 exports.default = router;

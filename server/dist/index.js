@@ -7,9 +7,11 @@ var express_1 = __importDefault(require("express"));
 var dotenv_1 = require("dotenv");
 var AuthRoutes_1 = __importDefault(require("./routes/AuthRoutes"));
 var APIRoutes_1 = __importDefault(require("./routes/APIRoutes"));
+var cors_1 = __importDefault(require("cors"));
 var PORT = 5000;
 var app = (0, express_1.default)();
 app.use(express_1.default.json());
+app.use((0, cors_1.default)());
 (0, dotenv_1.config)();
 app.get("/", function (_, res) {
     res.send("Hello, world");

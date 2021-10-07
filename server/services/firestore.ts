@@ -6,7 +6,11 @@ export const addData = async <T>(collection: string, document: string, data: T):
 
 export const readData = async <T>(collection: string, document?: string) => {
 	if (!!document) {
-		return (await db.collection(collection).doc(document).get()).data();
+		const doc = await db.collection(collection).doc(document).get();
+		if (!doc.exists) {
+			return null;
+		}
+		return doc.data();
 	} else {
 		const snapshots = await db.collection(collection).get();
 		const res: T[] = [];
