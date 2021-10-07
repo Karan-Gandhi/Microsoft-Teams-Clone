@@ -28,7 +28,6 @@ const SignupRoute: React.FC<SignupRouteProps> = () => {
 	const handleSubmit = useCallback(
 		(e: any) => {
 			e.preventDefault();
-			// console.log("Hello world");
 			const validationSuccess = validate(errorMessage => enqueueSnackbar(errorMessage), email, password, name, confirmPassword);
 
 			if (validationSuccess) {
@@ -103,7 +102,7 @@ const SignupRoute: React.FC<SignupRouteProps> = () => {
 							</div>
 						</div>
 						<div>
-							<Button type="submit">Login</Button>
+							<Button type="submit">Sign up</Button>
 						</div>
 					</form>
 				</div>

@@ -153,7 +153,6 @@ router.post("/accessToken", function (req, res) { return __awaiter(void 0, void 
 }); });
 router.delete("/logout", function (req, res) {
     var refreshToken = req.body.refreshToken;
-    console.log(refreshToken);
     if (!refreshToken)
         return res.sendStatus(401);
     (0, AuthUtils_1.revokeRefreshToken)(refreshToken);

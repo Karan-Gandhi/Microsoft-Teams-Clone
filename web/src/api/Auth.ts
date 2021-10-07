@@ -41,7 +41,6 @@ export const loginWithEmailAndPassword = async (email: string, password: string)
 		setCookie(CookieNames.ACCESS_TOKEN_TYPE_COOKIE_NAME, data.type);
 		return true;
 	} catch (error) {
-		console.log(error);
 		throw error;
 	}
 };
@@ -90,7 +89,6 @@ export const logout = async () => {
 		removeCookie(CookieNames.ACCESS_TOKEN_TYPE_COOKIE_NAME);
 		removeCookie(CookieNames.REFRESH_TOKEN_COOKIE_NAME);
 	} catch (error) {
-		console.log(error);
 		throw error;
 	}
 };

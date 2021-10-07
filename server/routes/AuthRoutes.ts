@@ -53,7 +53,6 @@ router.post("/accessToken", async (req, res) => {
 
 router.delete("/logout", (req, res) => {
 	const { refreshToken } = req.body;
-	console.log(refreshToken);
 	if (!refreshToken) return res.sendStatus(401);
 	revokeRefreshToken(refreshToken);
 	res.sendStatus(204);

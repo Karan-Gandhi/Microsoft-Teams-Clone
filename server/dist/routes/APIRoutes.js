@@ -32,7 +32,6 @@ router.use(function (req, res, next) {
     if (!token)
         return res.sendStatus(401);
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (error, user) {
-        console.log(error, token);
         if (error)
             return res.sendStatus(403);
         next();
