@@ -19,6 +19,8 @@ const App: React.FC<AppProps> = () => {
 						<Route path="/signup" component={SignupRoute} exact />
 
 						<AuthenticatedRoute path="/home" component={HomeRoute} exact />
+						<AuthenticatedRoute path="/teams" component={HomeRoute} exact />
+						<AuthenticatedRoute path="/todo" component={HomeRoute} exact />
 					</Switch>
 				</SnackbarProvider>
 			</BrowserRouter>
