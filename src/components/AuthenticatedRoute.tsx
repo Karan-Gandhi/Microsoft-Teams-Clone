@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Redirect, Route, RouteProps } from "react-router";
 import { userIsLoggedIn } from "../api/Auth";
-import Loader from "./Loader";
+import Loader from "./DefaultLoader";
 import MainSidebar from "./MainSidebar";
+import TeamsSidebar from "./TeamsSidebar";
 
 interface AuthenticatedRouteProps extends RouteProps {}
 
@@ -29,10 +30,9 @@ const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({ component: Comp
 					);
 				if (redirectToLogin) return <Redirect to="/" />;
 				return (
-					<div className="w-screen h-screen flex">
-						<div className="flex">
-							<MainSidebar />
-						</div>
+					<div className="w-screen h-screen flex text-white">
+						<MainSidebar />
+						<TeamsSidebar />
 						<div className="w-full h-full">
 							{/* @ts-ignore */}
 							<Component {...props} />

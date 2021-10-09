@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import DefaultRoute from "./routes/DefaultRoute";
-import HomeRoute from "./routes/HomeRoute";
+import TeamsRoute from "./routes/TeamsRoute";
 import LoginRoute from "./routes/LoginRoute";
 import SignupRoute from "./routes/SignupRoute";
 import { SnackbarProvider } from "./Snackbar";
@@ -18,9 +18,9 @@ const App: React.FC<AppProps> = () => {
 						<Route path="/login" component={LoginRoute} exact />
 						<Route path="/signup" component={SignupRoute} exact />
 
-						<AuthenticatedRoute path="/home" component={HomeRoute} exact />
-						<AuthenticatedRoute path="/teams" component={HomeRoute} exact />
-						<AuthenticatedRoute path="/todo" component={HomeRoute} exact />
+						<AuthenticatedRoute path="/teams" component={TeamsRoute} />
+						<AuthenticatedRoute path="/activity" component={TeamsRoute} exact />
+						<AuthenticatedRoute path="/todo" component={TeamsRoute} exact />
 					</Switch>
 				</SnackbarProvider>
 			</BrowserRouter>

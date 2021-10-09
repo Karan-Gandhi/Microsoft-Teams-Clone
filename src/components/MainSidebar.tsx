@@ -10,7 +10,7 @@ const MainSidebar: React.FC<MainSidebarProps> = () => {
 	return (
 		<div className="px-2 flex flex-col" style={{ backgroundColor: "#0a0a0a" }}>
 			<div className="flex flex-col items-center justify-center flex-grow">
-				<MainSidebarItem label="Activity" icon={<NotificationsIcon fontSize="medium" />} linkTo="/home" />
+				<MainSidebarItem label="Activity" icon={<NotificationsIcon fontSize="medium" />} linkTo="/activity" />
 				<MainSidebarItem label="Teams" icon={<PeopleIcon fontSize="medium" />} linkTo="/teams" />
 				<MainSidebarItem label="To-Do" icon={<ListAltIcon fontSize="medium" />} linkTo="/todo" />
 			</div>
