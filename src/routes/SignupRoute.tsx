@@ -43,7 +43,7 @@ const SignupRoute: React.FC<SignupRouteProps> = () => {
 	);
 
 	if (userLoggedIn) {
-		return <Redirect to="/home" />;
+		return <Redirect to="/teams" />;
 	}
 
 	return (

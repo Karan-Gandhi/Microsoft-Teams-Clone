@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Redirect } from "react-router";
 import { userIsLoggedIn } from "../api/Auth";
+import DefaultLoader from "../components/DefaultLoader";
 
 interface DefaultRouteProps {}
 
@@ -16,9 +17,9 @@ const DefaultRoute: React.FC<DefaultRouteProps> = () => {
 	}, []);
 
 	if (isLoading) {
-		return <div>Loading</div>;
+		return <DefaultLoader />;
 	} else if (redirectToHomeRoute) {
-		return <Redirect to="/home" />;
+		return <Redirect to="/teams" />;
 	} else {
 		return <Redirect to="/login" />;
 	}

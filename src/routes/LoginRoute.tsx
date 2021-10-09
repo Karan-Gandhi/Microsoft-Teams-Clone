@@ -5,12 +5,14 @@ import { Link, Redirect } from "react-router-dom";
 import { useSnackbar } from "../Snackbar";
 import { validate } from "../utils/AuthUtils";
 import { loginWithEmailAndPassword, userIsLoggedIn } from "../api/Auth";
+import DefaultLoader from "../components/DefaultLoader";
 
 interface LoginRouteProps {}
 
 const LoginRoute: React.FC<LoginRouteProps> = () => {
 	const { enqueueSnackbar } = useSnackbar();
 
+	const [isLoading, setLoading] = useState<boolean>(true);
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
@@ -18,6 +20,7 @@ const LoginRoute: React.FC<LoginRouteProps> = () => {
 	useEffect(() => {
 		userIsLoggedIn()
 			.then(status => {
+				setLoading(false);
 				setUserLoggedIn(status);
 			})
 			.catch(error => console.log(error));
@@ -40,8 +43,16 @@ const LoginRoute: React.FC<LoginRouteProps> = () => {
 		[enqueueSnackbar, email, password]
 	);
 
+	if (isLoading) {
+		return (
+			<div className="w-full h-screen">
+				<DefaultLoader />
+			</div>
+		);
+	}
+
 	if (userLoggedIn) {
-		return <Redirect to="/home" />;
+		return <Redirect to="/teams" />;
 	}
 
 	return (
