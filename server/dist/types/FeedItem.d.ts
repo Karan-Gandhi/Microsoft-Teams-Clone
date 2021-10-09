@@ -7,3 +7,4 @@ export default interface FeedItem<T> {
     content: T;
     dateCreated: Date;
 }
+//# sourceMappingURL=FeedItem.d.ts.map

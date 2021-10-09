@@ -7,8 +7,7 @@ POST http://localhost:5000/auth/loginWithEmailAndPassword
 Content-Type: application/json
 
 {
-  "name": "test",
-  "email": "test1@test.com",
+  "email": "karangandhi09@hotmail.com",
   "password": "pass@1234"
 }
 
@@ -29,3 +28,34 @@ Content-Type: application/json
 {
   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdCIsImlkIjoiNzJjN2ZhMWEtY2M0YS00YzRiLTgzOTYtNjRhYTExZWRkZDFlIiwiZW1haWwiOiJ0ZXN0MUB0ZXN0LmNvbSIsInBhc3N3b3JkIjoicGFzc0AxMjM0IiwidGVhbXMiOltdLCJpYXQiOjE2MzMyNTAyMjh9.yrVNTRAbN3ng9S_6-G3x66BzkqiGTcB0OJq7ymikSWc"
 }
+
+###
+
+GET http://localhost:5000/api/teams
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImthcmFuZ2FuZGhpMDlAaG90bWFpbC5jb20iLCJwYXNzd29yZCI6InBhc3NAMTIzNCIsInRlYW1zIjpbXSwibmFtZSI6IkthcmFuIEdhbmRoaSIsImlkIjoiZDA2ODIyMzktNzM3Yi00MjIxLWE3NTUtNTE0MDk1N2IyMWY1IiwiaWF0IjoxNjMzNzU0NjY0LCJleHAiOjE2MzM3NTgyNjR9.cTm0MYxSwrJ9lvv3l8oV0JDmpB-qFJh7H1izzbp_cr0
+
+###
+
+POST  http://localhost:5000/api/teams/createTeam
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImthcmFuZ2FuZGhpMDlAaG90bWFpbC5jb20iLCJwYXNzd29yZCI6InBhc3NAMTIzNCIsInRlYW1zIjpbXSwibmFtZSI6IkthcmFuIEdhbmRoaSIsImlkIjoiZDA2ODIyMzktNzM3Yi00MjIxLWE3NTUtNTE0MDk1N2IyMWY1IiwiaWF0IjoxNjMzNzU0NjY0LCJleHAiOjE2MzM3NTgyNjR9.cTm0MYxSwrJ9lvv3l8oV0JDmpB-qFJh7H1izzbp_cr0
+Content-Type: application/json
+
+{
+  "name": "Test Team",
+  "members": []
+}
+
+###
+
+POST http://localhost:5000/api/teams/joinTeam
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQwNjgyMjM5LTczN2ItNDIyMS1hNzU1LTUxNDA5NTdiMjFmNSIsImVtYWlsIjoia2FyYW5nYW5kaGkwOUBob3RtYWlsLmNvbSIsIm5hbWUiOiJLYXJhbiBHYW5kaGkiLCJ0ZWFtcyI6W10sInBhc3N3b3JkIjoicGFzc0AxMjM0IiwiaWF0IjoxNjMzNzgwNzI2LCJleHAiOjE2MzM3ODQzMjZ9.4XQJRClVlLNith-LzmRj21lVboNW4XpcsqCNntZ4dc0
+Content-Type: application/json
+
+{
+  "teamID": "f1508986-cf2c-41c5-a414-72cd9965c369"
+}
+
+###
+
+GET http://localhost:5000/api/teams/f1508986-cf2c-41c5-a414-72cd9965c369
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQwNjgyMjM5LTczN2ItNDIyMS1hNzU1LTUxNDA5NTdiMjFmNSIsImVtYWlsIjoia2FyYW5nYW5kaGkwOUBob3RtYWlsLmNvbSIsIm5hbWUiOiJLYXJhbiBHYW5kaGkiLCJ0ZWFtcyI6W10sInBhc3N3b3JkIjoicGFzc0AxMjM0IiwiaWF0IjoxNjMzNzgwNzI2LCJleHAiOjE2MzM3ODQzMjZ9.4XQJRClVlLNith-LzmRj21lVboNW4XpcsqCNntZ4dc0

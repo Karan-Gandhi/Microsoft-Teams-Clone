@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,59 +54,68 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importDefault(require("express"));
-var AuthUtils_1 = require("../utils/AuthUtils");
-var router = express_1.default.Router();
-router.get("/", function (_, res) {
-    res.send("Hello world from auth");
+var express = __importStar(require("express"));
+var TeamsUtils_1 = require("../utils/TeamsUtils");
+var router = express.Router();
+router.get("/", function (req, res) {
+    var user = JSON.parse(req.user);
+    // returns all the teams that the user belongs to
+    res.json({ teams: (0, TeamsUtils_1.getUserTeams)(user.id) });
 });
-router.post("/loginWithEmailAndPassword", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, email, password, accessToken, error_1;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+router.post("/createTeam", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, name, members, user, _b, _c;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
             case 0:
-                _a = req.body, email = _a.email, password = _a.password;
-                _b.label = 1;
+                _a = req.body, name = _a.name, members = _a.members;
+                user = JSON.parse(req.user);
+                _c = (_b = res).json;
+                return [4 /*yield*/, (0, TeamsUtils_1.createTeam)(name, user.id, members)];
             case 1:
-                _b.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, (0, AuthUtils_1.loginWithEmailAndPassword)(email, password)];
-            case 2:
-                accessToken = _b.sent();
-                res.json(accessToken);
-                return [3 /*break*/, 4];
-            case 3:
-                error_1 = _b.sent();
-                res.send(error_1);
-                return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+                _c.apply(_b, [_d.sent()]);
+                return [2 /*return*/];
         }
     });
 }); });
-// This will return the logged in user including the access token
-router.post("/createUserWithEmailAndPassword", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, name, email, password, accessToken, error_2;
+router.post("/joinTeam", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var teamID, user, _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _a = req.body, name = _a.name, email = _a.email, password = _a.password;
+                teamID = req.body.teamID;
+                user = JSON.parse(req.user);
                 _b.label = 1;
             case 1:
                 _b.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, (0, AuthUtils_1.createUserWithEmailAndPassword)(name, email, password)];
+                return [4 /*yield*/, (0, TeamsUtils_1.joinTeam)(user.id, teamID)];
             case 2:
-                accessToken = _b.sent();
-                res.json(accessToken);
+                _b.sent();
                 return [3 /*break*/, 4];
             case 3:
-                error_2 = _b.sent();
-                res.send(error_2);
+                _a = _b.sent();
+                res.sendStatus(404);
                 return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+            case 4:
+                res.sendStatus(204);
+                return [2 /*return*/];
         }
     });
 }); });
+router.get("/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var team;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, (0, TeamsUtils_1.getTeamById)(req.params.id)];
+            case 1:
+                team = _a.sent();
+                res.json(team);
+                return [2 /*return*/];
+        }
+    });
+}); });
+router.get("/feed/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+    return [2 /*return*/];
+}); }); });
+router.post("/message/:teamID", function (req, res) { });
 exports.default = router;

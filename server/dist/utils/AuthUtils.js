@@ -76,6 +76,7 @@ var FirestoreCollections_1 = __importDefault(require("../types/FirestoreCollecti
 var AuthErrors_1 = require("./AuthErrors");
 var Firestore_1 = require("../services/Firestore");
 var Tokens_1 = require("../types/Tokens");
+var ACCESS_TOKEN_EXPIRY_TIME = "1h";
 var loginWithEmailAndPassword = function (email, password) { return __awaiter(void 0, void 0, void 0, function () {
     var existingUsers, user;
     return __generator(this, function (_a) {
@@ -118,7 +119,7 @@ var createUserWithEmailAndPassword = function (name, email, password) { return _
 }); };
 exports.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
 var getAccessToken = function (user) {
-    var token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15s" });
+    var token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRY_TIME });
     return { accessToken: token, type: Tokens_1.AccessTokenTypes.BEARER };
 };
 exports.getAccessToken = getAccessToken;

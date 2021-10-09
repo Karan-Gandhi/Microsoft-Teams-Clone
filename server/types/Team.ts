@@ -6,8 +6,13 @@ import { UserID } from "./User";
 export type TeamID = string;
 
 export default interface Team {
+	id: TeamID;
 	name: string;
 	members: UserID[]; // this will also contain the admin
 	admin: UserID;
-	feed: FeedItem<MeetingMessage | Message>[];
+}
+
+export interface TeamFeed {
+	id: TeamID;
+	messages: FeedItem<MeetingMessage | Message>[];
 }

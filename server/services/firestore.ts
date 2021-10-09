@@ -4,13 +4,16 @@ export const addData = async <T>(collection: string, document: string, data: T):
 	return await db.collection(collection).doc(document).set(data);
 };
 
-export const readData = async <T>(collection: string, document?: string) => {
+export const readData: {
+	<T>(collection: string): Promise<T[]>;
+	<T>(collection: string, document: string): Promise<T>;
+} = async <T>(collection: string, document?: string) => {
 	if (!!document) {
 		const doc = await db.collection(collection).doc(document).get();
 		if (!doc.exists) {
 			return null;
 		}
-		return doc.data();
+		return doc.data() as T;
 	} else {
 		const snapshots = await db.collection(collection).get();
 		const res: T[] = [];
@@ -55,7 +58,7 @@ export const deleteData = async (collection: string, document?: string) => {
 	}
 };
 
-export const readDataWhere = async <T>(collection: string, fieldPath: string, opStr: FirebaseFirestore.WhereFilterOp, value: any) => {
+export const readDataWhere = async <T>(collection: string, fieldPath: string, opStr: FirebaseFirestore.WhereFilterOp, value: any): Promise<T[]> => {
 	const snapshots = await db.collection(collection).where(fieldPath, opStr, value).get();
 	const res: T[] = [];
 

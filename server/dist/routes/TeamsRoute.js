@@ -18,30 +18,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var jwt = __importStar(require("jsonwebtoken"));
-var express_1 = __importDefault(require("express"));
-var TeamsRoutes_1 = __importDefault(require("./TeamsRoutes"));
-var router = express_1.default.Router();
-router.use(function (req, res, next) {
-    if (!req.headers.authorization)
-        return res.sendStatus(401);
-    var _a = req.headers.authorization.split(" "), type = _a[0], token = _a[1];
-    if (!token)
-        return res.sendStatus(401);
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (error, user) {
-        if (error)
-            return res.sendStatus(403);
-        // req.user = user as User;
-        req.user = JSON.stringify(user);
-        next();
-    });
+var express = __importStar(require("express"));
+var router = express.Router();
+router.get("/", function (req, res) {
+    // returns all the teams that the user belongs to
+    res.json({ teams: JSON.parse(req.user).teams });
 });
-router.get("/", function (_, res) {
-    res.send("Hello world from api");
-});
-router.use("/teams", TeamsRoutes_1.default);
 exports.default = router;

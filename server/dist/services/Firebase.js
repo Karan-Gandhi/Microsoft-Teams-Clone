@@ -22,26 +22,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var jwt = __importStar(require("jsonwebtoken"));
-var express_1 = __importDefault(require("express"));
-var TeamsRoutes_1 = __importDefault(require("./TeamsRoutes"));
-var router = express_1.default.Router();
-router.use(function (req, res, next) {
-    if (!req.headers.authorization)
-        return res.sendStatus(401);
-    var _a = req.headers.authorization.split(" "), type = _a[0], token = _a[1];
-    if (!token)
-        return res.sendStatus(401);
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (error, user) {
-        if (error)
-            return res.sendStatus(403);
-        // req.user = user as User;
-        req.user = JSON.stringify(user);
-        next();
-    });
+exports.db = void 0;
+var admin = __importStar(require("firebase-admin"));
+var serviceAccount_json_1 = __importDefault(require("../credentials/serviceAccount.json"));
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount_json_1.default),
 });
-router.get("/", function (_, res) {
-    res.send("Hello world from api");
-});
-router.use("/teams", TeamsRoutes_1.default);
-exports.default = router;
+exports.db = admin.firestore();

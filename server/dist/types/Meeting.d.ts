@@ -4,3 +4,4 @@ export interface MeetingMessage {
     joined: number;
     start: Date;
 }
+//# sourceMappingURL=Meeting.d.ts.map
