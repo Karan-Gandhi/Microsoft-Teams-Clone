@@ -72,5 +72,5 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImthcmFuZ
 Content-Type: application/json
 
 {
-  "content": "Hello world"
+  "content": "Hello, how are ya?"
 }

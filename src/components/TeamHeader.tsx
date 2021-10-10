@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TeamHeaderItem from "./TeamHeaderItem";
 
 interface TeamHeaderProps {
@@ -7,6 +7,8 @@ interface TeamHeaderProps {
 
 const TeamHeader: React.FC<TeamHeaderProps> = ({ setTabIndex }) => {
 	const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
+
+	useEffect(() => setTabIndex(currentTabIndex), [currentTabIndex, setTabIndex]);
 
 	return (
 		<div className="flex py-8 gap-8">
