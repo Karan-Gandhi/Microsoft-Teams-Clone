@@ -6,6 +6,7 @@ import { MeetingMessage } from "../types/Meeting";
 import Message from "../types/Message";
 import Team, { TeamFeed, TeamID } from "../types/Team";
 import User, { UserID } from "../types/User";
+import { userJoinTeam } from "./UserUtils";
 
 const NO_SUCH_TEAM_EXISTS = new Error("No such team exists");
 
@@ -21,6 +22,8 @@ export const createTeam = async (
 		members: [...members, admin],
 	};
 
+	await userJoinTeam(team.id, admin);
+
 	// update database
 	await createTeamFeed(team.id);
 	await addData(FirestoreCollections.TEAMS, team.id, team);
@@ -29,7 +32,6 @@ export const createTeam = async (
 
 export const getTeamById = async (id: TeamID): Promise<Team> => {
 	const team = await readData<Team>(FirestoreCollections.TEAMS, id);
-	console.log(team);
 	if (!team) {
 		throw NO_SUCH_TEAM_EXISTS;
 	}
@@ -39,11 +41,9 @@ export const getTeamById = async (id: TeamID): Promise<Team> => {
 export const updateTeamData = async (id: TeamID, team: Team) =>
 	await addData<Team>(FirestoreCollections.TEAMS, id, team);
 
-export const getUserTeams = async (userID: UserID) =>
-	(await readData<User>(FirestoreCollections.USERS, userID)).teams;
-
 export const joinTeam = async (userID: UserID, teamID: TeamID) => {
 	const team = await getTeamById(teamID);
+	await userJoinTeam(teamID, userID);
 	return await updateTeamData(teamID, {
 		...team,
 		members: [...team.members, userID],
@@ -65,12 +65,14 @@ export const addFeedItem = async (
 	type: FeedType
 ) => {
 	const feed = await getTeamFeed(teamID);
+	if (!feed) throw NO_SUCH_TEAM_EXISTS;
+
 	const feedItem: FeedItem<MeetingMessage | Message> = {
 		type,
 		content: message,
 		dateCreated: new Date(),
 	};
-	await updateTeamFeed(teamID, {
+	return await updateTeamFeed(teamID, {
 		...feed,
 		messages: [...feed.messages, feedItem],
 	});

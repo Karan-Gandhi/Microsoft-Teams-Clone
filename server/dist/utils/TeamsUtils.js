@@ -59,10 +59,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addFeedItem = exports.createTeamFeed = exports.updateTeamFeed = exports.getTeamFeed = exports.joinTeam = exports.getUserTeams = exports.updateTeamData = exports.getTeamById = exports.createTeam = void 0;
+exports.addFeedItem = exports.createTeamFeed = exports.updateTeamFeed = exports.getTeamFeed = exports.joinTeam = exports.updateTeamData = exports.getTeamById = exports.createTeam = void 0;
 var uuid_1 = require("uuid");
 var Firestore_1 = require("../services/Firestore");
 var FirestoreCollections_1 = __importDefault(require("../types/FirestoreCollections"));
+var UserUtils_1 = require("./UserUtils");
 var NO_SUCH_TEAM_EXISTS = new Error("No such team exists");
 var createTeam = function (name, admin, members) { return __awaiter(void 0, void 0, void 0, function () {
     var team;
@@ -75,13 +76,16 @@ var createTeam = function (name, admin, members) { return __awaiter(void 0, void
                     admin: admin,
                     members: __spreadArray(__spreadArray([], members, true), [admin], false),
                 };
+                return [4 /*yield*/, (0, UserUtils_1.userJoinTeam)(team.id, admin)];
+            case 1:
+                _a.sent();
                 // update database
                 return [4 /*yield*/, (0, exports.createTeamFeed)(team.id)];
-            case 1:
+            case 2:
                 // update database
                 _a.sent();
                 return [4 /*yield*/, (0, Firestore_1.addData)(FirestoreCollections_1.default.TEAMS, team.id, team)];
-            case 2:
+            case 3:
                 _a.sent();
                 return [2 /*return*/, team];
         }
@@ -95,7 +99,6 @@ var getTeamById = function (id) { return __awaiter(void 0, void 0, void 0, funct
             case 0: return [4 /*yield*/, (0, Firestore_1.readData)(FirestoreCollections_1.default.TEAMS, id)];
             case 1:
                 team = _a.sent();
-                console.log(team);
                 if (!team) {
                     throw NO_SUCH_TEAM_EXISTS;
                 }
@@ -111,13 +114,6 @@ var updateTeamData = function (id, team) { return __awaiter(void 0, void 0, void
     }
 }); }); };
 exports.updateTeamData = updateTeamData;
-var getUserTeams = function (userID) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    switch (_a.label) {
-        case 0: return [4 /*yield*/, (0, Firestore_1.readData)(FirestoreCollections_1.default.USERS, userID)];
-        case 1: return [2 /*return*/, (_a.sent()).teams];
-    }
-}); }); };
-exports.getUserTeams = getUserTeams;
 var joinTeam = function (userID, teamID) { return __awaiter(void 0, void 0, void 0, function () {
     var team;
     return __generator(this, function (_a) {
@@ -125,8 +121,11 @@ var joinTeam = function (userID, teamID) { return __awaiter(void 0, void 0, void
             case 0: return [4 /*yield*/, (0, exports.getTeamById)(teamID)];
             case 1:
                 team = _a.sent();
+                return [4 /*yield*/, (0, UserUtils_1.userJoinTeam)(teamID, userID)];
+            case 2:
+                _a.sent();
                 return [4 /*yield*/, (0, exports.updateTeamData)(teamID, __assign(__assign({}, team), { members: __spreadArray(__spreadArray([], team.members, true), [userID], false) }))];
-            case 2: return [2 /*return*/, _a.sent()];
+            case 3: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
@@ -159,15 +158,15 @@ var addFeedItem = function (teamID, message, type) { return __awaiter(void 0, vo
             case 0: return [4 /*yield*/, (0, exports.getTeamFeed)(teamID)];
             case 1:
                 feed = _a.sent();
+                if (!feed)
+                    throw NO_SUCH_TEAM_EXISTS;
                 feedItem = {
                     type: type,
                     content: message,
                     dateCreated: new Date(),
                 };
                 return [4 /*yield*/, (0, exports.updateTeamFeed)(teamID, __assign(__assign({}, feed), { messages: __spreadArray(__spreadArray([], feed.messages, true), [feedItem], false) }))];
-            case 2:
-                _a.sent();
-                return [2 /*return*/];
+            case 2: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
