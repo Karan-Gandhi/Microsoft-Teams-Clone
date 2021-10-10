@@ -1,9 +1,35 @@
+import { useEffect, useState } from "react";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import TeamsSidebarItem from "./TeamsSidebarItem";
+import { getTeamByID, getUserTeams } from "../utils/TeamUtils";
 
-interface TeamsSidebarProps {}
+interface TeamsSidebarProps {
+	onLoaded: () => any;
+}
 
-const TeamsSidebar: React.FC<TeamsSidebarProps> = () => {
+const TeamsSidebar: React.FC<TeamsSidebarProps> = ({ onLoaded }) => {
+	const [sidebarItems, setSidebarItems] = useState<React.ReactNode>();
+
+	useEffect(() => {
+		getUserTeams().then(async teams => {
+			setSidebarItems(
+				await Promise.all(
+					teams.data.teams.map(async teamID => {
+						const data = (await getTeamByID(teamID)).data;
+						return (
+							<TeamsSidebarItem
+								key={data.id}
+								name={data.name}
+								linkTo={`/teams/${data.id}`}
+							/>
+						);
+					})
+				)
+			);
+			onLoaded();
+		});
+	}, [onLoaded]);
+
 	return (
 		<div style={{ backgroundColor: "#141414" }} className="lg:w-96 py-4">
 			<div className="px-8 py-4 flex items-center">
@@ -15,12 +41,7 @@ const TeamsSidebar: React.FC<TeamsSidebarProps> = () => {
 				<div className="px-8 mt-6 text-sm" style={{ color: "#adadad" }}>
 					<span>Your Teams</span>
 				</div>
-				<div className="flex flex-col mt-2">
-					<TeamsSidebarItem name="Team 1" linkTo="/teams/team1" />
-					<TeamsSidebarItem name="Team 2" linkTo="/teams/team2" />
-					<TeamsSidebarItem name="Team 3" linkTo="/teams/team3" />
-					<TeamsSidebarItem name="Team 4" linkTo="/teams/team4" />
-				</div>
+				<div className="flex flex-col mt-2">{sidebarItems}</div>
 			</div>
 		</div>
 	);
