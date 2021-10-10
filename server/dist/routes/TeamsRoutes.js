@@ -56,13 +56,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = __importStar(require("express"));
+var FeedItem_1 = require("../types/FeedItem");
 var TeamsUtils_1 = require("../utils/TeamsUtils");
+var UserUtils_1 = require("../utils/UserUtils");
 var router = express.Router();
-router.get("/", function (req, res) {
-    var user = JSON.parse(req.user);
-    // returns all the teams that the user belongs to
-    res.json({ teams: (0, TeamsUtils_1.getUserTeams)(user.id) });
-});
+router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, _a, _b;
+    var _c;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
+            case 0:
+                user = JSON.parse(req.user);
+                // returns all the teams that the user belongs to
+                _b = (_a = res).json;
+                _c = {};
+                return [4 /*yield*/, (0, UserUtils_1.getUserTeams)(user.id)];
+            case 1:
+                // returns all the teams that the user belongs to
+                _b.apply(_a, [(_c.teams = _d.sent(), _c)]);
+                return [2 /*return*/];
+        }
+    });
+}); });
 router.post("/createTeam", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, name, members, user, _b, _c;
     return __generator(this, function (_d) {
@@ -103,19 +118,62 @@ router.post("/joinTeam", function (req, res) { return __awaiter(void 0, void 0, 
     });
 }); });
 router.get("/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var team;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, TeamsUtils_1.getTeamById)(req.params.id)];
+    var team, _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, (0, TeamsUtils_1.getTeamById)(req.params.id)];
             case 1:
-                team = _a.sent();
+                team = _b.sent();
                 res.json(team);
-                return [2 /*return*/];
+                return [3 /*break*/, 3];
+            case 2:
+                _a = _b.sent();
+                return [2 /*return*/, res.sendStatus(404)];
+            case 3: return [2 /*return*/];
         }
     });
 }); });
-router.get("/feed/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/];
-}); }); });
-router.post("/message/:teamID", function (req, res) { });
+router.get("/feed/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var feed, _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, (0, TeamsUtils_1.getTeamFeed)(req.params.id)];
+            case 1:
+                feed = _b.sent();
+                res.json(feed);
+                return [3 /*break*/, 3];
+            case 2:
+                _a = _b.sent();
+                res.sendStatus(404);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
+router.post("/sendMessage/:teamID", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var content, user, message, _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _b.trys.push([0, 2, , 3]);
+                content = req.body.content;
+                user = JSON.parse(req.user);
+                message = { content: content, sender: user.id };
+                return [4 /*yield*/, (0, TeamsUtils_1.addFeedItem)(req.params.teamID, message, FeedItem_1.FeedType.Message)];
+            case 1:
+                _b.sent();
+                res.sendStatus(204);
+                return [3 /*break*/, 3];
+            case 2:
+                _a = _b.sent();
+                res.sendStatus(404);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); });
 exports.default = router;
