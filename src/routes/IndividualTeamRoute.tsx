@@ -42,21 +42,25 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({
 	}
 
 	return (
-		<div className="w-full h-screen px-8 flex flex-col">
+		<div className="w-full h-screen pl-8 flex flex-col">
 			<TeamHeadder setTabIndex={setTabIndex} />
 			<div className="flex-grow flex flex-col">
 				{tabIndex === 0 && (
 					<div className="flex flex-col h-full">
-						<div className="flex-grow">
-							{feed?.messages.map(feedItem => {
+						<div className="flex-grow h-1 overflow-auto pr-8">
+							{feed?.messages.map((feedItem, idx) => {
 								if (feedItem.type === FeedType.Message)
 									return (
-										<MessageComponent {...(feedItem.content as Message)} />
+										<MessageComponent
+											key={idx}
+											{...(feedItem.content as Message)}
+											dateCreated={feedItem.dateCreated}
+										/>
 									);
-								else return <div>Meeting</div>;
+								else return <div key={idx}>Meeting</div>;
 							})}
 						</div>
-						<div>
+						<div className="pt-8 pr-8">
 							<Textfield
 								backgroundColor="#292929"
 								placeholder="Start a new Conversation"

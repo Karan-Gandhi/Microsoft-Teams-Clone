@@ -163,7 +163,7 @@ var addFeedItem = function (teamID, message, type) { return __awaiter(void 0, vo
                 feedItem = {
                     type: type,
                     content: message,
-                    dateCreated: new Date(),
+                    dateCreated: Date.now(),
                 };
                 return [4 /*yield*/, (0, exports.updateTeamFeed)(teamID, __assign(__assign({}, feed), { messages: __spreadArray(__spreadArray([], feed.messages, true), [feedItem], false) }))];
             case 2: return [2 /*return*/, _a.sent()];

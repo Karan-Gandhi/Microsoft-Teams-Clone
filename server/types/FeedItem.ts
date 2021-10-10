@@ -6,5 +6,5 @@ export enum FeedType {
 export default interface FeedItem<T> {
 	type: FeedType;
 	content: T;
-	dateCreated: Date;
+	dateCreated: number;
 }

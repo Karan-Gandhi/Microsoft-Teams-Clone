@@ -70,7 +70,7 @@ export const addFeedItem = async (
 	const feedItem: FeedItem<MeetingMessage | Message> = {
 		type,
 		content: message,
-		dateCreated: new Date(),
+		dateCreated: Date.now(),
 	};
 	return await updateTeamFeed(teamID, {
 		...feed,
