@@ -5,6 +5,7 @@ import DefaultRoute from "./routes/DefaultRoute";
 import TeamsRoute from "./routes/TeamsRoute";
 import LoginRoute from "./routes/LoginRoute";
 import SignupRoute from "./routes/SignupRoute";
+import LogoutRoute from "./routes/LogoutRoute";
 
 interface AppProps {}
 
@@ -21,6 +22,7 @@ const App: React.FC<AppProps> = () => {
 						<AuthenticatedRoute path="/teams" component={TeamsRoute} />
 						<AuthenticatedRoute path="/activity" component={TeamsRoute} exact />
 						<AuthenticatedRoute path="/todo" component={TeamsRoute} exact />
+						<AuthenticatedRoute path="/logout" component={LogoutRoute} exact />
 					</Switch>
 				</SnackbarProvider>
 			</BrowserRouter>
