@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { Route } from "react-router";
 import DefaultLoader from "../components/DefaultLoader";
 import TeamCard from "../components/TeamCard";
 import { getTeamByID, getUserTeams } from "../utils/TeamUtils";
+import AddIcon from "@mui/icons-material/Add";
 
-interface HomeRouteProps {}
+interface TeamsRouteProps {}
 
-const HomeRoute: React.FC<HomeRouteProps> = () => {
+const TeamsRoute: React.FC<TeamsRouteProps> = () => {
 	const [isLoading, setLoading] = useState<boolean>(true);
 	const [teamDisplay, setTeamDisplay] = useState<React.ReactNode>();
 
 	useEffect(() => {
 		getUserTeams().then(async teams => {
-			// setUserTeams(teams.data.teams);
 			setTeamDisplay(
 				await Promise.all(
 					teams.data.teams.map(async teamID => {
@@ -26,10 +27,31 @@ const HomeRoute: React.FC<HomeRouteProps> = () => {
 
 	return (
 		<div className="flex items-center justify-center w-full h-screen">
-			{isLoading && <DefaultLoader />}
-			{!isLoading && <div>{teamDisplay}</div>}
+			<Route path="/teams" exact>
+				{isLoading && (
+					<div className="h-screen w-full">
+						<DefaultLoader />
+					</div>
+				)}
+				{!isLoading && (
+					<div className="w-full h-screen px-8 py-4">
+						<div className="flex py-4">
+							<div className="flex-grow text-xl font-medium">
+								<span>Teams</span>
+							</div>
+							<div>
+								<AddIcon className="cursor-pointer rounded-full" />
+							</div>
+						</div>
+						<div>
+							<span style={{ color: "#adadad" }}>Your Teams</span>
+							<div className="flex">{teamDisplay}</div>
+						</div>
+					</div>
+				)}
+			</Route>
 		</div>
 	);
 };
 
-export default HomeRoute;
+export default TeamsRoute;

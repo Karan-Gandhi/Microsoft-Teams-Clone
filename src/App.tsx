@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { SnackbarProvider } from "./Snackbar";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import DefaultRoute from "./routes/DefaultRoute";
 import TeamsRoute from "./routes/TeamsRoute";
 import LoginRoute from "./routes/LoginRoute";
 import SignupRoute from "./routes/SignupRoute";
-import { SnackbarProvider } from "./Snackbar";
 
 interface AppProps {}
 
