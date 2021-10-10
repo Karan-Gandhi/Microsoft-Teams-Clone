@@ -4,12 +4,14 @@ import DefaultLoader from "../components/DefaultLoader";
 import TeamCard from "../components/TeamCard";
 import { getTeamByID, getUserTeams } from "../utils/TeamUtils";
 import AddIcon from "@mui/icons-material/Add";
+import IndividualTeamRoute from "./IndividualTeamRoute";
 
 interface TeamsRouteProps {}
 
 const TeamsRoute: React.FC<TeamsRouteProps> = () => {
 	const [isLoading, setLoading] = useState<boolean>(true);
 	const [teamDisplay, setTeamDisplay] = useState<React.ReactNode>();
+	const [teamRoutes, setTeamRoutes] = useState<React.ReactNode>();
 
 	useEffect(() => {
 		getUserTeams().then(async teams => {
@@ -21,6 +23,20 @@ const TeamsRoute: React.FC<TeamsRouteProps> = () => {
 					})
 				)
 			);
+
+			setTeamRoutes(
+				await Promise.all(
+					teams.data.teams.map(async teamID => {
+						const data = (await getTeamByID(teamID)).data;
+						return (
+							<Route key={data.id} path={`/teams/${teamID}`} exact>
+								<IndividualTeamRoute {...data} />
+							</Route>
+						);
+					})
+				)
+			);
+
 			setLoading(false);
 		});
 	}, []);
@@ -50,6 +66,7 @@ const TeamsRoute: React.FC<TeamsRouteProps> = () => {
 					</div>
 				)}
 			</Route>
+			{teamRoutes}
 		</div>
 	);
 };
