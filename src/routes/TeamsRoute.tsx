@@ -5,6 +5,7 @@ import TeamCard from "../components/TeamCard";
 import { getTeamByID, getUserTeams } from "../utils/TeamUtils";
 import AddIcon from "@mui/icons-material/Add";
 import IndividualTeamRoute from "./IndividualTeamRoute";
+import JoinTeamDialoge from "../components/JoinTeamDialoge";
 
 interface TeamsRouteProps {}
 
@@ -12,6 +13,8 @@ const TeamsRoute: React.FC<TeamsRouteProps> = () => {
 	const [isLoading, setLoading] = useState<boolean>(true);
 	const [teamDisplay, setTeamDisplay] = useState<React.ReactNode>();
 	const [teamRoutes, setTeamRoutes] = useState<React.ReactNode>();
+	const [joinTeamDialogueIsVisible, setJoinTeamDialogueIsVisible] =
+		useState<boolean>(false);
 
 	useEffect(() => {
 		getUserTeams().then(async teams => {
@@ -51,12 +54,20 @@ const TeamsRoute: React.FC<TeamsRouteProps> = () => {
 				)}
 				{!isLoading && (
 					<div className="w-full h-screen px-8 py-4">
+						<JoinTeamDialoge
+							dialogueIsOpen={joinTeamDialogueIsVisible}
+							setDialogueOpen={setJoinTeamDialogueIsVisible}
+						/>
+
 						<div className="flex py-4">
 							<div className="flex-grow text-xl font-medium">
 								<span>Teams</span>
 							</div>
 							<div>
-								<AddIcon className="cursor-pointer rounded-full" />
+								<AddIcon
+									className="cursor-pointer rounded-full"
+									onClick={() => setJoinTeamDialogueIsVisible(true)}
+								/>
 							</div>
 						</div>
 						<div>

@@ -3,11 +3,12 @@ import DefaultLoader from "../components/DefaultLoader";
 import MessageComponent from "../components/MessageComponent";
 import TeamHeadder from "../components/TeamHeader";
 import Textfield from "../components/Textfield";
+import { useSnackbar } from "../Snackbar";
 import { FeedType } from "../types/FeedItem";
 import Message from "../types/Message";
 import { TeamFeed, TeamID } from "../types/Team";
 import { UserID } from "../types/User";
-import { getTeamFeed } from "../utils/TeamUtils";
+import { getTeamFeed, sendMessageOnTeam } from "../utils/TeamUtils";
 
 const FEED_REFRESH_TIME = 1e3 * 10;
 
@@ -28,6 +29,17 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({
 	const [feed, setFeed] = useState<TeamFeed>();
 	const [tabIndex, setTabIndex] = useState<number>(0);
 	const [isLoading, setLoading] = useState<boolean>(true);
+	const [message, setMessage] = useState<string>("");
+	const { enqueueSnackbar } = useSnackbar();
+
+	const handleSubmit = async (e: any) => {
+		e.preventDefault();
+		if (message.length === 0) return enqueueSnackbar("Please enter a message");
+		await sendMessageOnTeam(id, message);
+		getTeamFeed(id).then(data => {
+			setFeed(data.data);
+		});
+	};
 
 	useEffect(() => {
 		getTeamFeed(id).then(data => {
@@ -54,6 +66,13 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({
 			}, FEED_REFRESH_TIME);
 		});
 	}, [id]);
+
+	useEffect(() => {
+		feedRef.current?.scroll({
+			top: feedRef.current.scrollHeight,
+			behavior: "auto",
+		});
+	}, [tabIndex]);
 
 	if (isLoading) {
 		return (
@@ -82,13 +101,16 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({
 								else return <div key={idx}>Meeting</div>;
 							})}
 						</div>
-						<div className="pt-8 pr-8">
-							<Textfield
-								backgroundColor="#292929"
-								placeholder="Start a new Conversation"
-								className="py-4 px-4"
-							/>
-						</div>
+						<form onSubmit={handleSubmit}>
+							<div className="pt-8 pr-8">
+								<Textfield
+									onChange={value => setMessage(value)}
+									backgroundColor="#292929"
+									placeholder="Start a new Conversation"
+									className="py-4 px-4"
+								/>
+							</div>
+						</form>
 					</div>
 				)}
 			</div>
