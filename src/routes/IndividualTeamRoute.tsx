@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import DefaultLoader from "../components/DefaultLoader";
 import MessageComponent from "../components/MessageComponent";
 import TeamHeadder from "../components/TeamHeader";
@@ -9,6 +9,7 @@ import Message from "../types/Message";
 import { TeamFeed, TeamID } from "../types/Team";
 import { UserID } from "../types/User";
 import { getTeamFeed, sendMessageOnTeam } from "../utils/TeamUtils";
+import { getUserById } from "../utils/UserUtils";
 
 const FEED_REFRESH_TIME = 1e3 * 10;
 
@@ -31,19 +32,42 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({
 	const [isLoading, setLoading] = useState<boolean>(true);
 	const [message, setMessage] = useState<string>("");
 	const { enqueueSnackbar } = useSnackbar();
+	const [messages, setMessages] = useState<React.ReactNode>();
+
+	const updateFeed = useCallback(async () => {
+		return getTeamFeed(id).then(async data => {
+			setFeed(data.data);
+
+			setMessages(
+				await Promise.all(
+					data.data.messages.map(async (feedItem, idx) => {
+						if (feedItem.type === FeedType.Message) {
+							const currentMessage = feedItem.content as Message;
+
+							return (
+								<MessageComponent
+									key={idx}
+									content={currentMessage.content}
+									sender={currentMessage.name}
+									dateCreated={feedItem.dateCreated}
+								/>
+							);
+						} else return <div key={idx}>Meeting</div>;
+					})
+				)
+			);
+		});
+	}, [id]);
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 		if (message.length === 0) return enqueueSnackbar("Please enter a message");
 		await sendMessageOnTeam(id, message);
-		getTeamFeed(id).then(data => {
-			setFeed(data.data);
-		});
+		await updateFeed();
 	};
 
 	useEffect(() => {
-		getTeamFeed(id).then(data => {
-			setFeed(data.data);
+		updateFeed().then(() => {
 			setLoading(false);
 
 			feedRef.current?.addEventListener("DOMNodeInserted", event => {
@@ -59,13 +83,11 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({
 				behavior: "auto",
 			});
 
-			setInterval(() => {
-				getTeamFeed(id).then(data => {
-					setFeed(data.data);
-				});
+			setInterval(async () => {
+				await updateFeed();
 			}, FEED_REFRESH_TIME);
 		});
-	}, [id]);
+	}, [id, updateFeed]);
 
 	useEffect(() => {
 		feedRef.current?.scroll({
@@ -89,17 +111,7 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({
 				{tabIndex === 0 && (
 					<div className="flex flex-col h-full">
 						<div className="flex-grow h-1 overflow-auto pr-8" ref={feedRef}>
-							{feed?.messages.map((feedItem, idx) => {
-								if (feedItem.type === FeedType.Message)
-									return (
-										<MessageComponent
-											key={idx}
-											{...(feedItem.content as Message)}
-											dateCreated={feedItem.dateCreated}
-										/>
-									);
-								else return <div key={idx}>Meeting</div>;
-							})}
+							{messages}
 						</div>
 						<form onSubmit={handleSubmit}>
 							<div className="pt-8 pr-8">

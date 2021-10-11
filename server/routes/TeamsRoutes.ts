@@ -59,7 +59,7 @@ router.post("/sendMessage/:teamID", async (req, res) => {
 	try {
 		const { content } = req.body;
 		const user = JSON.parse(req.user as string) as User;
-		const message: Message = { content, sender: user.id };
+		const message: Message = { content, sender: user.id, name: user.name };
 		await addFeedItem(req.params.teamID, message, FeedType.Message);
 		res.sendStatus(204);
 	} catch {

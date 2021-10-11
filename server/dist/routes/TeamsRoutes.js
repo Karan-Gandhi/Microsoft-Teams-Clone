@@ -162,7 +162,7 @@ router.post("/sendMessage/:teamID", function (req, res) { return __awaiter(void 
                 _b.trys.push([0, 2, , 3]);
                 content = req.body.content;
                 user = JSON.parse(req.user);
-                message = { content: content, sender: user.id };
+                message = { content: content, sender: user.id, name: user.name };
                 return [4 /*yield*/, (0, TeamsUtils_1.addFeedItem)(req.params.teamID, message, FeedItem_1.FeedType.Message)];
             case 1:
                 _b.sent();
