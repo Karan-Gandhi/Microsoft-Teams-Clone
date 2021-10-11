@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,38 +46,53 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUserWithEmailAndPassword = exports.loginWithEmailAndPassword = void 0;
-var uuid_1 = require("uuid");
-var FirestoreCollections_1 = __importDefault(require("../types/FirestoreCollections"));
-var AuthErrors_1 = require("./AuthErrors");
+exports.getUserTeams = exports.userJoinTeam = exports.updateUserData = exports.getUserByID = void 0;
 var Firestore_1 = require("../services/Firestore");
-var loginWithEmailAndPassword = function (email, password) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/];
+var FirestoreCollections_1 = __importDefault(require("../types/FirestoreCollections"));
+var getUserByID = function (userID) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+    switch (_a.label) {
+        case 0: return [4 /*yield*/, (0, Firestore_1.readData)(FirestoreCollections_1.default.USERS, userID)];
+        case 1: return [2 /*return*/, _a.sent()];
+    }
 }); }); };
-exports.loginWithEmailAndPassword = loginWithEmailAndPassword;
-var createUserWithEmailAndPassword = function (name, email, password) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, user, existingUsers;
+exports.getUserByID = getUserByID;
+var updateUserData = function (userID, userData) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+    switch (_a.label) {
+        case 0: return [4 /*yield*/, (0, Firestore_1.addData)(FirestoreCollections_1.default.USERS, userID, userData)];
+        case 1: return [2 /*return*/, _a.sent()];
+    }
+}); }); };
+exports.updateUserData = updateUserData;
+var userJoinTeam = function (teamID, userID) { return __awaiter(void 0, void 0, void 0, function () {
+    var user;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                id = (0, uuid_1.v4)();
-                user = { id: id, name: name, email: email, password: password, teams: [] };
-                return [4 /*yield*/, (0, Firestore_1.readDataWhere)(FirestoreCollections_1.default.USERS, "email", "==", email)];
+            case 0: return [4 /*yield*/, (0, exports.getUserByID)(userID)];
             case 1:
-                existingUsers = _a.sent();
-                // Email validation will be done at the client side only
-                if (existingUsers.length !== 0) {
-                    throw AuthErrors_1.EmailAlreadyExistError;
-                }
-                return [4 /*yield*/, (0, Firestore_1.addData)(FirestoreCollections_1.default.USERS, id, user)];
-            case 2:
-                _a.sent();
-                return [2 /*return*/];
+                user = _a.sent();
+                return [4 /*yield*/, (0, exports.updateUserData)(userID, __assign(__assign({}, user), { teams: __spreadArray(__spreadArray([], user.teams, true), [teamID], false) }))];
+            case 2: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
-exports.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+exports.userJoinTeam = userJoinTeam;
+var getUserTeams = function (userID) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+    switch (_a.label) {
+        case 0: return [4 /*yield*/, (0, Firestore_1.readData)(FirestoreCollections_1.default.USERS, userID)];
+        case 1: return [2 /*return*/, (_a.sent()).teams];
+    }
+}); }); };
+exports.getUserTeams = getUserTeams;

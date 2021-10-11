@@ -1,10 +1,11 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { SnackbarProvider } from "./Snackbar";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import DefaultRoute from "./routes/DefaultRoute";
-import HomeRoute from "./routes/HomeRoute";
+import TeamsRoute from "./routes/TeamsRoute";
 import LoginRoute from "./routes/LoginRoute";
 import SignupRoute from "./routes/SignupRoute";
-import { SnackbarProvider } from "./Snackbar";
+import LogoutRoute from "./routes/LogoutRoute";
 
 interface AppProps {}
 
@@ -18,7 +19,10 @@ const App: React.FC<AppProps> = () => {
 						<Route path="/login" component={LoginRoute} exact />
 						<Route path="/signup" component={SignupRoute} exact />
 
-						<AuthenticatedRoute path="/home" component={HomeRoute} exact />
+						<AuthenticatedRoute path="/teams" component={TeamsRoute} />
+						<AuthenticatedRoute path="/activity" component={TeamsRoute} exact />
+						<AuthenticatedRoute path="/todo" component={TeamsRoute} exact />
+						<AuthenticatedRoute path="/logout" component={LogoutRoute} exact />
 					</Switch>
 				</SnackbarProvider>
 			</BrowserRouter>

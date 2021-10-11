@@ -1,13 +1,28 @@
 import * as jwt from "jsonwebtoken";
-import { v4, validate } from "uuid";
+import { v4 } from "uuid";
 import FirestoreCollections from "../types/FirestoreCollections";
 import User, { UserID } from "../types/User";
 import { EmailAlreadyExistError, InvalidEmailOrPassword } from "./AuthErrors";
 import { addData, deleteData, readDataWhere } from "../services/Firestore";
-import { AccessToken, AccessTokenTypes, RefreshToken, Token } from "../types/Tokens";
+import {
+	AccessToken,
+	AccessTokenTypes,
+	RefreshToken,
+	Token,
+} from "../types/Tokens";
 
-export const loginWithEmailAndPassword = async (email: string, password: string) => {
-	const existingUsers = await readDataWhere<User>(FirestoreCollections.USERS, "email", "==", email);
+const ACCESS_TOKEN_EXPIRY_TIME = "7d";
+
+export const loginWithEmailAndPassword = async (
+	email: string,
+	password: string
+) => {
+	const existingUsers = await readDataWhere<User>(
+		FirestoreCollections.USERS,
+		"email",
+		"==",
+		email
+	);
 	if (existingUsers.length !== 1) {
 		throw InvalidEmailOrPassword;
 	}
@@ -20,11 +35,20 @@ export const loginWithEmailAndPassword = async (email: string, password: string)
 	return { ...getAccessToken(user), refreshToken: getRefreshToken(user) };
 };
 
-export const createUserWithEmailAndPassword = async (name: string, email: string, password: string) => {
+export const createUserWithEmailAndPassword = async (
+	name: string,
+	email: string,
+	password: string
+) => {
 	const id: UserID = v4();
 	const user: User = { id, name, email, password, teams: [] };
 
-	const existingUsers = await readDataWhere<User>(FirestoreCollections.USERS, "email", "==", email);
+	const existingUsers = await readDataWhere<User>(
+		FirestoreCollections.USERS,
+		"email",
+		"==",
+		email
+	);
 
 	// Email validation will be done at the client side only
 	if (existingUsers.length !== 0) {
@@ -37,12 +61,19 @@ export const createUserWithEmailAndPassword = async (name: string, email: string
 };
 
 export const getAccessToken = (user: User): AccessToken => {
-	const token: Token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: "15s" });
+	const token: Token = jwt.sign(
+		user,
+		process.env.ACCESS_TOKEN_SECRET as string,
+		{ expiresIn: ACCESS_TOKEN_EXPIRY_TIME }
+	);
 	return { accessToken: token, type: AccessTokenTypes.BEARER };
 };
 
 export const getRefreshToken = (user: User): RefreshToken => {
-	const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET as string);
+	const refreshToken = jwt.sign(
+		user,
+		process.env.REFRESH_TOKEN_SECRET as string
+	);
 	addData(FirestoreCollections.REFRESH_TOKENS, refreshToken, {});
 	return refreshToken;
 };

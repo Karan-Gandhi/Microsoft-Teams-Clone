@@ -1,0 +1,1 @@
+{"version":3,"file":"FeedItem.d.ts","sourceRoot":"","sources":["../../types/FeedItem.ts"],"names":[],"mappings":"AAAA,oBAAY,QAAQ;IACnB,OAAO,IAAA;IACP,OAAO,IAAA;CACP;AAED,MAAM,CAAC,OAAO,WAAW,QAAQ,CAAC,CAAC;IAClC,IAAI,EAAE,QAAQ,CAAC;IACf,OAAO,EAAE,CAAC,CAAC;IACX,WAAW,EAAE,MAAM,CAAC;CACpB"}

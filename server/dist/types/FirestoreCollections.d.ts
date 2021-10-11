@@ -1,4 +1,8 @@
 declare enum FirestoreCollections {
-    USERS = "Users"
+    USERS = "Users",
+    REFRESH_TOKENS = "RefreshTokens",
+    TEAMS = "Teams",
+    TEAM_FEED = "TeamFeed"
 }
 export default FirestoreCollections;
+//# sourceMappingURL=FirestoreCollections.d.ts.map

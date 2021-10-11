@@ -28,13 +28,20 @@ const SignupRoute: React.FC<SignupRouteProps> = () => {
 	const handleSubmit = useCallback(
 		(e: any) => {
 			e.preventDefault();
-			const validationSuccess = validate(errorMessage => enqueueSnackbar(errorMessage), email, password, name, confirmPassword);
+			const validationSuccess = validate(
+				errorMessage => enqueueSnackbar(errorMessage),
+				email,
+				password,
+				name,
+				confirmPassword
+			);
 
 			if (validationSuccess) {
 				createUserWithEmailAndPassword(name, email, password)
 					.then(status => setUserLoggedIn(status || false))
 					.catch(error => {
-						if (error.message === "Network Error") return enqueueSnackbar("No internet connection");
+						if (error.message === "Network Error")
+							return enqueueSnackbar("No internet connection");
 						enqueueSnackbar(error.message);
 					});
 			}
@@ -43,11 +50,11 @@ const SignupRoute: React.FC<SignupRouteProps> = () => {
 	);
 
 	if (userLoggedIn) {
-		return <Redirect to="/home" />;
+		return <Redirect to="/teams" />;
 	}
 
 	return (
-		<div className="flex w-full h-screen items-center justify-center bg-white">
+		<div className="flex w-full h-screen items-center justify-center">
 			<div className="lg:w-1/3 lg:min-w-128 w-full bg-white h-fit px-16 py-14 flex flex-col justify-center items-center lg:border lg:rounded-lg">
 				<div className="flex flex-col items-center min-w-full">
 					<div className="text-4xl font-bold mb-8">

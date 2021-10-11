@@ -7,7 +7,8 @@ interface ButtonProps {
 	hoverBackgroudColor?: string;
 	hoverColor?: string;
 	className?: string;
-	hintText?: string;
+	noPadding?: boolean;
+	noRounded?: boolean;
 	onClick?: () => any;
 }
 
@@ -19,14 +20,23 @@ const Button: React.FC<ButtonProps> = ({
 	className = "",
 	hoverBackgroudColor = "#3357e4",
 	hoverColor = "#fff",
+	noPadding = false,
+	noRounded = false,
 	onClick = () => {},
 }) => {
-	const [style, setStyle] = useState<React.CSSProperties>({ backgroundColor, color });
+	const [style, setStyle] = useState<React.CSSProperties>({
+		backgroundColor,
+		color,
+	});
 
 	return (
 		<div>
 			<button
-				className={`px-8 py-3 transition duration-300 hover:shadow-lg rounded-lg font-medium w-full ${className}`}
+				className={`${
+					noPadding ? "" : "px-8 py-3"
+				} transition duration-300 hover:shadow-lg ${
+					noRounded ? "" : "rounded-lg"
+				} font-medium w-full ${className}`}
 				type={type}
 				style={style}
 				onMouseEnter={() => {

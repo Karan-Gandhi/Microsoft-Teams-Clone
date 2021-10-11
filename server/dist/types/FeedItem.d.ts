@@ -5,5 +5,6 @@ export declare enum FeedType {
 export default interface FeedItem<T> {
     type: FeedType;
     content: T;
-    dateCreated: Date;
+    dateCreated: number;
 }
+//# sourceMappingURL=FeedItem.d.ts.map

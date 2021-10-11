@@ -7,8 +7,7 @@ POST http://localhost:5000/auth/loginWithEmailAndPassword
 Content-Type: application/json
 
 {
-  "name": "test",
-  "email": "test1@test.com",
+  "email": "karangandhi09@hotmail.com",
   "password": "pass@1234"
 }
 
@@ -28,4 +27,50 @@ Content-Type: application/json
 
 {
   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdCIsImlkIjoiNzJjN2ZhMWEtY2M0YS00YzRiLTgzOTYtNjRhYTExZWRkZDFlIiwiZW1haWwiOiJ0ZXN0MUB0ZXN0LmNvbSIsInBhc3N3b3JkIjoicGFzc0AxMjM0IiwidGVhbXMiOltdLCJpYXQiOjE2MzMyNTAyMjh9.yrVNTRAbN3ng9S_6-G3x66BzkqiGTcB0OJq7ymikSWc"
+}
+
+###
+
+GET http://localhost:5000/api/teams
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImthcmFuZ2FuZGhpMDlAaG90bWFpbC5jb20iLCJpZCI6ImQwNjgyMjM5LTczN2ItNDIyMS1hNzU1LTUxNDA5NTdiMjFmNSIsIm5hbWUiOiJLYXJhbiBHYW5kaGkiLCJwYXNzd29yZCI6InBhc3NAMTIzNCIsInRlYW1zIjpbXSwiaWF0IjoxNjMzODQxNTYyLCJleHAiOjE2MzQ0NDYzNjJ9.oRfJjsoS_X8D_fz9J4HOhc6AsaGsMFD-s89csGAanZw
+
+###
+
+POST  http://localhost:5000/api/teams/createTeam
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImthcmFuZ2FuZGhpMDlAaG90bWFpbC5jb20iLCJpZCI6ImQwNjgyMjM5LTczN2ItNDIyMS1hNzU1LTUxNDA5NTdiMjFmNSIsIm5hbWUiOiJLYXJhbiBHYW5kaGkiLCJwYXNzd29yZCI6InBhc3NAMTIzNCIsInRlYW1zIjpbXSwiaWF0IjoxNjMzODQxNTYyLCJleHAiOjE2MzQ0NDYzNjJ9.oRfJjsoS_X8D_fz9J4HOhc6AsaGsMFD-s89csGAanZw
+Content-Type: application/json
+
+{
+  "name": "Test Team 2",
+  "members": []
+}
+
+###
+
+POST http://localhost:5000/api/teams/joinTeam
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImthcmFuZ2FuZGhpMDlAaG90bWFpbC5jb20iLCJpZCI6ImQwNjgyMjM5LTczN2ItNDIyMS1hNzU1LTUxNDA5NTdiMjFmNSIsIm5hbWUiOiJLYXJhbiBHYW5kaGkiLCJwYXNzd29yZCI6InBhc3NAMTIzNCIsInRlYW1zIjpbXSwiaWF0IjoxNjMzODQxNTYyLCJleHAiOjE2MzQ0NDYzNjJ9.oRfJjsoS_X8D_fz9J4HOhc6AsaGsMFD-s89csGAanZw
+Content-Type: application/json
+
+{
+  "teamID": "057a3cae-1205-4337-9cef-01a58b873db6"
+}
+
+###
+
+GET http://localhost:5000/api/teams/057a3cae-1205-4337-9cef-01a58b873db6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImthcmFuZ2FuZGhpMDlAaG90bWFpbC5jb20iLCJpZCI6ImQwNjgyMjM5LTczN2ItNDIyMS1hNzU1LTUxNDA5NTdiMjFmNSIsIm5hbWUiOiJLYXJhbiBHYW5kaGkiLCJwYXNzd29yZCI6InBhc3NAMTIzNCIsInRlYW1zIjpbXSwiaWF0IjoxNjMzODQxNTYyLCJleHAiOjE2MzQ0NDYzNjJ9.oRfJjsoS_X8D_fz9J4HOhc6AsaGsMFD-s89csGAanZw
+
+###
+
+GET http://localhost:5000/api/teams/feed/057a3cae-1205-4337-9cef-01a58b873db6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImthcmFuZ2FuZGhpMDlAaG90bWFpbC5jb20iLCJpZCI6ImQwNjgyMjM5LTczN2ItNDIyMS1hNzU1LTUxNDA5NTdiMjFmNSIsIm5hbWUiOiJLYXJhbiBHYW5kaGkiLCJwYXNzd29yZCI6InBhc3NAMTIzNCIsInRlYW1zIjpbXSwiaWF0IjoxNjMzODQxNTYyLCJleHAiOjE2MzQ0NDYzNjJ9.oRfJjsoS_X8D_fz9J4HOhc6AsaGsMFD-s89csGAanZw
+
+###
+
+POST http://localhost:5000/api/teams/sendMessage/057a3cae-1205-4337-9cef-01a58b873db6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImthcmFuZ2FuZGhpMDlAaG90bWFpbC5jb20iLCJpZCI6ImQwNjgyMjM5LTczN2ItNDIyMS1hNzU1LTUxNDA5NTdiMjFmNSIsIm5hbWUiOiJLYXJhbiBHYW5kaGkiLCJwYXNzd29yZCI6InBhc3NAMTIzNCIsInRlYW1zIjpbXSwiaWF0IjoxNjMzODQxNTYyLCJleHAiOjE2MzQ0NDYzNjJ9.oRfJjsoS_X8D_fz9J4HOhc6AsaGsMFD-s89csGAanZw
+Content-Type: application/json
+
+{
+  "content": "Howdy"
 }

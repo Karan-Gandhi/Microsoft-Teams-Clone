@@ -1,14 +1,16 @@
 import User from "../types/User";
-import { AccessTokenTypes } from "../types/AccessToken";
+import { AccessToken, AccessTokenTypes, RefreshToken } from "../types/Tokens";
 export declare const loginWithEmailAndPassword: (email: string, password: string) => Promise<{
-    token: string;
+    refreshToken: string;
     type: AccessTokenTypes;
+    accessToken: string;
 }>;
 export declare const createUserWithEmailAndPassword: (name: string, email: string, password: string) => Promise<{
-    token: string;
+    refreshToken: string;
     type: AccessTokenTypes;
+    accessToken: string;
 }>;
-export declare const getAccessToken: (user: User) => {
-    token: string;
-    type: AccessTokenTypes;
-};
+export declare const getAccessToken: (user: User) => AccessToken;
+export declare const getRefreshToken: (user: User) => RefreshToken;
+export declare const revokeRefreshToken: (token: RefreshToken) => void;
+//# sourceMappingURL=AuthUtils.d.ts.map
