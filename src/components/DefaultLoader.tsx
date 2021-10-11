@@ -7,7 +7,13 @@ export interface DefaultLoaderProps {
 
 const DefaultLoader: React.FC<DefaultLoaderProps> = ({ noPadding = false }) => {
 	return (
-		<div className={"w-full h-full flex items-center justify-center text-white " + (!noPadding ? "p-5" : "")} title="spinning-loader">
+		<div
+			className={
+				"w-full h-full flex items-center justify-center text-white " +
+				(!noPadding ? "p-5" : "")
+			}
+			title="spinning-loader"
+		>
 			<AutorenewIcon className="animate-spin text-primary" fontSize="large" />
 		</div>
 	);
