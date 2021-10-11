@@ -25,6 +25,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var jwt = __importStar(require("jsonwebtoken"));
 var express_1 = __importDefault(require("express"));
 var TeamsRoutes_1 = __importDefault(require("./TeamsRoutes"));
+var UserRoutes_1 = __importDefault(require("./UserRoutes"));
 var router = express_1.default.Router();
 router.use(function (req, res, next) {
     if (!req.headers.authorization)
@@ -44,4 +45,5 @@ router.get("/", function (_, res) {
     res.send("Hello world from api");
 });
 router.use("/teams", TeamsRoutes_1.default);
+router.use("/users", UserRoutes_1.default);
 exports.default = router;
