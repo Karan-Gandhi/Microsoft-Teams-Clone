@@ -6,10 +6,9 @@ import Textfield from "../components/Textfield";
 import { useSnackbar } from "../Snackbar";
 import { FeedType } from "../types/FeedItem";
 import Message from "../types/Message";
-import { TeamFeed, TeamID } from "../types/Team";
+import { TeamID } from "../types/Team";
 import { UserID } from "../types/User";
 import { getTeamFeed, sendMessageOnTeam } from "../utils/TeamUtils";
-import { getUserById } from "../utils/UserUtils";
 
 const FEED_REFRESH_TIME = 1e3 * 10;
 
@@ -22,7 +21,6 @@ interface IndividualTeamRouteProps {
 
 const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, members, admin }) => {
 	const feedRef = useRef<HTMLDivElement>(null);
-	const [feed, setFeed] = useState<TeamFeed>();
 	const [tabIndex, setTabIndex] = useState<number>(0);
 	const [isLoading, setLoading] = useState<boolean>(true);
 	const [message, setMessage] = useState<string>("");
@@ -31,8 +29,6 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 
 	const updateFeed = useCallback(async () => {
 		return getTeamFeed(id).then(async data => {
-			setFeed(data.data);
-
 			setMessages(
 				await Promise.all(
 					data.data.messages.map(async (feedItem, idx) => {
