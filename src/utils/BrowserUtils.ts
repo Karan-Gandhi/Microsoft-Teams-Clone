@@ -6,8 +6,10 @@ export enum CookieNames {
 	ACCESS_TOKEN_TYPE_COOKIE_NAME = "access_token_type",
 }
 
-export const setCookie = (name: CookieNames, value: string) =>
+export const setCookie = (name: CookieNames, value: string) => {
+	removeCookie(name);
 	Cookies.set(name, value);
+};
 
 export const removeCookie = (name: CookieNames) => Cookies.remove(name);
 
@@ -22,9 +24,7 @@ export const makeNumberTwoDigit = (x: number) => {
 
 export const getFormattedDate = (dateCreated: number) => {
 	const date = new Date(dateCreated);
-	return `${makeNumberTwoDigit(date.getDate())}/${makeNumberTwoDigit(
-		date.getMonth()
-	)}/${makeNumberTwoDigit(date.getFullYear())}, ${makeNumberTwoDigit(
-		date.getHours()
-	)}:${makeNumberTwoDigit(date.getMinutes())}`;
+	return `${makeNumberTwoDigit(date.getDate())}/${makeNumberTwoDigit(date.getMonth())}/${makeNumberTwoDigit(
+		date.getFullYear()
+	)}, ${makeNumberTwoDigit(date.getHours())}:${makeNumberTwoDigit(date.getMinutes())}`;
 };

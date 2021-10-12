@@ -20,12 +20,7 @@ interface IndividualTeamRouteProps {
 	admin: UserID;
 }
 
-const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({
-	id,
-	name,
-	members,
-	admin,
-}) => {
+const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, members, admin }) => {
 	const feedRef = useRef<HTMLDivElement>(null);
 	const [feed, setFeed] = useState<TeamFeed>();
 	const [tabIndex, setTabIndex] = useState<number>(0);
@@ -67,6 +62,7 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({
 	};
 
 	useEffect(() => {
+		let interval: NodeJS.Timeout;
 		updateFeed().then(() => {
 			setLoading(false);
 
@@ -83,10 +79,14 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({
 				behavior: "auto",
 			});
 
-			setInterval(async () => {
+			interval = setInterval(async () => {
 				await updateFeed();
 			}, FEED_REFRESH_TIME);
 		});
+
+		return () => {
+			if (interval) clearInterval(interval);
+		};
 	}, [id, updateFeed]);
 
 	useEffect(() => {

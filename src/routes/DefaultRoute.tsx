@@ -17,7 +17,11 @@ const DefaultRoute: React.FC<DefaultRouteProps> = () => {
 	}, []);
 
 	if (isLoading) {
-		return <DefaultLoader />;
+		return (
+			<div className="w-full h-screen">
+				<DefaultLoader />
+			</div>
+		);
 	} else if (redirectToHomeRoute) {
 		return <Redirect to="/teams" />;
 	} else {
