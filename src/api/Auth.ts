@@ -2,7 +2,7 @@ import { CreateUserRequest, LoginRequest, LogoutRequest, RenewAccessTokenRequest
 import { TokensResponse } from "../types/Responses";
 import { AccessToken, RefreshToken } from "../types/Tokens";
 import { CookieNames, getCookie, removeCookie, setCookie } from "../utils/BrowserUtils";
-import { fetchUsingDelete, fetchUsingGET, fetchUsingPOST, getAPIConfiguration } from "./APIControler";
+import { fetchUsingDelete, fetchUsingGET, fetchUsingPOST } from "./APIControler";
 import { NO_INTERNET, REFRESH_TOKEN_EXPIRED } from "./AuthErrors";
 import APIRoutes from "./APIRoutes";
 
@@ -10,7 +10,7 @@ export const accessTokenIsValid = async (): Promise<boolean> => {
 	if (!getCookie(CookieNames.ACCESS_TOKEN_COOKIE_NAME)) return false;
 
 	try {
-		await fetchUsingGET<string>(getAPIConfiguration(), APIRoutes.VERIFY_ACCESS_TOKEN);
+		await fetchUsingGET<string>(APIRoutes.VERIFY_ACCESS_TOKEN, [], true);
 		return true;
 	} catch (e) {
 		return false;
@@ -35,7 +35,15 @@ export const loginWithEmailAndPassword = async (email: string, password: string)
 	if (await userIsLoggedIn()) return true;
 
 	try {
-		const { data } = await fetchUsingPOST<LoginRequest, TokensResponse>(getAPIConfiguration(), APIRoutes.LOGIN, { email, password });
+		const { data } = await fetchUsingPOST<LoginRequest, TokensResponse>(
+			APIRoutes.LOGIN,
+			{
+				email,
+				password,
+			},
+			[],
+			true
+		);
 		setCookie(CookieNames.ACCESS_TOKEN_COOKIE_NAME, data.accessToken as string);
 		setCookie(CookieNames.REFRESH_TOKEN_COOKIE_NAME, data.refreshToken as string);
 		setCookie(CookieNames.ACCESS_TOKEN_TYPE_COOKIE_NAME, data.type);
@@ -51,9 +59,14 @@ export const renewAccessToken = async (): Promise<AccessToken> => {
 	if (!refreshToken) throw REFRESH_TOKEN_EXPIRED;
 
 	try {
-		const { data } = await fetchUsingPOST<RenewAccessTokenRequest, TokensResponse>(getAPIConfiguration(), APIRoutes.RENEW_ACCESS_TOKEN, {
-			refreshToken,
-		});
+		const { data } = await fetchUsingPOST<RenewAccessTokenRequest, TokensResponse>(
+			APIRoutes.RENEW_ACCESS_TOKEN,
+			{
+				refreshToken,
+			},
+			[],
+			true
+		);
 		setCookie(CookieNames.ACCESS_TOKEN_COOKIE_NAME, data.accessToken as string);
 		setCookie(CookieNames.REFRESH_TOKEN_COOKIE_NAME, data.refreshToken as string);
 		setCookie(CookieNames.ACCESS_TOKEN_TYPE_COOKIE_NAME, data.type);
@@ -68,7 +81,16 @@ export const createUserWithEmailAndPassword = async (name: string, email: string
 	if (await userIsLoggedIn()) return;
 
 	try {
-		const { data } = await fetchUsingPOST<CreateUserRequest, TokensResponse>(getAPIConfiguration(), APIRoutes.CREATE_USER, { name, email, password });
+		const { data } = await fetchUsingPOST<CreateUserRequest, TokensResponse>(
+			APIRoutes.CREATE_USER,
+			{
+				name,
+				email,
+				password,
+			},
+			[],
+			true
+		);
 		setCookie(CookieNames.ACCESS_TOKEN_COOKIE_NAME, data.accessToken as string);
 		setCookie(CookieNames.REFRESH_TOKEN_COOKIE_NAME, data.refreshToken as string);
 		setCookie(CookieNames.ACCESS_TOKEN_TYPE_COOKIE_NAME, data.type);
@@ -82,9 +104,14 @@ export const createUserWithEmailAndPassword = async (name: string, email: string
 export const logout = async () => {
 	// logouts a user
 	try {
-		await fetchUsingDelete<LogoutRequest>(getAPIConfiguration(), APIRoutes.LOGOUT, {
-			refreshToken: getCookie(CookieNames.REFRESH_TOKEN_COOKIE_NAME),
-		});
+		await fetchUsingDelete<LogoutRequest>(
+			APIRoutes.LOGOUT,
+			{
+				refreshToken: getCookie(CookieNames.REFRESH_TOKEN_COOKIE_NAME),
+			},
+			[],
+			true
+		);
 		removeCookie(CookieNames.ACCESS_TOKEN_COOKIE_NAME);
 		removeCookie(CookieNames.ACCESS_TOKEN_TYPE_COOKIE_NAME);
 		removeCookie(CookieNames.REFRESH_TOKEN_COOKIE_NAME);
