@@ -1,6 +1,6 @@
 import { TeamID } from "./Team";
 import { AccessToken, RefreshToken } from "./Tokens";
-import { UserID } from "./User";
+import User, { UserID } from "./User";
 
 export interface TokensResponse {
 	type: string;
@@ -16,4 +16,8 @@ export interface GetUserByIdResponse {
 	name: string;
 	id: UserID;
 	email: string;
+}
+
+export interface SearchUserByEmailResponse {
+	results: User[];
 }

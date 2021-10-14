@@ -11,6 +11,7 @@ enum APIRoutes {
 	GET_TEAM_FEED = "/api/teams/feed/",
 	SEND_MESSAGE = "/api/teams/sendMessage/",
 	GET_USER_BY_ID = "/api/users/",
+	SEARCH_USER_BY_EMAIL = "/api/users/searchUserByID/",
 }
 
 export default APIRoutes;

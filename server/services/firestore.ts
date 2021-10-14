@@ -1,6 +1,10 @@
 import { db } from "./Firebase";
 
-export const addData = async <T>(collection: string, document: string, data: T): Promise<FirebaseFirestore.WriteResult> => {
+export const addData = async <T>(
+	collection: string,
+	document: string,
+	data: T
+): Promise<FirebaseFirestore.WriteResult> => {
 	return await db.collection(collection).doc(document).set(data);
 };
 
@@ -35,7 +39,10 @@ export const deleteData = async (collection: string, document?: string) => {
 			});
 		};
 
-		const deleteQueryBatch = async (query: FirebaseFirestore.Query<FirebaseFirestore.DocumentData>, resolve: (value?: unknown) => void) => {
+		const deleteQueryBatch = async (
+			query: FirebaseFirestore.Query<FirebaseFirestore.DocumentData>,
+			resolve: (value?: unknown) => void
+		) => {
 			const snapshot = await query.get();
 
 			const batchSize = snapshot.size;
@@ -58,7 +65,12 @@ export const deleteData = async (collection: string, document?: string) => {
 	}
 };
 
-export const readDataWhere = async <T>(collection: string, fieldPath: string, opStr: FirebaseFirestore.WhereFilterOp, value: any): Promise<T[]> => {
+export const readDataWhere = async <T>(
+	collection: string,
+	fieldPath: string,
+	opStr: FirebaseFirestore.WhereFilterOp,
+	value: any
+): Promise<T[]> => {
 	const snapshots = await db.collection(collection).where(fieldPath, opStr, value).get();
 	const res: T[] = [];
 
@@ -66,3 +78,10 @@ export const readDataWhere = async <T>(collection: string, fieldPath: string, op
 
 	return res;
 };
+
+export const getSnapshotWhere = (
+	collection: string,
+	fieldPath: string,
+	opStr: FirebaseFirestore.WhereFilterOp,
+	value: any
+): FirebaseFirestore.Query<FirebaseFirestore.DocumentData> => db.collection(collection).where(fieldPath, opStr, value);

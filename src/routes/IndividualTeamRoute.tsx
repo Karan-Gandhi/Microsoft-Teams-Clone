@@ -55,6 +55,7 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 		if (message.length === 0) return enqueueSnackbar("Please enter a message");
 		await sendMessageOnTeam(id, message);
 		await updateFeed();
+		setMessage("");
 	};
 
 	useEffect(() => {
@@ -112,10 +113,11 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 						<form onSubmit={handleSubmit}>
 							<div className="pt-8 pr-8">
 								<Textfield
-									onChange={value => setMessage(value)}
+									onChange={setMessage}
 									backgroundColor="#292929"
 									placeholder="Start a new Conversation"
 									className="py-4 px-4"
+									value={message}
 								/>
 							</div>
 						</form>
