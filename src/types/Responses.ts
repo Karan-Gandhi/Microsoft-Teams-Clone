@@ -1,4 +1,4 @@
-import { TeamID } from "./Team";
+import Team, { TeamID } from "./Team";
 import { AccessToken, RefreshToken } from "./Tokens";
 import User, { UserID } from "./User";
 
@@ -21,3 +21,5 @@ export interface GetUserByIdResponse {
 export interface SearchUserByEmailResponse {
 	results: User[];
 }
+
+export interface CreateTeamResponse extends Team {}

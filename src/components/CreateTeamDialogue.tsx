@@ -2,6 +2,7 @@ import { useState } from "react";
 import useDebounce from "../hooks/useDebounce";
 import { useSnackbar } from "../Snackbar";
 import User, { UserID } from "../types/User";
+import { createTeam } from "../utils/TeamUtils";
 import { searchUserByEmail } from "../utils/UserUtils";
 import Chip from "./Chip";
 import Dialogue from "./Dialogue";
@@ -36,8 +37,15 @@ const CreateTeamDialogue: React.FC<CreateTeamDialogueProps> = ({
 		[addUserEmail]
 	);
 
-	const handleCreateTeamSubmit: React.FormEventHandler<HTMLFormElement> = e => {
+	const handleCreateTeamSubmit: React.FormEventHandler<HTMLFormElement> = async e => {
 		e.preventDefault();
+		try {
+			const { data } = await createTeam(teamName, addedUsers);
+			enqueueSnackbar("Sucessfully created Team");
+			window.location.href = "/teams/" + data.id;
+		} catch {
+			enqueueSnackbar("Error creating team");
+		}
 	};
 
 	const addUser = (user: User) => {

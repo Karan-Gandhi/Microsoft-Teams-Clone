@@ -10,17 +10,15 @@ import { userJoinTeam } from "./UserUtils";
 
 const NO_SUCH_TEAM_EXISTS = new Error("No such team exists");
 
-export const createTeam = async (
-	name: string,
-	admin: UserID,
-	members: UserID[]
-): Promise<Team> => {
+export const createTeam = async (name: string, admin: UserID, members: UserID[]): Promise<Team> => {
 	const team: Team = {
 		id: v4(),
 		name,
 		admin,
 		members: [...members, admin],
 	};
+
+	members.forEach(async member => await joinTeam(member, team.id));
 
 	await userJoinTeam(team.id, admin);
 
@@ -50,20 +48,14 @@ export const joinTeam = async (userID: UserID, teamID: TeamID) => {
 	});
 };
 
-export const getTeamFeed = async (teamId: TeamID) =>
-	await readData<TeamFeed>(FirestoreCollections.TEAM_FEED, teamId);
+export const getTeamFeed = async (teamId: TeamID) => await readData<TeamFeed>(FirestoreCollections.TEAM_FEED, teamId);
 
 export const updateTeamFeed = async (teamID: TeamID, feed: TeamFeed) =>
 	await addData<TeamFeed>(FirestoreCollections.TEAM_FEED, teamID, feed);
 
-export const createTeamFeed = async (teamID: TeamID) =>
-	await updateTeamFeed(teamID, { id: teamID, messages: [] });
+export const createTeamFeed = async (teamID: TeamID) => await updateTeamFeed(teamID, { id: teamID, messages: [] });
 
-export const addFeedItem = async (
-	teamID: TeamID,
-	message: MeetingMessage | Message,
-	type: FeedType
-) => {
+export const addFeedItem = async (teamID: TeamID, message: MeetingMessage | Message, type: FeedType) => {
 	const feed = await getTeamFeed(teamID);
 	if (!feed) throw NO_SUCH_TEAM_EXISTS;
 
