@@ -15,10 +15,10 @@ export const createTeam = async (name: string, admin: UserID, members: UserID[])
 		id: v4(),
 		name,
 		admin,
-		members: [...members, admin],
+		members: [admin],
 	};
 
-	members.forEach(async member => await joinTeam(member, team.id));
+	members.forEach(async member => await userJoinTeam(team.id, member));
 
 	await userJoinTeam(team.id, admin);
 
