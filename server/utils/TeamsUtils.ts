@@ -15,7 +15,7 @@ export const createTeam = async (name: string, admin: UserID, members: UserID[])
 		id: v4(),
 		name,
 		admin,
-		members: [admin],
+		members: [...members, admin],
 	};
 
 	members.forEach(async member => await userJoinTeam(team.id, member));
@@ -68,4 +68,9 @@ export const addFeedItem = async (teamID: TeamID, message: MeetingMessage | Mess
 		...feed,
 		messages: [...feed.messages, feedItem],
 	});
+};
+
+export const getTeamMembers = async (teamID: TeamID) => {
+	const team = await getTeamById(teamID);
+	return team.members;
 };

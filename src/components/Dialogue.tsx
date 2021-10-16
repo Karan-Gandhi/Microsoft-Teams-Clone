@@ -1,6 +1,6 @@
 import CloseIcon from "@mui/icons-material/Close";
 
-interface DialogueProps {
+export interface DialogueProps {
 	dialogueIsOpen?: boolean;
 	setDialogueOpen: (value: boolean) => any;
 	title: string;
@@ -41,7 +41,7 @@ const Dialogue: React.FC<DialogueProps> = ({
 				</div>
 			</div>
 		);
-	else return <div></div>;
+	else return <div className="absolute"></div>;
 };
 
 export default Dialogue;

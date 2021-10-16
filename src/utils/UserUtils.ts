@@ -5,7 +5,7 @@ import { UserID } from "../types/User";
 import { CookieNames, getCookie } from "./BrowserUtils";
 
 export const getUserById = async (userID: UserID) =>
-	await fetchUsingGET<GetUserByIdResponse>(APIRoutes.GET_USER_BY_ID, [userID]);
+	(await fetchUsingGET<GetUserByIdResponse>(APIRoutes.GET_USER_BY_ID, [userID])).data;
 
 export const searchUserByEmail = async (email: string) =>
 	(await fetchUsingGET<SearchUserByEmailResponse>(APIRoutes.SEARCH_USER_BY_EMAIL, [email])).data.results;

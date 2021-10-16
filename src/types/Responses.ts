@@ -25,3 +25,7 @@ export interface SearchUserByEmailResponse {
 export type CreateTeamResponse = Team;
 
 export type GetUserDetailsResponse = User;
+
+export interface GetTeamMembersResponse {
+	members: UserID[];
+}

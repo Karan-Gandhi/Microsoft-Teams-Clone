@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-interface TextfieldProps {
+export interface TextfieldProps {
 	type?: string;
 	className?: string;
 	placeholder?: string;
