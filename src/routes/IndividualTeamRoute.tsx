@@ -103,7 +103,13 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 
 	return (
 		<div className="w-full h-screen pl-8 flex flex-col">
-			<TeamHeadder adminID={admin} setTabIndex={setTabIndex} teamName={name} teamID={id} />
+			<TeamHeadder
+				adminID={admin}
+				setTabIndex={setTabIndex}
+				teamName={name}
+				teamID={id}
+				totalMembers={members.length}
+			/>
 			<div className="flex-grow flex flex-col">
 				{tabIndex === 0 && (
 					<div className="flex flex-col h-full">

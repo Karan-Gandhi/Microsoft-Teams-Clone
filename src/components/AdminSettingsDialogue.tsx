@@ -10,9 +10,10 @@ interface AdminSettingsDialogueProps {
 	dialogueIsOpen?: boolean;
 	teamName: string;
 	teamID: TeamID;
+	totalMembers: number;
 }
 
-const AdminSettingsDialogue: React.FC<AdminSettingsDialogueProps> = ({ teamName, teamID, ...rest }) => {
+const AdminSettingsDialogue: React.FC<AdminSettingsDialogueProps> = ({ teamName, teamID, totalMembers, ...rest }) => {
 	return (
 		<Dialogue {...rest} title="Admin Settings">
 			<div>
@@ -25,7 +26,7 @@ const AdminSettingsDialogue: React.FC<AdminSettingsDialogueProps> = ({ teamName,
 				<div className="mt-4">
 					<div className="flex items-center px-4">
 						<div className="text-xl font-medium flex-grow">
-							<span>Members</span>
+							<span>Members ({totalMembers})</span>
 						</div>
 
 						<AddIcon />

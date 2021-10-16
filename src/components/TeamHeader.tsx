@@ -13,9 +13,10 @@ interface TeamHeaderProps {
 	adminID: UserID;
 	teamName: string;
 	teamID: TeamID;
+	totalMembers: number;
 }
 
-const TeamHeader: React.FC<TeamHeaderProps> = ({ setTabIndex, adminID, teamName, teamID }) => {
+const TeamHeader: React.FC<TeamHeaderProps> = ({ setTabIndex, adminID, teamName, teamID, totalMembers }) => {
 	const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
 	const [showAdminPanel, setShowAdminPanel] = useState<boolean>(false);
 	const [showAdminSettings, setShowAdminSettings] = useState<boolean>(false);
@@ -47,6 +48,7 @@ const TeamHeader: React.FC<TeamHeaderProps> = ({ setTabIndex, adminID, teamName,
 					dialogueIsOpen={showAdminPanel}
 					teamName={teamName}
 					teamID={teamID}
+					totalMembers={totalMembers}
 				/>
 			</div>
 		</div>
