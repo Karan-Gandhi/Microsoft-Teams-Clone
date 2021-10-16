@@ -5,7 +5,7 @@ import FirestoreCollections from "../types/FirestoreCollections";
 import { MeetingMessage } from "../types/Meeting";
 import Message from "../types/Message";
 import Team, { TeamFeed, TeamID } from "../types/Team";
-import User, { UserID } from "../types/User";
+import { UserID } from "../types/User";
 import { userJoinTeam } from "./UserUtils";
 
 const NO_SUCH_TEAM_EXISTS = new Error("No such team exists");

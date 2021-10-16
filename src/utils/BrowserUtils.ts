@@ -4,6 +4,9 @@ export enum CookieNames {
 	ACCESS_TOKEN_COOKIE_NAME = "access_token",
 	REFRESH_TOKEN_COOKIE_NAME = "refresh_token",
 	ACCESS_TOKEN_TYPE_COOKIE_NAME = "access_token_type",
+	USER_ID_COOKIE_NAME = "user_id",
+	USER_NAME_COOKIE_NAME = "user_name",
+	USER_EMAIL_COOKIE_NAME = "user_email",
 }
 
 export const setCookie = (name: CookieNames, value: string) => {

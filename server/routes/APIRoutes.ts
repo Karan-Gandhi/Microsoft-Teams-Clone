@@ -2,6 +2,7 @@ import * as jwt from "jsonwebtoken";
 import express from "express";
 import TeamsRouter from "./TeamsRoutes";
 import UserRouter from "./UserRoutes";
+import User from "../types/User";
 
 const router = express.Router();
 
@@ -10,16 +11,14 @@ router.use((req, res, next) => {
 	const [type, token] = req.headers.authorization.split(" ");
 	if (!token) return res.sendStatus(401);
 
-	jwt.verify(
-		token,
-		process.env.ACCESS_TOKEN_SECRET as string,
-		(error, user) => {
-			if (error) return res.sendStatus(403);
-			// req.user = user as User;
-			req.user = JSON.stringify(user);
-			next();
-		}
-	);
+	jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string, (error, user) => {
+		if (error) return res.sendStatus(403);
+		// req.user = user as User;
+		delete user?.iat;
+		delete user?.exp;
+		req.user = JSON.stringify(user);
+		next();
+	});
 });
 
 router.get("/", (_, res) => {

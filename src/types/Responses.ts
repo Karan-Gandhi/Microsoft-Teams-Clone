@@ -22,4 +22,6 @@ export interface SearchUserByEmailResponse {
 	results: User[];
 }
 
-export interface CreateTeamResponse extends Team {}
+export type CreateTeamResponse = Team;
+
+export type GetUserDetailsResponse = User;
