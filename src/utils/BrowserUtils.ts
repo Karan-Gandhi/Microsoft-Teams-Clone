@@ -31,3 +31,17 @@ export const getFormattedDate = (dateCreated: number) => {
 		date.getFullYear()
 	)}, ${makeNumberTwoDigit(date.getHours())}:${makeNumberTwoDigit(date.getMinutes())}`;
 };
+
+export const hashString = (s: string) => {
+	let hash: number = 0;
+	let hashConstant: number = 11;
+	let mod = 1e9 + 7;
+	let power = hashConstant;
+	for (let c of s) {
+		let hashValue = ((c.charCodeAt(0) - "A".charCodeAt(0) + 1) * power) % mod;
+		power %= mod;
+		hash += hashValue;
+	}
+
+	return hash;
+};

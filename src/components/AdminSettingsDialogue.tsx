@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { TeamID } from "../types/Team";
-import { getTeamMembers } from "../utils/TeamUtils";
-import { getUserById } from "../utils/UserUtils";
 import Dialogue from "./Dialogue";
 import PrimaryTextfield from "./PrimaryTextfield";
+import AddIcon from "@mui/icons-material/Add";
+import MemberTable from "./MemberTable";
 
 interface AdminSettingsDialogueProps {
 	setDialogueOpen: (value: boolean) => any;
@@ -13,36 +13,25 @@ interface AdminSettingsDialogueProps {
 }
 
 const AdminSettingsDialogue: React.FC<AdminSettingsDialogueProps> = ({ teamName, teamID, ...rest }) => {
-	const [teamMembers, setTeamMembers] = useState<React.ReactNode>();
-
-	useEffect(() => {
-		getTeamMembers(teamID).then(async ({ data: { members } }) => {
-			setTeamMembers(
-				await Promise.all(
-					members.map(async member => {
-						const user = await getUserById(member);
-						return <div>{user.name}</div>;
-					})
-				)
-			);
-		});
-	}, [teamID]);
-
 	return (
 		<Dialogue {...rest} title="Admin Settings">
 			<div>
-				<div>
-					<div className="my-2">
+				<div className="px-4">
+					<div className="my-2 text-xl font-medium">
 						<span>Team Name</span>
 					</div>
 					<PrimaryTextfield value={teamName} />
 				</div>
-				<div>
-					<div>
-						<span>Members</span>
+				<div className="mt-4">
+					<div className="flex items-center px-4">
+						<div className="text-xl font-medium flex-grow">
+							<span>Members</span>
+						</div>
+
+						<AddIcon />
 					</div>
 
-					{/* fetch the team members and then show */ teamMembers}
+					<MemberTable teamID={teamID} />
 				</div>
 			</div>
 		</Dialogue>
