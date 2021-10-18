@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import DefaultLoader from "../components/DefaultLoader";
-import MeetingMessage from "../components/MeetingMessage";
 import MessageComponent from "../components/MessageComponent";
 import TeamHeadder from "../components/TeamHeader";
 import Textfield from "../components/Textfield";

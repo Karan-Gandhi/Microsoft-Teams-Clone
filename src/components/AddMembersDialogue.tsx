@@ -1,52 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useDebounce from "../hooks/useDebounce";
 import { useSnackbar } from "../Snackbar";
+import { TeamID } from "../types/Team";
 import User, { UserID } from "../types/User";
-import { createTeam } from "../utils/TeamUtils";
-import { searchUserByEmail } from "../utils/UserUtils";
-import Chip from "./Chip";
+import { getTeamMembers } from "../utils/TeamUtils";
+import { getUserById, searchUserByEmail } from "../utils/UserUtils";
 import Dialogue from "./Dialogue";
+import MemberTable from "./MemberTable";
 import PrimaryButton from "./PrimaryButton";
 import SearchListItem from "./SearchListItem";
 import Textfield from "./Textfield";
 
 const DEBOUNCE_TIME_INTERVAL = 0.25e3;
 
-interface CreateTeamDialogueProps {
-	showCreateTeamDialogue: boolean;
-	setShowCreateTeamDialogue: React.Dispatch<React.SetStateAction<boolean>>;
+interface AddMembersDialogueProps {
+	setDialogueOpen: (value: boolean) => any;
+	dialogueIsOpen?: boolean;
+	teamID: TeamID;
 }
 
-const CreateTeamDialogue: React.FC<CreateTeamDialogueProps> = ({
-	setShowCreateTeamDialogue,
-	showCreateTeamDialogue,
-}) => {
-	const [addedUsers, setAddedUsers] = useState<User[]>([]);
+const AddMembersDialogue: React.FC<AddMembersDialogueProps> = ({ teamID, ...rest }) => {
 	const [addUserEmail, setAddUserEmail] = useState<string>("");
-	const [teamName, setTeamName] = useState<string>("");
+	const [addedUsers, setAddedUsers] = useState<User[]>([]);
 	const [searchResults, setSearchResults] = useState<User[]>([]);
-
 	const { enqueueSnackbar } = useSnackbar();
-
-	useDebounce(
-		async () => {
-			if (addUserEmail.length === 0) return setSearchResults([]);
-			setSearchResults(await searchUserByEmail(addUserEmail));
-		},
-		DEBOUNCE_TIME_INTERVAL,
-		[addUserEmail]
-	);
-
-	const handleCreateTeamSubmit: React.FormEventHandler<HTMLFormElement> = async e => {
-		e.preventDefault();
-		try {
-			const { data } = await createTeam(teamName, addedUsers);
-			enqueueSnackbar("Sucessfully created Team");
-			window.location.href = "/teams/" + data.id;
-		} catch {
-			enqueueSnackbar("Error creating team");
-		}
-	};
 
 	const addUser = (user: User) => {
 		// get the user and add
@@ -61,27 +38,24 @@ const CreateTeamDialogue: React.FC<CreateTeamDialogueProps> = ({
 		setAddedUsers(addedUsers.filter(user => user.id !== id));
 	};
 
+	useDebounce(
+		async () => {
+			if (addUserEmail.length === 0) return setSearchResults([]);
+			setSearchResults(await searchUserByEmail(addUserEmail));
+		},
+		DEBOUNCE_TIME_INTERVAL,
+		[addUserEmail]
+	);
+
+	useEffect(() => {
+		getTeamMembers(teamID).then(async ({ data: { members } }) => {
+			setAddedUsers(await Promise.all(members.map(async member => await getUserById(member))));
+		});
+	});
+
 	return (
-		<Dialogue
-			dialogueIsOpen={showCreateTeamDialogue}
-			setDialogueOpen={setShowCreateTeamDialogue}
-			title="Create a team"
-			onClose={() => setShowCreateTeamDialogue(false)}
-			minHeight="66.666%"
-		>
-			<form onSubmit={handleCreateTeamSubmit} className="flex flex-col flex-grow">
-				<div className="">
-					<div className="my-2">
-						<span>Team name</span>
-					</div>
-					<Textfield backgroundColor="#353535" placeholder="Team name" onChange={setTeamName} />
-				</div>
-
-				<div className="my-2">
-					<span>Add members</span>
-				</div>
-
-				{/* Make a new dialogue for members */}
+		<Dialogue title="Add Members" {...rest}>
+			<div>
 				<div className="flex flex-row gap-2">
 					<div className="flex-grow">
 						<Textfield
@@ -138,30 +112,12 @@ const CreateTeamDialogue: React.FC<CreateTeamDialogueProps> = ({
 						Add
 					</PrimaryButton>
 				</div>
-
-				<div className="flex-grow">
-					<div className="flex gap-3 flex-wrap">
-						<Chip title="You" className="text-sm" />
-						{addedUsers.map(user => (
-							<Chip key={user.id} onClose={() => removeUser(user.id)}>
-								<div className="flex gap-2 items-center">
-									<div className="font-medium text-sm">
-										<span>{user.name}</span>
-									</div>
-									<div className="text-sm text-gray-300">
-										<span>{user.email}</span>
-									</div>
-								</div>
-							</Chip>
-						))}
-					</div>
+				<div>
+					<MemberTable teamID={teamID} closeButton onClose={() => {}} />
 				</div>
-				<div className="flex justify-end mt-8">
-					<PrimaryButton type="submit">Create</PrimaryButton>
-				</div>
-			</form>
+			</div>
 		</Dialogue>
 	);
 };
 
-export default CreateTeamDialogue;
+export default AddMembersDialogue;
