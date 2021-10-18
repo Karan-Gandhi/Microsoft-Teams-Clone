@@ -14,11 +14,9 @@ const MessageComponent: React.FC<MessageComponentProps> = ({ sender, content, da
 	if (sender === getUserName()) sender = "You";
 	return (
 		<div className={`flex items-center gap-4 ${sender === "You" ? "flex-row" : "flex-row"}`}>
-			{/* {sender !== "You" && ( */}
 			<div>
 				<img src={avatarSrc} alt="" className="rounded-full" />
 			</div>
-			{/* )} */}
 
 			<div className="my-4 flex flex-col rounded-xl" style={{ backgroundColor: "#292929" }}>
 				<div className="px-4 py-3 flex gap-4 pr-8">
