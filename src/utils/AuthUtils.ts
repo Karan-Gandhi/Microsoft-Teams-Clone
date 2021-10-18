@@ -1,3 +1,5 @@
+import { hashString } from "./BrowserUtils";
+
 const COLORS = [
 	{ b: "ef9a9a", t: "b71c1c" },
 	{ b: "9fa8da", t: "1a237e" },
@@ -54,8 +56,9 @@ export const validate = (
 };
 
 export const getAvatarSrc = (title: string, size?: number) => {
+	const hash = hashString(title);
 	if (!size) size = 512;
-	const index = Math.floor(Math.random() * COLORS.length);
+	const index = hash % COLORS.length;
 	title = title.replaceAll(" ", "%20");
 	return `https://ui-avatars.com/api/?name=${title}&font-size=0.33&size=${size}&background=${COLORS[index].b}&color=${COLORS[index].t}`;
 };

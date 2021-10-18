@@ -1,5 +1,6 @@
 import { TeamID } from "./Team";
 import { RefreshToken } from "./Tokens";
+import { UserID } from "./User";
 
 export interface RenewAccessTokenRequest {
 	refreshToken: RefreshToken;
@@ -26,4 +27,9 @@ export interface SendTeamMessageRequest {
 
 export interface JoinTeamRequest {
 	teamID: TeamID;
+}
+
+export interface CreateTeamRequest {
+	name: string;
+	members: UserID[];
 }

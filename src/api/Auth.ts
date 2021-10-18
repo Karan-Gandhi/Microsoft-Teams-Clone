@@ -5,6 +5,7 @@ import { CookieNames, getCookie, removeCookie, setCookie } from "../utils/Browse
 import { fetchUsingDelete, fetchUsingGET, fetchUsingPOST } from "./APIControler";
 import { NO_INTERNET, REFRESH_TOKEN_EXPIRED } from "./AuthErrors";
 import APIRoutes from "./APIRoutes";
+import { getUserDetails } from "../utils/UserUtils";
 
 export const accessTokenIsValid = async (): Promise<boolean> => {
 	if (!getCookie(CookieNames.ACCESS_TOKEN_COOKIE_NAME)) return false;
@@ -30,6 +31,13 @@ export const userIsLoggedIn = async (): Promise<boolean> => {
 	return true;
 };
 
+export const setUserDetails = async () => {
+	const { data: user } = await getUserDetails();
+	setCookie(CookieNames.USER_ID_COOKIE_NAME, user.id);
+	setCookie(CookieNames.USER_NAME_COOKIE_NAME, user.name);
+	setCookie(CookieNames.USER_EMAIL_COOKIE_NAME, user.email);
+};
+
 export const loginWithEmailAndPassword = async (email: string, password: string) => {
 	// login with email and password and then add access token and refresh token to the cookie list
 	if (await userIsLoggedIn()) return true;
@@ -47,6 +55,7 @@ export const loginWithEmailAndPassword = async (email: string, password: string)
 		setCookie(CookieNames.ACCESS_TOKEN_COOKIE_NAME, data.accessToken as string);
 		setCookie(CookieNames.REFRESH_TOKEN_COOKIE_NAME, data.refreshToken as string);
 		setCookie(CookieNames.ACCESS_TOKEN_TYPE_COOKIE_NAME, data.type);
+		await setUserDetails();
 		return true;
 	} catch (error) {
 		throw error;
@@ -94,6 +103,7 @@ export const createUserWithEmailAndPassword = async (name: string, email: string
 		setCookie(CookieNames.ACCESS_TOKEN_COOKIE_NAME, data.accessToken as string);
 		setCookie(CookieNames.REFRESH_TOKEN_COOKIE_NAME, data.refreshToken as string);
 		setCookie(CookieNames.ACCESS_TOKEN_TYPE_COOKIE_NAME, data.type);
+		await setUserDetails();
 		return true;
 	} catch (error: any) {
 		if (error.message === "Network Error") throw NO_INTERNET;
@@ -112,9 +122,13 @@ export const logout = async () => {
 			[],
 			true
 		);
+
 		removeCookie(CookieNames.ACCESS_TOKEN_COOKIE_NAME);
 		removeCookie(CookieNames.ACCESS_TOKEN_TYPE_COOKIE_NAME);
 		removeCookie(CookieNames.REFRESH_TOKEN_COOKIE_NAME);
+		removeCookie(CookieNames.USER_ID_COOKIE_NAME);
+		removeCookie(CookieNames.USER_NAME_COOKIE_NAME);
+		removeCookie(CookieNames.USER_EMAIL_COOKIE_NAME);
 	} catch (error) {
 		throw error;
 	}

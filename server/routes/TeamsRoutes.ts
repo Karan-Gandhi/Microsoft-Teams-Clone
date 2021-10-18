@@ -2,13 +2,7 @@ import * as express from "express";
 import { FeedType } from "../types/FeedItem";
 import Message from "../types/Message";
 import User from "../types/User";
-import {
-	addFeedItem,
-	createTeam,
-	getTeamById,
-	getTeamFeed,
-	joinTeam,
-} from "../utils/TeamsUtils";
+import { addFeedItem, createTeam, getTeamById, getTeamFeed, getTeamMembers, joinTeam } from "../utils/TeamsUtils";
 import { getUserTeams } from "../utils/UserUtils";
 
 const router = express.Router();
@@ -62,6 +56,15 @@ router.post("/sendMessage/:teamID", async (req, res) => {
 		const message: Message = { content, sender: user.id, name: user.name };
 		await addFeedItem(req.params.teamID, message, FeedType.Message);
 		res.sendStatus(204);
+	} catch {
+		res.sendStatus(404);
+	}
+});
+
+router.get("/teamMembers/:id", async (req, res) => {
+	try {
+		const { id } = req.params;
+		res.json({ members: await getTeamMembers(id) });
 	} catch {
 		res.sendStatus(404);
 	}

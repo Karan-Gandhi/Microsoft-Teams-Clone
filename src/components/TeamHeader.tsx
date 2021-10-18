@@ -3,29 +3,34 @@ import TeamHeaderItem from "./TeamHeaderItem";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddIcon from "@mui/icons-material/Add";
 import Button from "./Button";
+import { getUserID } from "../utils/UserUtils";
+import { UserID } from "../types/User";
+import AdminSettingsDialogue from "./AdminSettingsDialogue";
+import { TeamID } from "../types/Team";
 
 interface TeamHeaderProps {
 	setTabIndex: React.Dispatch<React.SetStateAction<number>>;
+	adminID: UserID;
+	teamName: string;
+	teamID: TeamID;
+	totalMembers: number;
 }
 
-const TeamHeader: React.FC<TeamHeaderProps> = ({ setTabIndex }) => {
+const TeamHeader: React.FC<TeamHeaderProps> = ({ setTabIndex, adminID, teamName, teamID, totalMembers }) => {
 	const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
+	const [showAdminPanel, setShowAdminPanel] = useState<boolean>(false);
+	const [showAdminSettings, setShowAdminSettings] = useState<boolean>(false);
 
 	useEffect(() => setTabIndex(currentTabIndex), [currentTabIndex, setTabIndex]);
+	useEffect(() => {
+		if (adminID === getUserID()) setShowAdminSettings(true);
+	}, [adminID]);
 
 	return (
 		<div className="flex py-8 pr-8">
 			<div className="flex gap-8 flex-grow">
-				<TeamHeaderItem
-					label="Posts"
-					active={currentTabIndex === 0}
-					onClick={() => setCurrentTabIndex(0)}
-				/>
-				<TeamHeaderItem
-					label="Assignments"
-					active={currentTabIndex === 1}
-					onClick={() => setCurrentTabIndex(1)}
-				/>
+				<TeamHeaderItem label="Posts" active={currentTabIndex === 0} onClick={() => setCurrentTabIndex(0)} />
+				<TeamHeaderItem label="Assignments" active={currentTabIndex === 1} onClick={() => setCurrentTabIndex(1)} />
 			</div>
 			<div className="flex gap-4 items-center">
 				<Button
@@ -37,7 +42,14 @@ const TeamHeader: React.FC<TeamHeaderProps> = ({ setTabIndex }) => {
 					<span>Create a new Meeting</span>
 					<AddIcon />
 				</Button>
-				<SettingsIcon className="cursor-pointer" />
+				{showAdminSettings && <SettingsIcon className="cursor-pointer" onClick={() => setShowAdminPanel(true)} />}
+				<AdminSettingsDialogue
+					setDialogueOpen={setShowAdminPanel}
+					dialogueIsOpen={showAdminPanel}
+					teamName={teamName}
+					teamID={teamID}
+					totalMembers={totalMembers}
+				/>
 			</div>
 		</div>
 	);

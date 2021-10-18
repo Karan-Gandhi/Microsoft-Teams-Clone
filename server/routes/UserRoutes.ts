@@ -1,7 +1,25 @@
 import * as express from "express";
-import { getUserByID } from "../utils/UserUtils";
+import User from "../types/User";
+import { getUserByID, searchUserByEmail } from "../utils/UserUtils";
 
 const router = express.Router();
+
+const SEARCH_USER_SIZE = 5;
+
+router.get("/searchUserByID/:email", async (req, res) => {
+	// returns the best 5 answers
+	const { email } = req.params;
+	const user = JSON.parse(req.user as string) as User;
+
+	res.json({ results: await searchUserByEmail(email, SEARCH_USER_SIZE, user.email) });
+});
+
+router.get("/userInfo", (req, res) => {
+	const user = JSON.parse(req.user as string) as User;
+	delete user.password;
+	delete user.teams;
+	res.json({ ...user });
+});
 
 router.get("/:id", async (req, res) => {
 	try {

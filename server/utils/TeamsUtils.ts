@@ -5,22 +5,20 @@ import FirestoreCollections from "../types/FirestoreCollections";
 import { MeetingMessage } from "../types/Meeting";
 import Message from "../types/Message";
 import Team, { TeamFeed, TeamID } from "../types/Team";
-import User, { UserID } from "../types/User";
+import { UserID } from "../types/User";
 import { userJoinTeam } from "./UserUtils";
 
 const NO_SUCH_TEAM_EXISTS = new Error("No such team exists");
 
-export const createTeam = async (
-	name: string,
-	admin: UserID,
-	members: UserID[]
-): Promise<Team> => {
+export const createTeam = async (name: string, admin: UserID, members: UserID[]): Promise<Team> => {
 	const team: Team = {
 		id: v4(),
 		name,
 		admin,
 		members: [...members, admin],
 	};
+
+	members.forEach(async member => await userJoinTeam(team.id, member));
 
 	await userJoinTeam(team.id, admin);
 
@@ -50,20 +48,14 @@ export const joinTeam = async (userID: UserID, teamID: TeamID) => {
 	});
 };
 
-export const getTeamFeed = async (teamId: TeamID) =>
-	await readData<TeamFeed>(FirestoreCollections.TEAM_FEED, teamId);
+export const getTeamFeed = async (teamId: TeamID) => await readData<TeamFeed>(FirestoreCollections.TEAM_FEED, teamId);
 
 export const updateTeamFeed = async (teamID: TeamID, feed: TeamFeed) =>
 	await addData<TeamFeed>(FirestoreCollections.TEAM_FEED, teamID, feed);
 
-export const createTeamFeed = async (teamID: TeamID) =>
-	await updateTeamFeed(teamID, { id: teamID, messages: [] });
+export const createTeamFeed = async (teamID: TeamID) => await updateTeamFeed(teamID, { id: teamID, messages: [] });
 
-export const addFeedItem = async (
-	teamID: TeamID,
-	message: MeetingMessage | Message,
-	type: FeedType
-) => {
+export const addFeedItem = async (teamID: TeamID, message: MeetingMessage | Message, type: FeedType) => {
 	const feed = await getTeamFeed(teamID);
 	if (!feed) throw NO_SUCH_TEAM_EXISTS;
 
@@ -76,4 +68,9 @@ export const addFeedItem = async (
 		...feed,
 		messages: [...feed.messages, feedItem],
 	});
+};
+
+export const getTeamMembers = async (teamID: TeamID) => {
+	const team = await getTeamById(teamID);
+	return team.members;
 };

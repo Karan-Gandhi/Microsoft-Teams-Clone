@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import DefaultLoader from "../components/DefaultLoader";
+import MeetingMessage from "../components/MeetingMessage";
 import MessageComponent from "../components/MessageComponent";
 import TeamHeadder from "../components/TeamHeader";
 import Textfield from "../components/Textfield";
@@ -55,6 +56,7 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 		if (message.length === 0) return enqueueSnackbar("Please enter a message");
 		await sendMessageOnTeam(id, message);
 		await updateFeed();
+		setMessage("");
 	};
 
 	useEffect(() => {
@@ -102,7 +104,13 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 
 	return (
 		<div className="w-full h-screen pl-8 flex flex-col">
-			<TeamHeadder setTabIndex={setTabIndex} />
+			<TeamHeadder
+				adminID={admin}
+				setTabIndex={setTabIndex}
+				teamName={name}
+				teamID={id}
+				totalMembers={members.length}
+			/>
 			<div className="flex-grow flex flex-col">
 				{tabIndex === 0 && (
 					<div className="flex flex-col h-full">
@@ -112,10 +120,11 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 						<form onSubmit={handleSubmit}>
 							<div className="pt-8 pr-8">
 								<Textfield
-									onChange={value => setMessage(value)}
+									onChange={setMessage}
 									backgroundColor="#292929"
 									placeholder="Start a new Conversation"
 									className="py-4 px-4"
+									value={message}
 								/>
 							</div>
 						</form>

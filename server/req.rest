@@ -31,6 +31,11 @@ Content-Type: application/json
 
 ###
 
+GET http://localhost:5000/api/users/userInfo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImthcmFuZ2FuZGhpMDlAaG90bWFpbC5jb20iLCJpZCI6ImQwNjgyMjM5LTczN2ItNDIyMS1hNzU1LTUxNDA5NTdiMjFmNSIsIm5hbWUiOiJLYXJhbiBHYW5kaGkiLCJwYXNzd29yZCI6InBhc3NAMTIzNCIsInRlYW1zIjpbXSwiaWF0IjoxNjMzODQxNTYyLCJleHAiOjE2MzQ0NDYzNjJ9.oRfJjsoS_X8D_fz9J4HOhc6AsaGsMFD-s89csGAanZw
+
+###
+
 GET http://localhost:5000/api/teams
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImthcmFuZ2FuZGhpMDlAaG90bWFpbC5jb20iLCJpZCI6ImQwNjgyMjM5LTczN2ItNDIyMS1hNzU1LTUxNDA5NTdiMjFmNSIsIm5hbWUiOiJLYXJhbiBHYW5kaGkiLCJwYXNzd29yZCI6InBhc3NAMTIzNCIsInRlYW1zIjpbXSwiaWF0IjoxNjMzODQxNTYyLCJleHAiOjE2MzQ0NDYzNjJ9.oRfJjsoS_X8D_fz9J4HOhc6AsaGsMFD-s89csGAanZw
 
@@ -74,3 +79,8 @@ Content-Type: application/json
 {
   "content": "Howdy"
 }
+
+###
+
+GET http://localhost:5000/api/users/searchUserByID/hel
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImthcmFuZ2FuZGhpMDlAaG90bWFpbC5jb20iLCJpZCI6ImQwNjgyMjM5LTczN2ItNDIyMS1hNzU1LTUxNDA5NTdiMjFmNSIsIm5hbWUiOiJLYXJhbiBHYW5kaGkiLCJwYXNzd29yZCI6InBhc3NAMTIzNCIsInRlYW1zIjpbXSwiaWF0IjoxNjMzODQxNTYyLCJleHAiOjE2MzQ0NDYzNjJ9.oRfJjsoS_X8D_fz9J4HOhc6AsaGsMFD-s89csGAanZw
