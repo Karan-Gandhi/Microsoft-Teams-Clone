@@ -3,7 +3,7 @@ import useDebounce from "../hooks/useDebounce";
 import { useSnackbar } from "../Snackbar";
 import { TeamID } from "../types/Team";
 import User, { UserID } from "../types/User";
-import { getTeamMembers } from "../utils/TeamUtils";
+import { addMemberToTeam, getTeamMembers } from "../utils/TeamUtils";
 import { getUserById, searchUserByEmail } from "../utils/UserUtils";
 import Dialogue from "./Dialogue";
 import MemberTable from "./MemberTable";
@@ -25,13 +25,14 @@ const AddMembersDialogue: React.FC<AddMembersDialogueProps> = ({ teamID, ...rest
 	const [searchResults, setSearchResults] = useState<User[]>([]);
 	const { enqueueSnackbar } = useSnackbar();
 
-	const addUser = (user: User) => {
+	const addUser = async (user: User) => {
 		// get the user and add
 		if (addedUsers.findIndex(addedUser => addedUser.id === user.id) !== -1) {
 			setAddUserEmail("");
 			return enqueueSnackbar("User is already added");
 		}
 		setAddedUsers([...addedUsers, user]);
+		await addMemberToTeam(teamID, user.id);
 	};
 
 	const removeUser = (id: UserID) => {
@@ -41,7 +42,7 @@ const AddMembersDialogue: React.FC<AddMembersDialogueProps> = ({ teamID, ...rest
 	useDebounce(
 		async () => {
 			if (addUserEmail.length === 0) return setSearchResults([]);
-			setSearchResults(await searchUserByEmail(addUserEmail));
+			setSearchResults(await searchUserByEmail(addUserEmail, addedUsers));
 		},
 		DEBOUNCE_TIME_INTERVAL,
 		[addUserEmail]
@@ -51,10 +52,10 @@ const AddMembersDialogue: React.FC<AddMembersDialogueProps> = ({ teamID, ...rest
 		getTeamMembers(teamID).then(async ({ data: { members } }) => {
 			setAddedUsers(await Promise.all(members.map(async member => await getUserById(member))));
 		});
-	});
+	}, [teamID]);
 
 	return (
-		<Dialogue title="Add Members" {...rest}>
+		<Dialogue title="Manage Members" {...rest}>
 			<div>
 				<div className="flex flex-row gap-2">
 					<div className="flex-grow">
@@ -65,9 +66,9 @@ const AddMembersDialogue: React.FC<AddMembersDialogueProps> = ({ teamID, ...rest
 							value={addUserEmail}
 							onChange={setAddUserEmail}
 							onSubmit={async () => {
-								const users = await searchUserByEmail(addUserEmail);
+								const users = await searchUserByEmail(addUserEmail, addedUsers);
 								if (users.length >= 1) {
-									addUser(users[0]);
+									await addUser(users[0]);
 								} else {
 									enqueueSnackbar("No such user found");
 								}
@@ -80,19 +81,17 @@ const AddMembersDialogue: React.FC<AddMembersDialogueProps> = ({ teamID, ...rest
 									className="absolute py-2"
 									style={{ backgroundColor: "#292929", boxShadow: "0px 16px 20px #00000055" }}
 								>
-									{searchResults
-										.filter(result => addedUsers.findIndex(user => result.id === user.id) === -1)
-										.map(user => (
-											<SearchListItem
-												key={user.id}
-												name={user.name}
-												email={user.email}
-												onClick={() => {
-													setAddUserEmail("");
-													addUser(user);
-												}}
-											/>
-										))}
+									{searchResults.map(user => (
+										<SearchListItem
+											key={user.id}
+											name={user.name}
+											email={user.email}
+											onClick={async () => {
+												setAddUserEmail("");
+												await addUser(user);
+											}}
+										/>
+									))}
 								</div>
 							)}
 						</div>
@@ -101,9 +100,9 @@ const AddMembersDialogue: React.FC<AddMembersDialogueProps> = ({ teamID, ...rest
 					<PrimaryButton
 						onClick={async () => {
 							// adds the best match
-							const users = await searchUserByEmail(addUserEmail);
+							const users = await searchUserByEmail(addUserEmail, addedUsers);
 							if (users.length >= 1) {
-								addUser(users[0]);
+								await addUser(users[0]);
 							} else {
 								enqueueSnackbar("No such user found");
 							}
@@ -113,7 +112,15 @@ const AddMembersDialogue: React.FC<AddMembersDialogueProps> = ({ teamID, ...rest
 					</PrimaryButton>
 				</div>
 				<div>
-					<MemberTable teamID={teamID} closeButton onClose={() => {}} />
+					{/* TODO: Remove the user */}
+					<MemberTable
+						teamID={teamID}
+						closeButton
+						onClose={user => {
+							// cant remove yourself
+							console.log(user);
+						}}
+					/>
 				</div>
 			</div>
 		</Dialogue>

@@ -14,6 +14,7 @@ enum APIRoutes {
 	SEARCH_USER_BY_EMAIL = "/api/users/searchUserByID/",
 	GET_USER_INFO = "/api/users/userInfo",
 	GET_TEAM_MEMBERS = "/api/teams/teamMembers/",
+	ADD_USER_TO_TEAM = "/api/teams/addUser/",
 }
 
 export default APIRoutes;

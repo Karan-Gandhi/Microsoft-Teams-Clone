@@ -2,6 +2,7 @@ import FeedItem from "./FeedItem";
 import Message from "./Message";
 import { MeetingMessage } from "./Meeting";
 import { UserID } from "./User";
+import JoinMessage from "./JoinMessage";
 
 export type TeamID = string;
 
@@ -14,5 +15,5 @@ export default interface Team {
 
 export interface TeamFeed {
 	id: TeamID;
-	messages: FeedItem<MeetingMessage | Message>[];
+	messages: FeedItem<MeetingMessage | Message | JoinMessage>[];
 }

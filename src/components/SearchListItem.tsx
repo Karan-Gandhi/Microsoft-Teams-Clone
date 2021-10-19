@@ -21,6 +21,7 @@ const SearchListItem: React.FC<SearchListItemProps> = ({
 	closeButton = false,
 	onClose = () => {},
 }) => {
+	const avatarSrc = getAvatarSrc(name, 32);
 	if (name === getUserName()) name += " (You)";
 
 	return (
@@ -30,7 +31,7 @@ const SearchListItem: React.FC<SearchListItemProps> = ({
 			} hover:bg-black cursor-pointer py-2 gap-2 items-center transition duration-200`}
 			onClick={onClick}
 		>
-			<img src={getAvatarSrc(name, 32)} className="rounded-full" alt="" />
+			<img src={avatarSrc} className="rounded-full" alt="" />
 			<div className="font-medium">
 				<span>{name}</span>
 			</div>

@@ -21,6 +21,11 @@ router.use((req, res, next) => {
 	});
 });
 
+router.use((error: Error, _: express.Request, res: express.Response, next: express.NextFunction) => {
+	console.log(error);
+	res.sendStatus(500);
+});
+
 router.get("/", (_, res) => {
 	res.send("Hello world from api");
 });

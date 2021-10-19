@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { TeamID } from "../types/Team";
+import User from "../types/User";
 import { getTeamMembers } from "../utils/TeamUtils";
 import { getUserById } from "../utils/UserUtils";
 import DefaultLoader from "./DefaultLoader";
@@ -8,10 +9,10 @@ import SearchListItem from "./SearchListItem";
 interface MemberTableProps {
 	teamID: TeamID;
 	closeButton?: boolean;
-	onClose?: () => any;
+	onClose?: (user: User) => any;
 }
 
-const MemberTable: React.FC<MemberTableProps> = ({ teamID, closeButton, onClose }) => {
+const MemberTable: React.FC<MemberTableProps> = ({ teamID, closeButton, onClose = () => {} }) => {
 	const [teamMembers, setTeamMembers] = useState<React.ReactNode>();
 	const [isLoading, setLoading] = useState<boolean>(true);
 
@@ -24,7 +25,13 @@ const MemberTable: React.FC<MemberTableProps> = ({ teamID, closeButton, onClose 
 						return (
 							<div className="" style={{ backgroundColor: "#00000000" }} key={user.id}>
 								{idx !== 0 && <hr className="my-2" style={{ borderColor: "#00000044" }} />}
-								<SearchListItem email={user.email} name={user.name} noDot closeButton={closeButton} onClose={onClose} />
+								<SearchListItem
+									email={user.email}
+									name={user.name}
+									noDot
+									closeButton={closeButton}
+									onClose={() => onClose(user)}
+								/>
 							</div>
 						);
 					})

@@ -2,6 +2,7 @@ import { v4 } from "uuid";
 import { addData, readData } from "../services/Firestore";
 import FeedItem, { FeedType } from "../types/FeedItem";
 import FirestoreCollections from "../types/FirestoreCollections";
+import JoinMessage from "../types/JoinMessage";
 import { MeetingMessage } from "../types/Meeting";
 import Message from "../types/Message";
 import Team, { TeamFeed, TeamID } from "../types/Team";
@@ -55,11 +56,11 @@ export const updateTeamFeed = async (teamID: TeamID, feed: TeamFeed) =>
 
 export const createTeamFeed = async (teamID: TeamID) => await updateTeamFeed(teamID, { id: teamID, messages: [] });
 
-export const addFeedItem = async (teamID: TeamID, message: MeetingMessage | Message, type: FeedType) => {
+export const addFeedItem = async (teamID: TeamID, message: MeetingMessage | Message | JoinMessage, type: FeedType) => {
 	const feed = await getTeamFeed(teamID);
 	if (!feed) throw NO_SUCH_TEAM_EXISTS;
 
-	const feedItem: FeedItem<MeetingMessage | Message> = {
+	const feedItem: FeedItem<MeetingMessage | Message | JoinMessage> = {
 		type,
 		content: message,
 		dateCreated: Date.now(),
@@ -73,4 +74,14 @@ export const addFeedItem = async (teamID: TeamID, message: MeetingMessage | Mess
 export const getTeamMembers = async (teamID: TeamID) => {
 	const team = await getTeamById(teamID);
 	return team.members;
+};
+
+export const addUserToTeam = async (teamID: TeamID, userID: UserID) => {
+	const team: Team = await getTeamById(teamID);
+	if (team.members.findIndex(user => user === userID) !== -1) return;
+	team.members.push(userID);
+
+	await updateTeamData(teamID, team);
+	await userJoinTeam(teamID, userID);
+	await addFeedItem(teamID, { userJoined: userID }, FeedType.UserJoin);
 };

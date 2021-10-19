@@ -1,5 +1,5 @@
-import { CreateUserRequest, LoginRequest, LogoutRequest, RenewAccessTokenRequest } from "../types/Requests";
-import { TokensResponse } from "../types/Responses";
+import { CreateUserRequest, LoginRequest, LogoutRequest, RenewAccessTokenRequest } from "./Requests";
+import { TokensResponse } from "./Responses";
 import { AccessToken, RefreshToken } from "../types/Tokens";
 import { CookieNames, getCookie, removeCookie, setCookie } from "../utils/BrowserUtils";
 import { fetchUsingDelete, fetchUsingGET, fetchUsingPOST } from "./APIControler";

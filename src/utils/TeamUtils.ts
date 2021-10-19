@@ -1,9 +1,9 @@
-import { fetchUsingGET, fetchUsingPOST } from "../api/APIControler";
+import { fetchUsingGET, fetchUsingPOST, fetchUsingPut } from "../api/APIControler";
 import APIRoutes from "../api/APIRoutes";
-import { CreateTeamRequest, JoinTeamRequest, SendTeamMessageRequest } from "../types/Requests";
-import { CreateTeamResponse, GetTeamMembersResponse, GetUserTeamsResponse } from "../types/Responses";
+import { AddMemberToTeamRequest, CreateTeamRequest, JoinTeamRequest, SendTeamMessageRequest } from "../api/Requests";
+import { CreateTeamResponse, GetTeamMembersResponse, GetUserTeamsResponse } from "../api/Responses";
 import Team, { TeamFeed, TeamID } from "../types/Team";
-import User from "../types/User";
+import User, { UserID } from "../types/User";
 
 export const getUserTeams = async () => await fetchUsingGET<GetUserTeamsResponse>(APIRoutes.GET_TEAMS);
 
@@ -25,3 +25,6 @@ export const createTeam = async (name: string, members: User[]) =>
 
 export const getTeamMembers = async (teamID: TeamID) =>
 	await fetchUsingGET<GetTeamMembersResponse>(APIRoutes.GET_TEAM_MEMBERS, [teamID]);
+
+export const addMemberToTeam = async (teamID: TeamID, userID: UserID) =>
+	await fetchUsingPut<AddMemberToTeamRequest, any>(APIRoutes.ADD_USER_TO_TEAM, { userID }, [teamID]);
