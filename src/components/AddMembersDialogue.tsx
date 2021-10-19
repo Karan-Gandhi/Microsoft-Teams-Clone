@@ -3,8 +3,9 @@ import useDebounce from "../hooks/useDebounce";
 import { useSnackbar } from "../Snackbar";
 import { TeamID } from "../types/Team";
 import User, { UserID } from "../types/User";
-import { addMemberToTeam, getTeamMembers } from "../utils/TeamUtils";
-import { getUserById, searchUserByEmail } from "../utils/UserUtils";
+import { addMemberToTeam, getTeamMembers, removeUserFromTeam } from "../utils/TeamUtils";
+import { getUserById, getUserID, searchUserByEmail } from "../utils/UserUtils";
+import DefaultLoader from "./DefaultLoader";
 import Dialogue from "./Dialogue";
 import MemberTable from "./MemberTable";
 import PrimaryButton from "./PrimaryButton";
@@ -20,23 +21,31 @@ interface AddMembersDialogueProps {
 }
 
 const AddMembersDialogue: React.FC<AddMembersDialogueProps> = ({ teamID, ...rest }) => {
+	const [isLoading, setLoading] = useState<boolean>(false);
 	const [addUserEmail, setAddUserEmail] = useState<string>("");
 	const [addedUsers, setAddedUsers] = useState<User[]>([]);
 	const [searchResults, setSearchResults] = useState<User[]>([]);
 	const { enqueueSnackbar } = useSnackbar();
 
 	const addUser = async (user: User) => {
-		// get the user and add
+		setLoading(true);
 		if (addedUsers.findIndex(addedUser => addedUser.id === user.id) !== -1) {
 			setAddUserEmail("");
 			return enqueueSnackbar("User is already added");
 		}
 		setAddedUsers([...addedUsers, user]);
 		await addMemberToTeam(teamID, user.id);
+		enqueueSnackbar("Sucessfully added user");
+		setLoading(false);
 	};
 
-	const removeUser = (id: UserID) => {
+	const removeUser = async (id: UserID) => {
+		setLoading(true);
 		setAddedUsers(addedUsers.filter(user => user.id !== id));
+		if (id === getUserID()) return;
+		await removeUserFromTeam(teamID, id);
+		enqueueSnackbar("Sucessfully removed user");
+		setLoading(false);
 	};
 
 	useDebounce(
@@ -56,16 +65,52 @@ const AddMembersDialogue: React.FC<AddMembersDialogueProps> = ({ teamID, ...rest
 
 	return (
 		<Dialogue title="Manage Members" {...rest}>
-			<div>
-				<div className="flex flex-row gap-2">
-					<div className="flex-grow">
-						<Textfield
-							className="mb-0"
-							backgroundColor="#353535"
-							placeholder="Enter a email"
-							value={addUserEmail}
-							onChange={setAddUserEmail}
-							onSubmit={async () => {
+			{isLoading && <DefaultLoader />}
+			{!isLoading && (
+				<div>
+					<div className="flex flex-row gap-2">
+						<div className="flex-grow">
+							<Textfield
+								className="mb-0"
+								backgroundColor="#353535"
+								placeholder="Enter a email"
+								value={addUserEmail}
+								onChange={setAddUserEmail}
+								onSubmit={async () => {
+									const users = await searchUserByEmail(addUserEmail, addedUsers);
+									if (users.length >= 1) {
+										await addUser(users[0]);
+									} else {
+										enqueueSnackbar("No such user found");
+									}
+								}}
+							/>
+
+							<div className="absolute w-full">
+								{searchResults.length !== 0 && (
+									<div
+										className="absolute py-2"
+										style={{ backgroundColor: "#292929", boxShadow: "0px 16px 20px #00000055" }}
+									>
+										{searchResults.map(user => (
+											<SearchListItem
+												key={user.id}
+												name={user.name}
+												email={user.email}
+												onClick={async () => {
+													setAddUserEmail("");
+													await addUser(user);
+												}}
+											/>
+										))}
+									</div>
+								)}
+							</div>
+						</div>
+
+						<PrimaryButton
+							onClick={async () => {
+								// adds the best match
 								const users = await searchUserByEmail(addUserEmail, addedUsers);
 								if (users.length >= 1) {
 									await addUser(users[0]);
@@ -73,56 +118,15 @@ const AddMembersDialogue: React.FC<AddMembersDialogueProps> = ({ teamID, ...rest
 									enqueueSnackbar("No such user found");
 								}
 							}}
-						/>
-
-						<div className="absolute w-full">
-							{searchResults.length !== 0 && (
-								<div
-									className="absolute py-2"
-									style={{ backgroundColor: "#292929", boxShadow: "0px 16px 20px #00000055" }}
-								>
-									{searchResults.map(user => (
-										<SearchListItem
-											key={user.id}
-											name={user.name}
-											email={user.email}
-											onClick={async () => {
-												setAddUserEmail("");
-												await addUser(user);
-											}}
-										/>
-									))}
-								</div>
-							)}
-						</div>
+						>
+							Add
+						</PrimaryButton>
 					</div>
-
-					<PrimaryButton
-						onClick={async () => {
-							// adds the best match
-							const users = await searchUserByEmail(addUserEmail, addedUsers);
-							if (users.length >= 1) {
-								await addUser(users[0]);
-							} else {
-								enqueueSnackbar("No such user found");
-							}
-						}}
-					>
-						Add
-					</PrimaryButton>
+					<div>
+						<MemberTable teamID={teamID} closeButton onClose={async user => await removeUser(user.id)} />
+					</div>
 				</div>
-				<div>
-					{/* TODO: Remove the user */}
-					<MemberTable
-						teamID={teamID}
-						closeButton
-						onClose={user => {
-							// cant remove yourself
-							console.log(user);
-						}}
-					/>
-				</div>
-			</div>
+			)}
 		</Dialogue>
 	);
 };

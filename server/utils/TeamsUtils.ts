@@ -3,11 +3,12 @@ import { addData, readData } from "../services/Firestore";
 import FeedItem, { FeedType } from "../types/FeedItem";
 import FirestoreCollections from "../types/FirestoreCollections";
 import JoinMessage from "../types/JoinMessage";
+import LeaveMessage from "../types/LeaveMessage";
 import { MeetingMessage } from "../types/Meeting";
 import Message from "../types/Message";
 import Team, { TeamFeed, TeamID } from "../types/Team";
 import { UserID } from "../types/User";
-import { getUserByID, userJoinTeam } from "./UserUtils";
+import { getUserByID, removeUserFromTeam, userJoinTeam } from "./UserUtils";
 
 const NO_SUCH_TEAM_EXISTS = new Error("No such team exists");
 
@@ -56,11 +57,15 @@ export const updateTeamFeed = async (teamID: TeamID, feed: TeamFeed) =>
 
 export const createTeamFeed = async (teamID: TeamID) => await updateTeamFeed(teamID, { id: teamID, messages: [] });
 
-export const addFeedItem = async (teamID: TeamID, message: MeetingMessage | Message | JoinMessage, type: FeedType) => {
+export const addFeedItem = async (
+	teamID: TeamID,
+	message: MeetingMessage | Message | JoinMessage | LeaveMessage,
+	type: FeedType
+) => {
 	const feed = await getTeamFeed(teamID);
 	if (!feed) throw NO_SUCH_TEAM_EXISTS;
 
-	const feedItem: FeedItem<MeetingMessage | Message | JoinMessage> = {
+	const feedItem: FeedItem<MeetingMessage | Message | JoinMessage | LeaveMessage> = {
 		type,
 		content: message,
 		dateCreated: Date.now(),
@@ -87,3 +92,16 @@ export const addUserToTeam = async (teamID: TeamID, userID: UserID) => {
 };
 
 export const getTeamAdmin = async (teamID: TeamID) => (await getTeamById(teamID)).admin;
+
+export const removeUser = async (teamID: TeamID, userID: UserID) => {
+	const team = await getTeamById(teamID);
+	if (team.members.findIndex(user => user === userID) === -1) return;
+	team.members.splice(
+		team.members.findIndex(member => member === userID),
+		1
+	);
+
+	await addFeedItem(teamID, { userLeave: (await getUserByID(userID)).name }, FeedType.UserLeave);
+	await updateTeamData(teamID, team);
+	await removeUserFromTeam(userID, teamID);
+};

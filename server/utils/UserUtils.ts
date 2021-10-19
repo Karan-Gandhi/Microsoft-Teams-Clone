@@ -33,3 +33,13 @@ export const searchUserByEmail = async (email: string, searchSize: number, ignor
 
 	return searchResults.filter(({ email }) => email !== ignoreEmail).filter((_, idx) => idx <= searchSize - 1);
 };
+
+export const removeUserFromTeam = async (userID: UserID, teamID: TeamID) => {
+	const user = await getUserByID(userID);
+	if (user.teams?.findIndex(team => team === teamID) === -1) return;
+	user.teams?.splice(
+		user.teams.findIndex(team => team === teamID),
+		1
+	);
+	return await updateUserData(userID, user);
+};

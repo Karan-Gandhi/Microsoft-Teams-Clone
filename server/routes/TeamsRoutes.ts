@@ -11,6 +11,7 @@ import {
 	getTeamFeed,
 	getTeamMembers,
 	joinTeam,
+	removeUser,
 } from "../utils/TeamsUtils";
 import { getUserTeams } from "../utils/UserUtils";
 
@@ -84,6 +85,15 @@ router.put("/addUser/:id", async (req, res) => {
 		const user = JSON.parse(req.user as string) as User;
 		if (user.id !== (await getTeamAdmin(req.params.id))) return res.sendStatus(403);
 		await addUserToTeam(req.params.id, req.body.userID);
+		res.sendStatus(204);
+	} catch {
+		res.sendStatus(404);
+	}
+});
+
+router.delete("/removeUser/:id", async (req, res) => {
+	try {
+		await removeUser(req.params.id, req.body.userID);
 		res.sendStatus(204);
 	} catch {
 		res.sendStatus(404);

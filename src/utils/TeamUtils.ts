@@ -1,6 +1,12 @@
-import { fetchUsingGET, fetchUsingPOST, fetchUsingPut } from "../api/APIControler";
+import { fetchUsingDelete, fetchUsingGET, fetchUsingPOST, fetchUsingPut } from "../api/APIControler";
 import APIRoutes from "../api/APIRoutes";
-import { AddMemberToTeamRequest, CreateTeamRequest, JoinTeamRequest, SendTeamMessageRequest } from "../api/Requests";
+import {
+	AddMemberToTeamRequest,
+	CreateTeamRequest,
+	JoinTeamRequest,
+	RemoveUserFromTeamRequest,
+	SendTeamMessageRequest,
+} from "../api/Requests";
 import { CreateTeamResponse, GetTeamMembersResponse, GetUserTeamsResponse } from "../api/Responses";
 import Team, { TeamFeed, TeamID } from "../types/Team";
 import User, { UserID } from "../types/User";
@@ -28,3 +34,6 @@ export const getTeamMembers = async (teamID: TeamID) =>
 
 export const addMemberToTeam = async (teamID: TeamID, userID: UserID) =>
 	await fetchUsingPut<AddMemberToTeamRequest, any>(APIRoutes.ADD_USER_TO_TEAM, { userID }, [teamID]);
+
+export const removeUserFromTeam = async (teamID: TeamID, userID: UserID) =>
+	await fetchUsingDelete<RemoveUserFromTeamRequest>(APIRoutes.REMOVE_USER_FROM_TEAM, { userID }, [teamID]);

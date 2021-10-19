@@ -37,3 +37,7 @@ export interface CreateTeamRequest {
 export interface AddMemberToTeamRequest {
 	userID: UserID;
 }
+
+export interface RemoveUserFromTeamRequest {
+	userID: UserID;
+}
