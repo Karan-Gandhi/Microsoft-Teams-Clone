@@ -85,3 +85,5 @@ export const addUserToTeam = async (teamID: TeamID, userID: UserID) => {
 	await userJoinTeam(teamID, userID);
 	await addFeedItem(teamID, { userJoined: (await getUserByID(userID)).name }, FeedType.UserJoin);
 };
+
+export const getTeamAdmin = async (teamID: TeamID) => (await getTeamById(teamID)).admin;
