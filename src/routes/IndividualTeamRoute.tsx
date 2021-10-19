@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import DefaultLoader from "../components/DefaultLoader";
 import JoinMessageComponent from "../components/JoinMessageComponent";
+import LeaveMessageComponent from "../components/LeaveMessageComponent";
 import MessageComponent from "../components/MessageComponent";
 import TeamHeadder from "../components/TeamHeader";
 import Textfield from "../components/Textfield";
 import { useSnackbar } from "../Snackbar";
 import { FeedType } from "../types/FeedItem";
 import JoinMessage from "../types/JoinMessage";
+import LeaveMessage from "../types/LeaveMessage";
 import Message from "../types/Message";
 import { TeamID } from "../types/Team";
 import { UserID } from "../types/User";
@@ -50,6 +52,9 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 						} else if (feedItem.type === FeedType.UserJoin) {
 							const currentMessage = feedItem.content as JoinMessage;
 							return <JoinMessageComponent key={idx} {...currentMessage} dateCreated={feedItem.dateCreated} />;
+						} else if (feedItem.type === FeedType.UserLeave) {
+							const currentMessage = feedItem.content as LeaveMessage;
+							return <LeaveMessageComponent key={idx} {...currentMessage} dateCreated={feedItem.dateCreated} />;
 						} else return <div key={idx}>Meeting</div>;
 					})
 				)
