@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import DefaultLoader from "../components/DefaultLoader";
+import JoinMessageComponent from "../components/JoinMessageComponent";
 import MessageComponent from "../components/MessageComponent";
 import TeamHeadder from "../components/TeamHeader";
 import Textfield from "../components/Textfield";
 import { useSnackbar } from "../Snackbar";
 import { FeedType } from "../types/FeedItem";
+import JoinMessage from "../types/JoinMessage";
 import Message from "../types/Message";
 import { TeamID } from "../types/Team";
 import { UserID } from "../types/User";
@@ -21,15 +23,17 @@ interface IndividualTeamRouteProps {
 
 const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, members, admin }) => {
 	const feedRef = useRef<HTMLDivElement>(null);
+
 	const [tabIndex, setTabIndex] = useState<number>(0);
 	const [isLoading, setLoading] = useState<boolean>(true);
-	const [message, setMessage] = useState<string>("");
+	const [messageToSend, setMessageToSend] = useState<string>("");
+	const [feed, setFeed] = useState<React.ReactNode>();
+
 	const { enqueueSnackbar } = useSnackbar();
-	const [messages, setMessages] = useState<React.ReactNode>();
 
 	const updateFeed = useCallback(async () => {
 		return getTeamFeed(id).then(async data => {
-			setMessages(
+			setFeed(
 				await Promise.all(
 					data.data.messages.map(async (feedItem, idx) => {
 						if (feedItem.type === FeedType.Message) {
@@ -43,6 +47,9 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 									dateCreated={feedItem.dateCreated}
 								/>
 							);
+						} else if (feedItem.type === FeedType.UserJoin) {
+							const currentMessage = feedItem.content as JoinMessage;
+							return <JoinMessageComponent key={idx} {...currentMessage} dateCreated={feedItem.dateCreated} />;
 						} else return <div key={idx}>Meeting</div>;
 					})
 				)
@@ -52,10 +59,10 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
-		if (message.length === 0) return enqueueSnackbar("Please enter a message");
-		await sendMessageOnTeam(id, message);
+		if (messageToSend.length === 0) return enqueueSnackbar("Please enter a message");
+		await sendMessageOnTeam(id, messageToSend);
 		await updateFeed();
-		setMessage("");
+		setMessageToSend("");
 	};
 
 	useEffect(() => {
@@ -114,16 +121,16 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 				{tabIndex === 0 && (
 					<div className="flex flex-col h-full">
 						<div className="flex-grow h-1 overflow-auto pr-8" ref={feedRef}>
-							{messages}
+							{feed}
 						</div>
 						<form onSubmit={handleSubmit}>
 							<div className="pt-8 pr-8">
 								<Textfield
-									onChange={setMessage}
+									onChange={setMessageToSend}
 									backgroundColor="#292929"
 									placeholder="Start a new Conversation"
 									className="py-4 px-4"
-									value={message}
+									value={messageToSend}
 								/>
 							</div>
 						</form>

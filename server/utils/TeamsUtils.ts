@@ -7,7 +7,7 @@ import { MeetingMessage } from "../types/Meeting";
 import Message from "../types/Message";
 import Team, { TeamFeed, TeamID } from "../types/Team";
 import { UserID } from "../types/User";
-import { userJoinTeam } from "./UserUtils";
+import { getUserByID, userJoinTeam } from "./UserUtils";
 
 const NO_SUCH_TEAM_EXISTS = new Error("No such team exists");
 
@@ -83,5 +83,5 @@ export const addUserToTeam = async (teamID: TeamID, userID: UserID) => {
 
 	await updateTeamData(teamID, team);
 	await userJoinTeam(teamID, userID);
-	await addFeedItem(teamID, { userJoined: userID }, FeedType.UserJoin);
+	await addFeedItem(teamID, { userJoined: (await getUserByID(userID)).name }, FeedType.UserJoin);
 };
