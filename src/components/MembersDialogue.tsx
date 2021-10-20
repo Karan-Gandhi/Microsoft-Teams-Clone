@@ -15,8 +15,8 @@ interface MembersDialogueProps {
 const MembersDialogue: React.FC<MembersDialogueProps> = ({ teamName, teamID, totalMembers, ...rest }) => {
 	return (
 		<Dialogue {...rest} title={"Members - " + teamName}>
-			<div>
-				<div className="mt-4">
+			<div className="flex flex-col flex-grow">
+				<div className="mt-4 flex-grow">
 					<MemberTable teamID={teamID} />
 				</div>
 				<div className="py-2 mt-8">

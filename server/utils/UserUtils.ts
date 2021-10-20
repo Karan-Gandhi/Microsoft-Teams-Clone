@@ -1,7 +1,9 @@
 import { addData, getSnapshotWhere, readData } from "../services/Firestore";
+import { FeedType } from "../types/FeedItem";
 import FirestoreCollections from "../types/FirestoreCollections";
 import { TeamID } from "../types/Team";
 import User, { UserID } from "../types/User";
+import { addFeedItem } from "./TeamsUtils";
 
 export const getUserByID = async (userID: UserID) => await readData<User>(FirestoreCollections.USERS, userID);
 
@@ -10,6 +12,7 @@ export const updateUserData = async (userID: UserID, userData: User) =>
 
 export const userJoinTeam = async (teamID: TeamID, userID: UserID) => {
 	const user = await getUserByID(userID);
+	await addFeedItem(teamID, { userJoined: (await getUserByID(userID)).name }, FeedType.UserJoin);
 	return await updateUserData(userID, {
 		...user,
 		teams: [...(user.teams || []), teamID],
