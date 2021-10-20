@@ -8,6 +8,7 @@ import { getUserID } from "../utils/UserUtils";
 import { UserID } from "../types/User";
 import AdminSettingsDialogue from "./AdminSettingsDialogue";
 import { TeamID } from "../types/Team";
+import MembersDialogue from "./MembersDialogue";
 
 interface TeamHeaderProps {
 	setTabIndex: React.Dispatch<React.SetStateAction<number>>;
@@ -20,6 +21,7 @@ interface TeamHeaderProps {
 const TeamHeader: React.FC<TeamHeaderProps> = ({ setTabIndex, adminID, teamName, teamID, totalMembers }) => {
 	const [currentTabIndex, setCurrentTabIndex] = useState<number>(0);
 	const [showAdminPanel, setShowAdminPanel] = useState<boolean>(false);
+	const [showMembersPanel, setShowMembersPanel] = useState<boolean>(false);
 	const [showAdminSettings, setShowAdminSettings] = useState<boolean>(false);
 
 	useEffect(() => setTabIndex(currentTabIndex), [currentTabIndex, setTabIndex]);
@@ -44,10 +46,17 @@ const TeamHeader: React.FC<TeamHeaderProps> = ({ setTabIndex, adminID, teamName,
 					<AddIcon />
 				</Button>
 				{showAdminSettings && <SettingsIcon className="cursor-pointer" onClick={() => setShowAdminPanel(true)} />}
-				{!showAdminSettings && <GroupIcon className="cursor-pointer" onClick={() => setShowAdminPanel(true)} />}
+				{!showAdminSettings && <GroupIcon className="cursor-pointer" onClick={() => setShowMembersPanel(true)} />}
 				<AdminSettingsDialogue
 					setDialogueOpen={setShowAdminPanel}
 					dialogueIsOpen={showAdminPanel}
+					teamName={teamName}
+					teamID={teamID}
+					totalMembers={totalMembers}
+				/>
+				<MembersDialogue
+					setDialogueOpen={setShowMembersPanel}
+					dialogueIsOpen={showMembersPanel}
 					teamName={teamName}
 					teamID={teamID}
 					totalMembers={totalMembers}
