@@ -2,9 +2,9 @@ import * as jwt from "jsonwebtoken";
 import { v4 } from "uuid";
 import FirestoreCollections from "../types/FirestoreCollections";
 import User, { UserID } from "../types/User";
-import { EmailAlreadyExistError, InvalidEmailOrPassword } from "./AuthErrors";
 import { addData, deleteData, readDataWhere } from "../services/Firestore";
 import { AccessToken, AccessTokenTypes, RefreshToken, Token } from "../types/Tokens";
+import { EmailAlreadyExistError, InvalidEmailOrPassword } from "./AuthErrors";
 
 const ACCESS_TOKEN_EXPIRY_TIME = "10d";
 

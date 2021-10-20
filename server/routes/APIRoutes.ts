@@ -1,8 +1,8 @@
 import * as jwt from "jsonwebtoken";
 import express from "express";
+import User from "../types/User";
 import TeamsRouter from "./TeamsRoutes";
 import UserRouter from "./UserRoutes";
-import User from "../types/User";
 
 const router = express.Router();
 
