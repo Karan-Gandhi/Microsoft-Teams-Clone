@@ -12,7 +12,7 @@ const TeamHeaderItem: React.FC<TeamHeaderItemProps> = ({
 	return (
 		<div
 			onClick={onClick}
-			className={`text-lg cursor-pointer font-medium transition duration-200`}
+			className="text-lg cursor-pointer font-medium transition duration-200"
 			style={active ? {} : { color: "#adadad" }}
 		>
 			<div className="py-2 px-2">
@@ -22,7 +22,7 @@ const TeamHeaderItem: React.FC<TeamHeaderItemProps> = ({
 				<div
 					className="w-full h-1"
 					style={{ backgroundColor: "#9ea2ff" }}
-				></div>
+				 />
 			)}
 		</div>
 	);

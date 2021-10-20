@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Route } from "react-router";
+import AddIcon from "@mui/icons-material/Add";
 import DefaultLoader from "../components/DefaultLoader";
 import TeamCard from "../components/TeamCard";
 import { getTeamByID, getUserTeams } from "../utils/TeamUtils";
-import AddIcon from "@mui/icons-material/Add";
-import IndividualTeamRoute from "./IndividualTeamRoute";
 import JoinTeamDialoge from "../components/JoinTeamDialoge";
+import IndividualTeamRoute from "./IndividualTeamRoute";
 
 interface TeamsRouteProps {}
 

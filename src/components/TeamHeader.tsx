@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import TeamHeaderItem from "./TeamHeaderItem";
 import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddIcon from "@mui/icons-material/Add";
-import Button from "./Button";
 import { getUserID } from "../utils/UserUtils";
 import { UserID } from "../types/User";
-import AdminSettingsDialogue from "./AdminSettingsDialogue";
 import { TeamID } from "../types/Team";
+import AdminSettingsDialogue from "./AdminSettingsDialogue";
+import Button from "./Button";
+import TeamHeaderItem from "./TeamHeaderItem";
 import MembersDialogue from "./MembersDialogue";
 
 interface TeamHeaderProps {

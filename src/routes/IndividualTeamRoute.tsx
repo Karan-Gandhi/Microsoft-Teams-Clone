@@ -18,134 +18,152 @@ import { getTeamFeed, sendMessageOnTeam } from "../utils/TeamUtils";
 const FEED_REFRESH_TIME = 1e3 * 10;
 
 interface IndividualTeamRouteProps {
-	id: TeamID;
-	name: string;
-	members: UserID[]; // this will also contain the admin
-	admin: UserID;
+  id: TeamID;
+  name: string;
+  members: UserID[];
+  admin: UserID;
 }
 
-const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, members, admin }) => {
-	const feedRef = useRef<HTMLDivElement>(null);
+const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({
+  id,
+  name,
+  members,
+  admin,
+}) => {
+  const feedRef = useRef<HTMLDivElement>(null);
 
-	const [tabIndex, setTabIndex] = useState<number>(0);
-	const [isLoading, setLoading] = useState<boolean>(true);
-	const [messageToSend, setMessageToSend] = useState<string>("");
-	const [feed, setFeed] = useState<React.ReactNode>();
+  const [tabIndex, setTabIndex] = useState<number>(0);
+  const [isLoading, setLoading] = useState<boolean>(true);
+  const [messageToSend, setMessageToSend] = useState<string>("");
+  const [feed, setFeed] = useState<React.ReactNode>();
 
-	const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
-	const updateFeed = useCallback(async () => {
-		return getTeamFeed(id).then(async data => {
-			setFeed(
-				await Promise.all(
-					data.data.messages.map(async (feedItem, idx) => {
-						if (feedItem.type === FeedType.Message) {
-							const currentMessage = feedItem.content as Message;
+  const updateFeed = useCallback(async () => {
+    return getTeamFeed(id).then(async (data) => {
+      setFeed(
+        await Promise.all(
+          data.data.messages.map(async (feedItem, idx) => {
+            if (feedItem.type === FeedType.Message) {
+              const currentMessage = feedItem.content as Message;
 
-							return (
-								<MessageComponent
-									key={idx}
-									content={currentMessage.content}
-									sender={currentMessage.name}
-									dateCreated={feedItem.dateCreated}
-								/>
-							);
-						} else if (feedItem.type === FeedType.UserJoin) {
-							const currentMessage = feedItem.content as JoinMessage;
-							return <JoinMessageComponent key={idx} {...currentMessage} dateCreated={feedItem.dateCreated} />;
-						} else if (feedItem.type === FeedType.UserLeave) {
-							const currentMessage = feedItem.content as LeaveMessage;
-							return <LeaveMessageComponent key={idx} {...currentMessage} dateCreated={feedItem.dateCreated} />;
-						} else return <div key={idx}>Meeting</div>;
-					})
-				)
-			);
-		});
-	}, [id]);
+              return (
+                <MessageComponent
+                  key={idx.toString()}
+                  content={currentMessage.content}
+                  sender={currentMessage.name}
+                  dateCreated={feedItem.dateCreated}
+                />
+              );
+            } else if (feedItem.type === FeedType.UserJoin) {
+              const currentMessage = feedItem.content as JoinMessage;
+              return (
+                <JoinMessageComponent
+                  key={idx.toString()}
+                  {...currentMessage}
+                  dateCreated={feedItem.dateCreated}
+                />
+              );
+            } else if (feedItem.type === FeedType.UserLeave) {
+              const currentMessage = feedItem.content as LeaveMessage;
+              return (
+                <LeaveMessageComponent
+                  key={idx.toString()}
+                  {...currentMessage}
+                  dateCreated={feedItem.dateCreated}
+                />
+              );
+            } else return <div key={idx.toString()}>Meeting</div>;
+          })
+        )
+      );
+    });
+  }, [id]);
 
-	const handleSubmit = async (e: any) => {
-		e.preventDefault();
-		if (messageToSend.length === 0) return enqueueSnackbar("Please enter a message");
-		await sendMessageOnTeam(id, messageToSend);
-		await updateFeed();
-		setMessageToSend("");
-	};
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    if (messageToSend.length === 0)
+      return enqueueSnackbar("Please enter a message");
+    await sendMessageOnTeam(id, messageToSend);
+    await updateFeed();
+    setMessageToSend("");
+  };
 
-	useEffect(() => {
-		let interval: NodeJS.Timeout;
-		updateFeed().then(() => {
-			setLoading(false);
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    updateFeed().then(() => {
+      setLoading(false);
 
-			feedRef.current?.addEventListener("DOMNodeInserted", event => {
-				const { currentTarget: target } = event;
-				(target as HTMLDivElement).scroll({
-					top: (target as HTMLDivElement).scrollHeight,
-					behavior: "smooth",
-				});
-			});
+      feedRef.current?.addEventListener("DOMNodeInserted", (event) => {
+        const { currentTarget: target } = event;
+        (target as HTMLDivElement).scroll({
+          top: (target as HTMLDivElement).scrollHeight,
+          behavior: "smooth",
+        });
+      });
 
-			feedRef.current?.scroll({
-				top: feedRef.current.scrollHeight,
-				behavior: "auto",
-			});
+      feedRef.current?.scroll({
+        top: feedRef.current.scrollHeight,
+        behavior: "auto",
+      });
 
-			interval = setInterval(async () => {
-				await updateFeed();
-			}, FEED_REFRESH_TIME);
-		});
+      interval = setInterval(async () => {
+        await updateFeed();
+      }, FEED_REFRESH_TIME);
+    });
 
-		return () => {
-			if (interval) clearInterval(interval);
-		};
-	}, [id, updateFeed]);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [id, updateFeed]);
 
-	useEffect(() => {
-		feedRef.current?.scroll({
-			top: feedRef.current.scrollHeight,
-			behavior: "auto",
-		});
-	}, [tabIndex]);
+  useEffect(() => {
+    feedRef.current?.scroll({
+      top: feedRef.current.scrollHeight,
+      behavior: "auto",
+    });
+  }, [tabIndex]);
 
-	if (isLoading) {
-		return (
-			<div className="w-full h-screen">
-				<DefaultLoader />
-			</div>
-		);
-	}
+  if (isLoading) {
+    return (
+      <div className="w-full h-screen">
+        <DefaultLoader />
+      </div>
+    );
+  }
 
-	return (
-		<div className="w-full h-screen pl-8 flex flex-col">
-			<TeamHeadder
-				adminID={admin}
-				setTabIndex={setTabIndex}
-				teamName={name}
-				teamID={id}
-				totalMembers={members.length}
-			/>
-			<div className="flex-grow flex flex-col">
-				{tabIndex === 0 && (
-					<div className="flex flex-col h-full">
-						<div className="flex-grow h-1 overflow-auto pr-8" ref={feedRef}>
-							<TeamWelcomeMessage teamName={name} />
-							{feed}
-						</div>
-						<form onSubmit={handleSubmit}>
-							<div className="pt-8 pr-8">
-								<Textfield
-									onChange={setMessageToSend}
-									backgroundColor="#292929"
-									placeholder="Start a new Conversation"
-									className="py-4 px-4"
-									value={messageToSend}
-								/>
-							</div>
-						</form>
-					</div>
-				)}
-			</div>
-		</div>
-	);
+  return (
+    <div className="w-full h-screen pl-8 flex flex-col">
+      <TeamHeadder
+        adminID={admin}
+        setTabIndex={setTabIndex}
+        teamName={name}
+        teamID={id}
+        totalMembers={members.length}
+      />
+      <div className="flex-grow flex flex-col">
+        {tabIndex === 0 && (
+          <div className="flex flex-col h-full">
+            <div className="flex-grow h-1 overflow-auto pr-8" ref={feedRef}>
+              <TeamWelcomeMessage teamName={name} />
+              {feed}
+            </div>
+            <form onSubmit={handleSubmit}>
+              <div className="pt-8 pr-8">
+                <Textfield
+                  onChange={setMessageToSend}
+                  backgroundColor="#292929"
+                  placeholder="Start a new Conversation"
+                  className="py-4 px-4"
+                  value={messageToSend}
+                />
+              </div>
+            </form>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default IndividualTeamRoute;

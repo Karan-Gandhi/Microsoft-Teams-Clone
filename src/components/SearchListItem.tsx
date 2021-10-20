@@ -35,7 +35,7 @@ const SearchListItem: React.FC<SearchListItemProps> = ({
 			<div className="font-medium">
 				<span>{name}</span>
 			</div>
-			{!noDot && <div className="h-1.5 w-1.5 bg-white rounded-full"></div>}{" "}
+			{!noDot && <div className="h-1.5 w-1.5 bg-white rounded-full" />}{" "}
 			<div style={{ color: "#ffffff88" }} className="flex-grow">
 				<span>{email}</span>
 			</div>
