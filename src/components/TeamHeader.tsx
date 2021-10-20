@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import TeamHeaderItem from "./TeamHeaderItem";
+import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddIcon from "@mui/icons-material/Add";
 import Button from "./Button";
@@ -43,6 +44,7 @@ const TeamHeader: React.FC<TeamHeaderProps> = ({ setTabIndex, adminID, teamName,
 					<AddIcon />
 				</Button>
 				{showAdminSettings && <SettingsIcon className="cursor-pointer" onClick={() => setShowAdminPanel(true)} />}
+				{!showAdminSettings && <GroupIcon className="cursor-pointer" onClick={() => setShowAdminPanel(true)} />}
 				<AdminSettingsDialogue
 					setDialogueOpen={setShowAdminPanel}
 					dialogueIsOpen={showAdminPanel}

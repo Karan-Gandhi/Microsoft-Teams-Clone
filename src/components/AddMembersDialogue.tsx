@@ -28,24 +28,37 @@ const AddMembersDialogue: React.FC<AddMembersDialogueProps> = ({ teamID, ...rest
 	const { enqueueSnackbar } = useSnackbar();
 
 	const addUser = async (user: User) => {
-		setLoading(true);
-		if (addedUsers.findIndex(addedUser => addedUser.id === user.id) !== -1) {
-			setAddUserEmail("");
-			return enqueueSnackbar("User is already added");
+		try {
+			setLoading(true);
+			if (addedUsers.findIndex(addedUser => addedUser.id === user.id) !== -1) {
+				setAddUserEmail("");
+				return enqueueSnackbar("User is already added");
+			}
+			setAddedUsers([...addedUsers, user]);
+			await addMemberToTeam(teamID, user.id);
+			enqueueSnackbar("Sucessfully added user");
+			setLoading(false);
+		} catch {
+			enqueueSnackbar("Some error occoured, please try again");
+			setLoading(false);
 		}
-		setAddedUsers([...addedUsers, user]);
-		await addMemberToTeam(teamID, user.id);
-		enqueueSnackbar("Sucessfully added user");
-		setLoading(false);
 	};
 
 	const removeUser = async (id: UserID) => {
-		setLoading(true);
-		setAddedUsers(addedUsers.filter(user => user.id !== id));
-		if (id === getUserID()) return;
-		await removeUserFromTeam(teamID, id);
-		enqueueSnackbar("Sucessfully removed user");
-		setLoading(false);
+		try {
+			setLoading(true);
+			setAddedUsers(addedUsers.filter(user => user.id !== id));
+			if (id === getUserID()) {
+				setLoading(false);
+				return enqueueSnackbar("You can't remove yourself");
+			}
+			await removeUserFromTeam(teamID, id);
+			enqueueSnackbar("Sucessfully removed user");
+			setLoading(false);
+		} catch {
+			enqueueSnackbar("Some error occoured, please try again");
+			setLoading(false);
+		}
 	};
 
 	useDebounce(
@@ -77,6 +90,7 @@ const AddMembersDialogue: React.FC<AddMembersDialogueProps> = ({ teamID, ...rest
 								value={addUserEmail}
 								onChange={setAddUserEmail}
 								onSubmit={async () => {
+									if (addUserEmail.length === 0) return enqueueSnackbar("Please type a email");
 									const users = await searchUserByEmail(addUserEmail, addedUsers);
 									if (users.length >= 1) {
 										await addUser(users[0]);
@@ -111,6 +125,7 @@ const AddMembersDialogue: React.FC<AddMembersDialogueProps> = ({ teamID, ...rest
 						<PrimaryButton
 							onClick={async () => {
 								// adds the best match
+								if (addUserEmail.length === 0) return enqueueSnackbar("Please type a email");
 								const users = await searchUserByEmail(addUserEmail, addedUsers);
 								if (users.length >= 1) {
 									await addUser(users[0]);

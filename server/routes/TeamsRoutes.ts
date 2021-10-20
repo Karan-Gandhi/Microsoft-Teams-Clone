@@ -93,6 +93,8 @@ router.put("/addUser/:id", async (req, res) => {
 
 router.delete("/removeUser/:id", async (req, res) => {
 	try {
+		const user = JSON.parse(req.user as string) as User;
+		if (user.id !== (await getTeamAdmin(req.params.id))) return res.sendStatus(403);
 		await removeUser(req.params.id, req.body.userID);
 		res.sendStatus(204);
 	} catch {

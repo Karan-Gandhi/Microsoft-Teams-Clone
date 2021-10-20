@@ -17,28 +17,34 @@ const MemberTable: React.FC<MemberTableProps> = ({ teamID, closeButton, onClose 
 	const [isLoading, setLoading] = useState<boolean>(true);
 
 	useEffect(() => {
+		let isMounted = true;
 		getTeamMembers(teamID).then(async ({ data: { members } }) => {
-			setTeamMembers(
-				await Promise.all(
-					members.map(async (member, idx) => {
-						const user = await getUserById(member);
-						return (
-							<div className="" style={{ backgroundColor: "#00000000" }} key={user.id}>
-								{idx !== 0 && <hr className="my-2" style={{ borderColor: "#00000044" }} />}
-								<SearchListItem
-									email={user.email}
-									name={user.name}
-									noDot
-									closeButton={closeButton}
-									onClose={() => onClose(user)}
-								/>
-							</div>
-						);
-					})
-				)
+			let _members = await Promise.all(
+				members.map(async (member, idx) => {
+					const user = await getUserById(member);
+					return (
+						<div className="" style={{ backgroundColor: "#00000000" }} key={user.id}>
+							{idx !== 0 && <hr className="my-2" style={{ borderColor: "#00000044" }} />}
+							<SearchListItem
+								email={user.email}
+								name={user.name}
+								noDot
+								closeButton={closeButton}
+								onClose={() => onClose(user)}
+							/>
+						</div>
+					);
+				})
 			);
-			setLoading(false);
+			if (isMounted) {
+				setTeamMembers(_members);
+				setLoading(false);
+			}
 		});
+
+		return () => {
+			isMounted = false;
+		};
 	}, [closeButton, onClose, teamID]);
 
 	if (isLoading) return <DefaultLoader />;
