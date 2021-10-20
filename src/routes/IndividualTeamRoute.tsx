@@ -4,6 +4,7 @@ import JoinMessageComponent from "../components/JoinMessageComponent";
 import LeaveMessageComponent from "../components/LeaveMessageComponent";
 import MessageComponent from "../components/MessageComponent";
 import TeamHeadder from "../components/TeamHeader";
+import TeamWelcomeMessage from "../components/TeamWelcomeMessage";
 import Textfield from "../components/Textfield";
 import { useSnackbar } from "../Snackbar";
 import { FeedType } from "../types/FeedItem";
@@ -126,6 +127,7 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 				{tabIndex === 0 && (
 					<div className="flex flex-col h-full">
 						<div className="flex-grow h-1 overflow-auto pr-8" ref={feedRef}>
+							<TeamWelcomeMessage teamName={name} />
 							{feed}
 						</div>
 						<form onSubmit={handleSubmit}>

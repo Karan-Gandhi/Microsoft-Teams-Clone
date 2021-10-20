@@ -14,7 +14,9 @@ export default interface Team {
 	admin: UserID;
 }
 
+export type TeamFeedMessage = FeedItem<MeetingMessage | Message | JoinMessage | LeaveMessage>;
+
 export interface TeamFeed {
 	id: TeamID;
-	messages: FeedItem<MeetingMessage | Message | JoinMessage | LeaveMessage>[];
+	messages: TeamFeedMessage[];
 }

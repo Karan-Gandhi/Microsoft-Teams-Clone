@@ -6,7 +6,7 @@ import JoinMessage from "../types/JoinMessage";
 import LeaveMessage from "../types/LeaveMessage";
 import { MeetingMessage } from "../types/Meeting";
 import Message from "../types/Message";
-import Team, { TeamFeed, TeamID } from "../types/Team";
+import Team, { TeamFeed, TeamFeedMessage, TeamID } from "../types/Team";
 import { UserID } from "../types/User";
 import { getUserByID, removeUserFromTeam, userJoinTeam } from "./UserUtils";
 
@@ -65,7 +65,7 @@ export const addFeedItem = async (
 	const feed = await getTeamFeed(teamID);
 	if (!feed) throw NO_SUCH_TEAM_EXISTS;
 
-	const feedItem: FeedItem<MeetingMessage | Message | JoinMessage | LeaveMessage> = {
+	const feedItem: TeamFeedMessage = {
 		type,
 		content: message,
 		dateCreated: Date.now(),
