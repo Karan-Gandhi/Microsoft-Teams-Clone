@@ -2,5 +2,6 @@
 /credentials
 /dist/credentials
 /dist
+/cache/*
 
 .env

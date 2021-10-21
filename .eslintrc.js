@@ -16,7 +16,6 @@ module.exports = {
     "import/no-useless-path-segments": 2,
     "import/export": 2,
     "import/no-unused-modules": 2,
-    "import/no-nodejs-modules": 2,
     "import/no-amd": 2,
     "import/no-commonjs": 2,
     "import/first": 2,
