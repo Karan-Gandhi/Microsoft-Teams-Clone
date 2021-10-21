@@ -93,7 +93,7 @@ const LoginRoute: React.FC<LoginRouteProps> = () => {
             <div className="mb-2 mt-2	flex justify-end">
               <div className="font-medium ml-8" style={{ color: "#000" }}>
                 <Link to="/signup">
-                  <span className="nav-link">Don&apost have a account?</span>
+                  <span className="nav-link">Don&apos;t have a account?</span>
                 </Link>
               </div>
             </div>
