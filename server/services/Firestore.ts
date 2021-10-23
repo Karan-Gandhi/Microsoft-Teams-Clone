@@ -48,8 +48,13 @@ export const readData: {
 
 export const deleteData = async (collection: string, document?: string) => {
   if (!!document) {
+    firebaseCache.deleteIfPresent(
+      collectionAndDocumentToId(collection, document)
+    );
     return await db.collection(collection).doc(document).delete();
   } else {
+    firebaseCache.deleteIfPresent(collection);
+
     const deleteCollection = async (
       collectionPath: string,
       batchSize: number

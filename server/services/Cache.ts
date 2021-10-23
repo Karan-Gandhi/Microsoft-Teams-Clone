@@ -34,6 +34,13 @@ export default class Cache<U> {
     }
   }
 
+  public deleteIfPresent(id: string) {
+    if (this.itemExists(id)) {
+      this.data.delete(id);
+      this.writeFile();
+    }
+  }
+
   private writeFile() {
     console.log("cache write");
     const obj = Object.fromEntries(this.data);
@@ -42,6 +49,7 @@ export default class Cache<U> {
 
   public fromFile() {
     const json = fs.readFileSync(this.fileName, "utf-8");
+    if (json.length === 0) return;
     const data = new Map<string, CacheItemInterface<string, U>>(
       Object.entries(JSON.parse(json))
     );
