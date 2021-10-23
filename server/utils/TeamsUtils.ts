@@ -12,11 +12,7 @@ import { getUserByID, removeUserFromTeam, userJoinTeam } from "./UserUtils";
 
 const NO_SUCH_TEAM_EXISTS = new Error("No such team exists");
 
-export const createTeam = async (
-  name: string,
-  admin: UserID,
-  members: UserID[]
-): Promise<Team> => {
+export const createTeam = async (name: string, admin: UserID, members: UserID[]): Promise<Team> => {
   const team: Team = {
     id: v4(),
     name,
@@ -42,8 +38,7 @@ export const getTeamById = async (id: TeamID): Promise<Team> => {
   return team;
 };
 
-export const updateTeamData = async (id: TeamID, team: Team) =>
-  await addData<Team>(FirestoreCollections.TEAMS, id, team);
+export const updateTeamData = async (id: TeamID, team: Team) => await addData<Team>(FirestoreCollections.TEAMS, id, team);
 
 export const joinTeam = async (userID: UserID, teamID: TeamID) => {
   const team = await getTeamById(teamID);
@@ -54,20 +49,14 @@ export const joinTeam = async (userID: UserID, teamID: TeamID) => {
   });
 };
 
-export const getTeamFeed = async (teamId: TeamID) =>
-  await readData<TeamFeed>(FirestoreCollections.TEAM_FEED, teamId);
+export const getTeamFeed = async (teamId: TeamID) => await readData<TeamFeed>(FirestoreCollections.TEAM_FEED, teamId);
 
 export const updateTeamFeed = async (teamID: TeamID, feed: TeamFeed) =>
   await addData<TeamFeed>(FirestoreCollections.TEAM_FEED, teamID, feed);
 
-export const createTeamFeed = async (teamID: TeamID) =>
-  await updateTeamFeed(teamID, { id: teamID, messages: [] });
+export const createTeamFeed = async (teamID: TeamID) => await updateTeamFeed(teamID, { id: teamID, messages: [] });
 
-export const addFeedItem = async (
-  teamID: TeamID,
-  message: MeetingMessage | Message | JoinMessage | LeaveMessage,
-  type: FeedType
-) => {
+export const addFeedItem = async (teamID: TeamID, message: MeetingMessage | Message | JoinMessage | LeaveMessage, type: FeedType) => {
   const feed = await getTeamFeed(teamID);
   if (!feed) throw NO_SUCH_TEAM_EXISTS;
 
@@ -96,8 +85,7 @@ export const addUserToTeam = async (teamID: TeamID, userID: UserID) => {
   await userJoinTeam(teamID, userID);
 };
 
-export const getTeamAdmin = async (teamID: TeamID) =>
-  (await getTeamById(teamID)).admin;
+export const getTeamAdmin = async (teamID: TeamID) => (await getTeamById(teamID)).admin;
 
 export const removeUser = async (teamID: TeamID, userID: UserID) => {
   const team = await getTeamById(teamID);
@@ -107,18 +95,13 @@ export const removeUser = async (teamID: TeamID, userID: UserID) => {
     1
   );
 
-  await addFeedItem(
-    teamID,
-    { userLeave: (await getUserByID(userID)).name },
-    FeedType.UserLeave
-  );
+  await addFeedItem(teamID, { userLeave: (await getUserByID(userID)).name }, FeedType.UserLeave);
   await updateTeamData(teamID, team);
   await removeUserFromTeam(userID, teamID);
 };
 
 export const userBelongsToTeam = async (teamID: TeamID, userID: UserID) => {
   const team = await getTeamById(teamID);
-  if (team.members.findIndex((memberID) => memberID === userID) === -1)
-    return false;
+  if (team.members.findIndex((memberID) => memberID === userID) === -1) return false;
   else return true;
 };

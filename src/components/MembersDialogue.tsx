@@ -12,12 +12,7 @@ interface MembersDialogueProps {
   totalMembers: number;
 }
 
-const MembersDialogue: React.FC<MembersDialogueProps> = ({
-  teamName,
-  teamID,
-  totalMembers,
-  ...rest
-}) => {
+const MembersDialogue: React.FC<MembersDialogueProps> = ({ teamName, teamID, totalMembers, ...rest }) => {
   return (
     <Dialogue {...rest} title={"Members - " + teamName}>
       <div className="flex flex-col flex-grow">

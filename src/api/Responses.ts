@@ -3,23 +3,23 @@ import { AccessToken, RefreshToken } from "../types/Tokens";
 import User, { UserID } from "../types/User";
 
 export interface TokensResponse {
-	type: string;
-	accessToken: AccessToken;
-	refreshToken: RefreshToken;
+  type: string;
+  accessToken: AccessToken;
+  refreshToken: RefreshToken;
 }
 
 export interface GetUserTeamsResponse {
-	teams: TeamID[];
+  teams: TeamID[];
 }
 
 export interface GetUserByIdResponse {
-	name: string;
-	id: UserID;
-	email: string;
+  name: string;
+  id: UserID;
+  email: string;
 }
 
 export interface SearchUserByEmailResponse {
-	results: User[];
+  results: User[];
 }
 
 export type CreateTeamResponse = Team;
@@ -27,5 +27,5 @@ export type CreateTeamResponse = Team;
 export type GetUserDetailsResponse = User;
 
 export interface GetTeamMembersResponse {
-	members: UserID[];
+  members: UserID[];
 }

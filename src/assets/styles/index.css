@@ -3,144 +3,144 @@
 @tailwind utilities;
 
 body {
-	margin: 0;
-	background-color: #1f1f1f;
+  margin: 0;
+  background-color: #1f1f1f;
 }
 
 input:focus {
-	outline: none;
+  outline: none;
 }
 
 span.nav-link {
-	position: relative;
-	cursor: pointer;
+  position: relative;
+  cursor: pointer;
 }
 
 span.nav-link::after {
-	content: "";
-	width: 0%;
-	height: 1px;
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	transition: 0.2s;
-	box-shadow: inset 0 -10px 0 #000;
+  content: "";
+  width: 0%;
+  height: 1px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: 0.2s;
+  box-shadow: inset 0 -10px 0 #000;
 }
 
 span.nav-link:hover::after {
-	content: "";
-	width: 100%;
-	height: 1px;
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	box-shadow: inset 0 -10px 0 #000;
+  content: "";
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: inset 0 -10px 0 #000;
 }
 
 span.nav-link-thick {
-	position: relative;
-	cursor: pointer;
+  position: relative;
+  cursor: pointer;
 }
 
 span.nav-link-thick::after {
-	content: "";
-	width: 0%;
-	height: 3px;
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: -5px;
-	transition: 0.2s;
-	box-shadow: inset 0 -10px 0 #000;
+  content: "";
+  width: 0%;
+  height: 3px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -5px;
+  transition: 0.2s;
+  box-shadow: inset 0 -10px 0 #000;
 }
 
 span.nav-link-thick.active::after {
-	content: "";
-	width: 100%;
-	height: 3px;
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: -5px;
-	transition: 0.2s;
-	box-shadow: inset 0 -10px 0 #000;
+  content: "";
+  width: 100%;
+  height: 3px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -5px;
+  transition: 0.2s;
+  box-shadow: inset 0 -10px 0 #000;
 }
 
 span.nav-link-thick:hover::after {
-	content: "";
-	width: 100%;
-	height: 3px;
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: -5px;
-	box-shadow: inset 0 -10px 0 #000;
+  content: "";
+  width: 100%;
+  height: 3px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -5px;
+  box-shadow: inset 0 -10px 0 #000;
 }
 
 span.nav-link-black {
-	position: relative;
-	cursor: pointer;
+  position: relative;
+  cursor: pointer;
 }
 
 span.nav-link-black::after {
-	content: "";
-	width: 0%;
-	height: 1px;
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	transition: 0.2s;
-	box-shadow: inset 0 -10px 0 #fff;
+  content: "";
+  width: 0%;
+  height: 1px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: 0.2s;
+  box-shadow: inset 0 -10px 0 #fff;
 }
 
 span.nav-link-black:hover::after {
-	content: "";
-	width: 100%;
-	height: 1px;
-	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	box-shadow: inset 0 -10px 0 #fff;
+  content: "";
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: inset 0 -10px 0 #fff;
 }
 
 .main-sidebar-item-active {
-	color: #9ea2ff !important;
+  color: #9ea2ff !important;
 }
 
 .main-sidebar-item {
-	color: #adadad;
+  color: #adadad;
 }
 
 .main-sidebar-item:hover {
-	background-color: #1f1f1f !important;
+  background-color: #1f1f1f !important;
 }
 
 .teams-sidebar-item-active {
-	color: #fff !important;
-	background-color: #292929 !important;
+  color: #fff !important;
+  background-color: #292929 !important;
 }
 
 .teams-sidebar-item {
-	color: #adadad;
+  color: #adadad;
 }
 
 .teams-sidebar-item:hover {
-	background-color: #292929 !important;
+  background-color: #292929 !important;
 }
 
 *::-webkit-scrollbar {
-	width: 0.25em;
+  width: 0.25em;
 }
 
 *::-webkit-scrollbar-track {
-	box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
 *::-webkit-scrollbar-thumb {
-	background-color: darkgrey;
-	outline: 1px solid slategrey;
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
 }

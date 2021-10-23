@@ -24,12 +24,7 @@ interface IndividualTeamRouteProps {
   admin: UserID;
 }
 
-const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({
-  id,
-  name,
-  members,
-  admin,
-}) => {
+const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, members, admin }) => {
   const feedRef = useRef<HTMLDivElement>(null);
 
   const [tabIndex, setTabIndex] = useState<number>(0);
@@ -57,22 +52,10 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({
               );
             } else if (feedItem.type === FeedType.UserJoin) {
               const currentMessage = feedItem.content as JoinMessage;
-              return (
-                <JoinMessageComponent
-                  key={idx.toString()}
-                  {...currentMessage}
-                  dateCreated={feedItem.dateCreated}
-                />
-              );
+              return <JoinMessageComponent key={idx.toString()} {...currentMessage} dateCreated={feedItem.dateCreated} />;
             } else if (feedItem.type === FeedType.UserLeave) {
               const currentMessage = feedItem.content as LeaveMessage;
-              return (
-                <LeaveMessageComponent
-                  key={idx.toString()}
-                  {...currentMessage}
-                  dateCreated={feedItem.dateCreated}
-                />
-              );
+              return <LeaveMessageComponent key={idx.toString()} {...currentMessage} dateCreated={feedItem.dateCreated} />;
             } else return <div key={idx.toString()}>Meeting</div>;
           })
         )
@@ -82,8 +65,7 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    if (messageToSend.length === 0)
-      return enqueueSnackbar("Please enter a message");
+    if (messageToSend.length === 0) return enqueueSnackbar("Please enter a message");
     await sendMessageOnTeam(id, messageToSend);
     await updateFeed();
     setMessageToSend("");
@@ -134,13 +116,7 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({
 
   return (
     <div className="w-full h-screen pl-8 flex flex-col">
-      <TeamHeadder
-        adminID={admin}
-        setTabIndex={setTabIndex}
-        teamName={name}
-        teamID={id}
-        totalMembers={members.length}
-      />
+      <TeamHeadder adminID={admin} setTabIndex={setTabIndex} teamName={name} teamID={id} totalMembers={members.length} />
       <div className="flex-grow flex flex-col">
         {tabIndex === 0 && (
           <div className="flex flex-col h-full">

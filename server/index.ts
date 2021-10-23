@@ -13,7 +13,7 @@ app.use(cors());
 config();
 
 app.get("/", (_, res) => {
-	res.send("Hello, world");
+  res.send("Hello, world");
 });
 
 app.use("/auth", AuthRouter);

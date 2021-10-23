@@ -8,15 +8,15 @@ import LeaveMessage from "./LeaveMessage";
 export type TeamID = string;
 
 export default interface Team {
-	id: TeamID;
-	name: string;
-	members: UserID[]; // this will also contain the admin
-	admin: UserID;
+  id: TeamID;
+  name: string;
+  members: UserID[]; // this will also contain the admin
+  admin: UserID;
 }
 
 export type TeamFeedMessage = FeedItem<MeetingMessage | Message | JoinMessage | LeaveMessage>;
 
 export interface TeamFeed {
-	id: TeamID;
-	messages: TeamFeedMessage[];
+  id: TeamID;
+  messages: TeamFeedMessage[];
 }

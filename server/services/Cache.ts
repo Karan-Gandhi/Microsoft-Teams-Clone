@@ -50,15 +50,8 @@ export default class Cache<U> {
   public fromFile() {
     const json = fs.readFileSync(this.fileName, "utf-8");
     if (json.length === 0) return;
-    const data = new Map<string, CacheItemInterface<string, U>>(
-      Object.entries(JSON.parse(json))
-    );
-    data.forEach((value, key) =>
-      this.data.set(
-        key,
-        new CacheItem(value.id, value._data, value.dateCreated)
-      )
-    );
+    const data = new Map<string, CacheItemInterface<string, U>>(Object.entries(JSON.parse(json)));
+    data.forEach((value, key) => this.data.set(key, new CacheItem(value.id, value._data, value.dateCreated)));
     console.log(this.data);
   }
 }

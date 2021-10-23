@@ -29,11 +29,7 @@ const LoginRoute: React.FC<LoginRouteProps> = () => {
   const handleSubmit = useCallback(
     (e: any) => {
       e.preventDefault();
-      const validationSuccess = validate(
-        (errorMessage) => enqueueSnackbar(errorMessage),
-        email,
-        password
-      );
+      const validationSuccess = validate((errorMessage) => enqueueSnackbar(errorMessage), email, password);
 
       if (validationSuccess) {
         loginWithEmailAndPassword(email, password)

@@ -4,11 +4,7 @@ import Cache from "./Cache";
 export const firebaseCache = new Cache("cache/firebase.cache");
 firebaseCache.fromFile();
 
-export const addData = async <T>(
-  collection: string,
-  document: string,
-  data: T
-): Promise<FirebaseFirestore.WriteResult> => {
+export const addData = async <T>(collection: string, document: string, data: T): Promise<FirebaseFirestore.WriteResult> => {
   firebaseCache.addItem(collectionAndDocumentToId(collection, document), data);
   return await db.collection(collection).doc(document).set(data);
 };
@@ -18,26 +14,18 @@ export const readData: {
   <T>(collection: string, document: string): Promise<T>;
 } = async <T>(collection: string, document?: string) => {
   if (!!document) {
-    if (
-      firebaseCache.itemExists(collectionAndDocumentToId(collection, document))
-    ) {
-      return firebaseCache.getItem(
-        collectionAndDocumentToId(collection, document)
-      ) as T;
+    if (firebaseCache.itemExists(collectionAndDocumentToId(collection, document))) {
+      return firebaseCache.getItem(collectionAndDocumentToId(collection, document)) as T;
     }
     const doc = await db.collection(collection).doc(document).get();
     if (!doc.exists) {
       return null;
     }
     const data = doc.data() as T;
-    firebaseCache.addItem(
-      collectionAndDocumentToId(collection, document),
-      data
-    );
+    firebaseCache.addItem(collectionAndDocumentToId(collection, document), data);
     return data;
   } else {
-    if (firebaseCache.itemExists(collection))
-      return firebaseCache.getItem(collection) as T[];
+    if (firebaseCache.itemExists(collection)) return firebaseCache.getItem(collection) as T[];
     const snapshots = await db.collection(collection).get();
     const res: T[] = [];
     snapshots.forEach((snapshot) => res.push(snapshot.data() as T));
@@ -48,17 +36,12 @@ export const readData: {
 
 export const deleteData = async (collection: string, document?: string) => {
   if (!!document) {
-    firebaseCache.deleteIfPresent(
-      collectionAndDocumentToId(collection, document)
-    );
+    firebaseCache.deleteIfPresent(collectionAndDocumentToId(collection, document));
     return await db.collection(collection).doc(document).delete();
   } else {
     firebaseCache.deleteIfPresent(collection);
 
-    const deleteCollection = async (
-      collectionPath: string,
-      batchSize: number
-    ) => {
+    const deleteCollection = async (collectionPath: string, batchSize: number) => {
       const collectionRef = db.collection(collectionPath);
       const query = collectionRef.orderBy("__name__").limit(batchSize);
 
@@ -67,10 +50,7 @@ export const deleteData = async (collection: string, document?: string) => {
       });
     };
 
-    const deleteQueryBatch = async (
-      query: FirebaseFirestore.Query<FirebaseFirestore.DocumentData>,
-      resolve: (value?: unknown) => void
-    ) => {
+    const deleteQueryBatch = async (query: FirebaseFirestore.Query<FirebaseFirestore.DocumentData>, resolve: (value?: unknown) => void) => {
       const snapshot = await query.get();
 
       const batchSize = snapshot.size;
@@ -99,10 +79,7 @@ export const readDataWhere = async <T>(
   opStr: FirebaseFirestore.WhereFilterOp,
   value: any
 ): Promise<T[]> => {
-  const snapshots = await db
-    .collection(collection)
-    .where(fieldPath, opStr, value)
-    .get();
+  const snapshots = await db.collection(collection).where(fieldPath, opStr, value).get();
   const res: T[] = [];
 
   snapshots.forEach((snapshot) => res.push(snapshot.data() as T));
@@ -115,8 +92,6 @@ export const getSnapshotWhere = (
   fieldPath: string,
   opStr: FirebaseFirestore.WhereFilterOp,
   value: any
-): FirebaseFirestore.Query<FirebaseFirestore.DocumentData> =>
-  db.collection(collection).where(fieldPath, opStr, value);
+): FirebaseFirestore.Query<FirebaseFirestore.DocumentData> => db.collection(collection).where(fieldPath, opStr, value);
 
-const collectionAndDocumentToId = (collection: string, document: string) =>
-  `${collection}/${document}`;
+const collectionAndDocumentToId = (collection: string, document: string) => `${collection}/${document}`;

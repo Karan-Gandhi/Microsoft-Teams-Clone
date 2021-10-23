@@ -3,41 +3,41 @@ import { RefreshToken } from "../types/Tokens";
 import { UserID } from "../types/User";
 
 export interface RenewAccessTokenRequest {
-	refreshToken: RefreshToken;
+  refreshToken: RefreshToken;
 }
 
 export interface LoginRequest {
-	email: string;
-	password: string;
+  email: string;
+  password: string;
 }
 
 export interface CreateUserRequest {
-	name: string;
-	email: string;
-	password: string;
+  name: string;
+  email: string;
+  password: string;
 }
 
 export interface LogoutRequest {
-	refreshToken: RefreshToken;
+  refreshToken: RefreshToken;
 }
 
 export interface SendTeamMessageRequest {
-	content: string;
+  content: string;
 }
 
 export interface JoinTeamRequest {
-	teamID: TeamID;
+  teamID: TeamID;
 }
 
 export interface CreateTeamRequest {
-	name: string;
-	members: UserID[];
+  name: string;
+  members: UserID[];
 }
 
 export interface AddMemberToTeamRequest {
-	userID: UserID;
+  userID: UserID;
 }
 
 export interface RemoveUserFromTeamRequest {
-	userID: UserID;
+  userID: UserID;
 }

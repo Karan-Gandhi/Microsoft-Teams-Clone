@@ -4,10 +4,7 @@ import SnackbarContainer from "./components/SnackbarContainer";
 
 import SnackbarContext from "./SnackbarContext";
 import OptionsObject from "./types/OptionsObject";
-import SnackbarObject, {
-  DEFAULT_VISIBILITY_DURATION,
-  MAX_VISIBILITY_DURATION,
-} from "./types/SnackbarObject";
+import SnackbarObject, { DEFAULT_VISIBILITY_DURATION, MAX_VISIBILITY_DURATION } from "./types/SnackbarObject";
 import SnackbarContextProvider from "./types/SnackbarContextProvider";
 import SnackbarKey from "./types/SnackbarKey";
 
@@ -22,10 +19,7 @@ interface SnackbarProviderState {
   snackbarExitAnimations: { [key: SnackbarKey]: () => void };
 }
 
-class SnackbarProvider extends React.Component<
-  SnackbarProviderProps,
-  SnackbarProviderState
-> {
+class SnackbarProvider extends React.Component<SnackbarProviderProps, SnackbarProviderState> {
   constructor(props: SnackbarProviderProps) {
     super(props);
 
@@ -45,32 +39,19 @@ class SnackbarProvider extends React.Component<
   }
 
   enqueueSnackbar(message: string, options: OptionsObject = {}): SnackbarKey {
-    const key: SnackbarKey =
-      new Date().getTime().toString() +
-      "-" +
-      Math.round(Math.random() * 1e6).toString();
-    const {
-      preventDuplicate = false,
-      keepOnScreen = false,
-      visibilityDuration = DEFAULT_VISIBILITY_DURATION,
-      ...otherOptions
-    } = options;
+    const key: SnackbarKey = new Date().getTime().toString() + "-" + Math.round(Math.random() * 1e6).toString();
+    const { preventDuplicate = false, keepOnScreen = false, visibilityDuration = DEFAULT_VISIBILITY_DURATION, ...otherOptions } = options;
 
     const snackbar: SnackbarObject = {
       key,
       message,
-      visibilityDuration: keepOnScreen
-        ? MAX_VISIBILITY_DURATION
-        : visibilityDuration,
+      visibilityDuration: keepOnScreen ? MAX_VISIBILITY_DURATION : visibilityDuration,
       keepOnScreen,
       ...otherOptions,
     };
 
     if (preventDuplicate || this.props.preventDuplicate) {
-      const snackbarDoesExist: boolean =
-        this.state.snackbars.findIndex(
-          (item: SnackbarObject): boolean => item.message === message
-        ) > -1;
+      const snackbarDoesExist: boolean = this.state.snackbars.findIndex((item: SnackbarObject): boolean => item.message === message) > -1;
 
       if (snackbarDoesExist) {
         return key;
@@ -94,9 +75,7 @@ class SnackbarProvider extends React.Component<
   removeSnackbarFromArray(key: SnackbarKey): void {
     this.setState((state) => {
       const newState: SnackbarProviderState = Object.assign({}, state);
-      const index = newState.snackbars.findIndex(
-        (item: SnackbarObject) => item.key === key
-      );
+      const index = newState.snackbars.findIndex((item: SnackbarObject) => item.key === key);
       newState.snackbars.splice(index, 1);
       return newState;
     });

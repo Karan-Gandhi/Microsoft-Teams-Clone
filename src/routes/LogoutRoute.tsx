@@ -6,19 +6,19 @@ import DefaultLoader from "../components/DefaultLoader";
 interface LogoutProps {}
 
 const Logout: React.FC<LogoutProps> = () => {
-	const [isLodggedOut, setLoggedOut] = useState<boolean>(false);
+  const [isLodggedOut, setLoggedOut] = useState<boolean>(false);
 
-	useEffect(() => {
-		logout().then(() => setLoggedOut(true));
-	}, []);
+  useEffect(() => {
+    logout().then(() => setLoggedOut(true));
+  }, []);
 
-	if (isLodggedOut) return <Redirect to="/" />;
+  if (isLodggedOut) return <Redirect to="/" />;
 
-	return (
-		<div className="w-full h-screen">
-			<DefaultLoader />
-		</div>
-	);
+  return (
+    <div className="w-full h-screen">
+      <DefaultLoader />
+    </div>
+  );
 };
 
 export default Logout;

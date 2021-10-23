@@ -6,27 +6,27 @@ import DefaultLoader from "../components/DefaultLoader";
 interface DefaultRouteProps {}
 
 const DefaultRoute: React.FC<DefaultRouteProps> = () => {
-	const [isLoading, setLoading] = useState<boolean>(true);
-	const [redirectToHomeRoute, setRedirectToHomeRoute] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(true);
+  const [redirectToHomeRoute, setRedirectToHomeRoute] = useState<boolean>(false);
 
-	useEffect(() => {
-		userIsLoggedIn().then(res => {
-			setLoading(false);
-			if (res) setRedirectToHomeRoute(true);
-		});
-	}, []);
+  useEffect(() => {
+    userIsLoggedIn().then((res) => {
+      setLoading(false);
+      if (res) setRedirectToHomeRoute(true);
+    });
+  }, []);
 
-	if (isLoading) {
-		return (
-			<div className="w-full h-screen">
-				<DefaultLoader />
-			</div>
-		);
-	} else if (redirectToHomeRoute) {
-		return <Redirect to="/teams" />;
-	} else {
-		return <Redirect to="/login" />;
-	}
+  if (isLoading) {
+    return (
+      <div className="w-full h-screen">
+        <DefaultLoader />
+      </div>
+    );
+  } else if (redirectToHomeRoute) {
+    return <Redirect to="/teams" />;
+  } else {
+    return <Redirect to="/login" />;
+  }
 };
 
 export default DefaultRoute;

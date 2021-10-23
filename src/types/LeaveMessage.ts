@@ -1,3 +1,3 @@
 export default interface LeaveMessage {
-	userLeave: string;
+  userLeave: string;
 }

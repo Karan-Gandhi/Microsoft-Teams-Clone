@@ -12,11 +12,7 @@ interface MemberTableProps {
   onClose?: (user: User) => any;
 }
 
-const MemberTable: React.FC<MemberTableProps> = ({
-  teamID,
-  closeButton,
-  onClose,
-}) => {
+const MemberTable: React.FC<MemberTableProps> = ({ teamID, closeButton, onClose }) => {
   const [teamMembers, setTeamMembers] = useState<React.ReactNode>();
   const [isLoading, setLoading] = useState<boolean>(true);
 
@@ -27,14 +23,8 @@ const MemberTable: React.FC<MemberTableProps> = ({
         members.map(async (member, idx) => {
           const user = await getUserById(member);
           return (
-            <div
-              className=""
-              style={{ backgroundColor: "#00000000" }}
-              key={user.id}
-            >
-              {idx !== 0 && (
-                <hr className="my-2" style={{ borderColor: "#00000044" }} />
-              )}
+            <div className="" style={{ backgroundColor: "#00000000" }} key={user.id}>
+              {idx !== 0 && <hr className="my-2" style={{ borderColor: "#00000044" }} />}
               <SearchListItem
                 email={user.email}
                 name={user.name}
