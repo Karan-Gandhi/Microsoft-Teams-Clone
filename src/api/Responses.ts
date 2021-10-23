@@ -1,6 +1,6 @@
-import Team, { TeamID } from "./Team";
-import { AccessToken, RefreshToken } from "./Tokens";
-import User, { UserID } from "./User";
+import Team, { TeamID } from "../types/Team";
+import { AccessToken, RefreshToken } from "../types/Tokens";
+import User, { UserID } from "../types/User";
 
 export interface TokensResponse {
 	type: string;

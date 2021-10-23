@@ -1,11 +1,11 @@
-import { CreateUserRequest, LoginRequest, LogoutRequest, RenewAccessTokenRequest } from "../types/Requests";
-import { TokensResponse } from "../types/Responses";
 import { AccessToken, RefreshToken } from "../types/Tokens";
 import { CookieNames, getCookie, removeCookie, setCookie } from "../utils/BrowserUtils";
+import { getUserDetails } from "../utils/UserUtils";
+import { CreateUserRequest, LoginRequest, LogoutRequest, RenewAccessTokenRequest } from "./Requests";
+import { TokensResponse } from "./Responses";
 import { fetchUsingDelete, fetchUsingGET, fetchUsingPOST } from "./APIControler";
 import { NO_INTERNET, REFRESH_TOKEN_EXPIRED } from "./AuthErrors";
 import APIRoutes from "./APIRoutes";
-import { getUserDetails } from "../utils/UserUtils";
 
 export const accessTokenIsValid = async (): Promise<boolean> => {
 	if (!getCookie(CookieNames.ACCESS_TOKEN_COOKIE_NAME)) return false;

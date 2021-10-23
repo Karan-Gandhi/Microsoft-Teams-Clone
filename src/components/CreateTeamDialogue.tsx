@@ -100,7 +100,7 @@ const CreateTeamDialogue: React.FC<CreateTeamDialogueProps> = ({
 							}}
 						/>
 
-						<div className="relative">
+						<div className="absolute w-full">
 							{searchResults.length !== 0 && (
 								<div
 									className="absolute py-2"

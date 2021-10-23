@@ -1,8 +1,8 @@
 import express from "express";
 import { config } from "dotenv";
+import cors from "cors";
 import AuthRouter from "./routes/AuthRoutes";
 import APIRouter from "./routes/APIRoutes";
-import cors from "cors";
 
 const PORT = 5000;
 const app = express();

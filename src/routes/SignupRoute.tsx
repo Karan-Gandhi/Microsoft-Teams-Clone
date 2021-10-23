@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
+import { Link, Redirect } from "react-router-dom";
 import Textfield from "../components/Textfield";
 import Button from "../components/Button";
-import { Link, Redirect } from "react-router-dom";
 import { useSnackbar } from "../Snackbar";
 import { validate } from "../utils/AuthUtils";
 import { createUserWithEmailAndPassword, userIsLoggedIn } from "../api/Auth";

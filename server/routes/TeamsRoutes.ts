@@ -2,7 +2,17 @@ import * as express from "express";
 import { FeedType } from "../types/FeedItem";
 import Message from "../types/Message";
 import User from "../types/User";
-import { addFeedItem, createTeam, getTeamById, getTeamFeed, getTeamMembers, joinTeam } from "../utils/TeamsUtils";
+import {
+	addFeedItem,
+	addUserToTeam,
+	createTeam,
+	getTeamAdmin,
+	getTeamById,
+	getTeamFeed,
+	getTeamMembers,
+	joinTeam,
+	removeUser,
+} from "../utils/TeamsUtils";
 import { getUserTeams } from "../utils/UserUtils";
 
 const router = express.Router();
@@ -65,6 +75,28 @@ router.get("/teamMembers/:id", async (req, res) => {
 	try {
 		const { id } = req.params;
 		res.json({ members: await getTeamMembers(id) });
+	} catch {
+		res.sendStatus(404);
+	}
+});
+
+router.put("/addUser/:id", async (req, res) => {
+	try {
+		const user = JSON.parse(req.user as string) as User;
+		if (user.id !== (await getTeamAdmin(req.params.id))) return res.sendStatus(403);
+		await addUserToTeam(req.params.id, req.body.userID);
+		res.sendStatus(204);
+	} catch {
+		res.sendStatus(404);
+	}
+});
+
+router.delete("/removeUser/:id", async (req, res) => {
+	try {
+		const user = JSON.parse(req.user as string) as User;
+		if (user.id !== (await getTeamAdmin(req.params.id))) return res.sendStatus(403);
+		await removeUser(req.params.id, req.body.userID);
+		res.sendStatus(204);
 	} catch {
 		res.sendStatus(404);
 	}

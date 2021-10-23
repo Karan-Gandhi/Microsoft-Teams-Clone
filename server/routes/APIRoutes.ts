@@ -1,8 +1,8 @@
 import * as jwt from "jsonwebtoken";
 import express from "express";
+import User from "../types/User";
 import TeamsRouter from "./TeamsRoutes";
 import UserRouter from "./UserRoutes";
-import User from "../types/User";
 
 const router = express.Router();
 
@@ -19,6 +19,11 @@ router.use((req, res, next) => {
 		req.user = JSON.stringify(user);
 		next();
 	});
+});
+
+router.use((error: Error, _: express.Request, res: express.Response, next: express.NextFunction) => {
+	console.log(error);
+	res.sendStatus(500);
 });
 
 router.get("/", (_, res) => {

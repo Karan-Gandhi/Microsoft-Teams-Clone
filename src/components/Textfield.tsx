@@ -40,7 +40,7 @@ const Textfield: React.FC<TextfieldProps> = ({
 				type={type}
 				onChange={e => onChange(e.target.value)}
 				onKeyDown={e => {
-					if (e.key === "enter") onSubmit(e.currentTarget.value);
+					if (e.key === "Enter") onSubmit(e.currentTarget.value);
 				}}
 				value={value}
 			/>
