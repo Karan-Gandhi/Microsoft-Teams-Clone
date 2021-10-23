@@ -115,3 +115,10 @@ export const removeUser = async (teamID: TeamID, userID: UserID) => {
   await updateTeamData(teamID, team);
   await removeUserFromTeam(userID, teamID);
 };
+
+export const userBelongsToTeam = async (teamID: TeamID, userID: UserID) => {
+  const team = await getTeamById(teamID);
+  if (team.members.findIndex((memberID) => memberID === userID) === -1)
+    return false;
+  else return true;
+};
