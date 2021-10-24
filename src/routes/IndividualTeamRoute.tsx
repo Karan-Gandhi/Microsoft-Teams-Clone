@@ -73,26 +73,28 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    updateFeed().then(() => {
-      setLoading(false);
+    updateFeed()
+      .then(() => {
+        setLoading(false);
 
-      feedRef.current?.addEventListener("DOMNodeInserted", (event) => {
-        const { currentTarget: target } = event;
-        (target as HTMLDivElement).scroll({
-          top: (target as HTMLDivElement).scrollHeight,
-          behavior: "smooth",
+        feedRef.current?.addEventListener("DOMNodeInserted", (event) => {
+          const { currentTarget: target } = event;
+          (target as HTMLDivElement).scroll({
+            top: (target as HTMLDivElement).scrollHeight,
+            behavior: "smooth",
+          });
         });
-      });
 
-      feedRef.current?.scroll({
-        top: feedRef.current.scrollHeight,
-        behavior: "auto",
-      });
+        feedRef.current?.scroll({
+          top: feedRef.current.scrollHeight,
+          behavior: "auto",
+        });
 
-      interval = setInterval(async () => {
-        await updateFeed();
-      }, FEED_REFRESH_TIME);
-    });
+        interval = setInterval(async () => {
+          await updateFeed();
+        }, FEED_REFRESH_TIME);
+      })
+      .catch((error) => {});
 
     return () => {
       if (interval) clearInterval(interval);

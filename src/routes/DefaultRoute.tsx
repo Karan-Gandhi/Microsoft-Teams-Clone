@@ -10,10 +10,13 @@ const DefaultRoute: React.FC<DefaultRouteProps> = () => {
   const [redirectToHomeRoute, setRedirectToHomeRoute] = useState<boolean>(false);
 
   useEffect(() => {
-    userIsLoggedIn().then((res) => {
-      setLoading(false);
-      if (res) setRedirectToHomeRoute(true);
-    });
+    userIsLoggedIn()
+      .then((res) => {
+        setLoading(false);
+        if (res) setRedirectToHomeRoute(true);
+        else setRedirectToHomeRoute(false);
+      })
+      .catch((error) => {});
   }, []);
 
   if (isLoading) {

@@ -13,33 +13,36 @@ const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({ component: Comp
   const [redirectToLogin, setRedirectToLogin] = useState<boolean>(false);
 
   useEffect(() => {
-    userIsLoggedIn().then((status) => {
-      setLoading(false);
-      setRedirectToLogin(!status);
-    });
+    userIsLoggedIn()
+      .then((status) => {
+        setLoading(false);
+        setRedirectToLogin(!status);
+      })
+      .catch((error) => {});
   }, []);
 
   return (
     <Route
       {...rest}
       render={(props) => {
-        if (isLoading && teamsIsLoaded)
+        if (isLoading || !teamsIsLoaded)
           return (
             <div className="h-screen">
               <Loader />
             </div>
           );
-        if (redirectToLogin) return <Redirect to="/" />;
-        return (
-          <div className="w-screen h-screen flex text-white">
-            <MainSidebar />
-            <TeamsSidebar onLoaded={() => setTeamsIsLoaded(true)} />
-            <div className="w-full h-full">
-              {/* @ts-ignore */}
-              <Component {...props} />
+        if (redirectToLogin) return <Redirect to="/login" />;
+        else if (!redirectToLogin && !isLoading)
+          return (
+            <div className="w-screen h-screen flex text-white">
+              <MainSidebar />
+              <TeamsSidebar onLoaded={() => setTeamsIsLoaded(true)} />
+              <div className="w-full h-full">
+                {/* @ts-ignore */}
+                <Component {...props} />
+              </div>
             </div>
-          </div>
-        );
+          );
       }}
     />
   );

@@ -9,7 +9,9 @@ const Logout: React.FC<LogoutProps> = () => {
   const [isLodggedOut, setLoggedOut] = useState<boolean>(false);
 
   useEffect(() => {
-    logout().then(() => setLoggedOut(true));
+    logout()
+      .then(() => setLoggedOut(true))
+      .catch((error) => {});
   }, []);
 
   if (isLodggedOut) return <Redirect to="/" />;

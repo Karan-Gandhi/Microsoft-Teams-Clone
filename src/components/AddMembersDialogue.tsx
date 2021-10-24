@@ -71,9 +71,11 @@ const AddMembersDialogue: React.FC<AddMembersDialogueProps> = ({ teamID, ...rest
   );
 
   useEffect(() => {
-    getTeamMembers(teamID).then(async ({ data: { members } }) => {
-      setAddedUsers(await Promise.all(members.map(async (member) => await getUserById(member))));
-    });
+    getTeamMembers(teamID)
+      .then(async ({ data: { members } }) => {
+        setAddedUsers(await Promise.all(members.map(async (member) => await getUserById(member))));
+      })
+      .catch((error) => {});
   }, [teamID]);
 
   return (

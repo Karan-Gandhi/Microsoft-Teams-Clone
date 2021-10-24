@@ -16,31 +16,33 @@ const TeamsRoute: React.FC<TeamsRouteProps> = () => {
   const [joinTeamDialogueIsVisible, setJoinTeamDialogueIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    getUserTeams().then(async (teams) => {
-      setTeamDisplay(
-        await Promise.all(
-          teams.data.teams.map(async (teamID) => {
-            const data = (await getTeamByID(teamID)).data;
-            return <TeamCard key={data.id} {...data} />;
-          })
-        )
-      );
+    getUserTeams()
+      .then(async (teams) => {
+        setTeamDisplay(
+          await Promise.all(
+            teams.data.teams.map(async (teamID) => {
+              const data = (await getTeamByID(teamID)).data;
+              return <TeamCard key={data.id} {...data} />;
+            })
+          )
+        );
 
-      setTeamRoutes(
-        await Promise.all(
-          teams.data.teams.map(async (teamID) => {
-            const data = (await getTeamByID(teamID)).data;
-            return (
-              <Route key={data.id} path={`/teams/${teamID}`} exact>
-                <IndividualTeamRoute {...data} />
-              </Route>
-            );
-          })
-        )
-      );
+        setTeamRoutes(
+          await Promise.all(
+            teams.data.teams.map(async (teamID) => {
+              const data = (await getTeamByID(teamID)).data;
+              return (
+                <Route key={data.id} path={`/teams/${teamID}`} exact>
+                  <IndividualTeamRoute {...data} />
+                </Route>
+              );
+            })
+          )
+        );
 
-      setLoading(false);
-    });
+        setLoading(false);
+      })
+      .catch((error) => {});
   }, []);
 
   return (

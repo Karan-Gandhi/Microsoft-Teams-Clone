@@ -11,17 +11,19 @@ const TeamsSidebar: React.FC<TeamsSidebarProps> = ({ onLoaded }) => {
   const [sidebarItems, setSidebarItems] = useState<React.ReactNode>();
 
   useEffect(() => {
-    getUserTeams().then(async (teams) => {
-      setSidebarItems(
-        await Promise.all(
-          teams.data.teams.map(async (teamID) => {
-            const data = (await getTeamByID(teamID)).data;
-            return <TeamsSidebarItem key={data.id} name={data.name} linkTo={`/teams/${data.id}`} />;
-          })
-        )
-      );
-      onLoaded();
-    });
+    getUserTeams()
+      .then(async (teams) => {
+        setSidebarItems(
+          await Promise.all(
+            teams.data.teams.map(async (teamID) => {
+              const data = (await getTeamByID(teamID)).data;
+              return <TeamsSidebarItem key={data.id} name={data.name} linkTo={`/teams/${data.id}`} />;
+            })
+          )
+        );
+        onLoaded();
+      })
+      .catch((error) => {});
   }, [onLoaded]);
 
   return (
