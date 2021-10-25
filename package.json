@@ -32,7 +32,7 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "yarn lint --fix",
     "eject": "react-scripts eject"
   },

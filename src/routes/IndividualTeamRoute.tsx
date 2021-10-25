@@ -3,17 +3,20 @@ import DefaultLoader from "../components/DefaultLoader";
 import JoinMessageComponent from "../components/JoinMessageComponent";
 import LeaveMessageComponent from "../components/LeaveMessageComponent";
 import MessageComponent from "../components/MessageComponent";
+import SearchListItem from "../components/SearchListItem";
 import TeamHeadder from "../components/TeamHeader";
 import TeamWelcomeMessage from "../components/TeamWelcomeMessage";
 import Textfield from "../components/Textfield";
+import useDebounce from "../hooks/useDebounce";
 import { useSnackbar } from "../Snackbar";
 import { FeedType } from "../types/FeedItem";
 import JoinMessage from "../types/JoinMessage";
 import LeaveMessage from "../types/LeaveMessage";
 import Message from "../types/Message";
 import { TeamID } from "../types/Team";
-import { UserID } from "../types/User";
+import User, { UserID } from "../types/User";
 import { getTeamFeed, sendMessageOnTeam } from "../utils/TeamUtils";
+import { getUserById, getUserID } from "../utils/UserUtils";
 
 const FEED_REFRESH_TIME = 1e3 * 10;
 
@@ -31,6 +34,9 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
   const [isLoading, setLoading] = useState<boolean>(true);
   const [messageToSend, setMessageToSend] = useState<string>("");
   const [feed, setFeed] = useState<React.ReactNode>();
+  const [showMentionSuggesions, setShowMentionSuggesions] = useState<boolean>(false);
+  const [teamMembers, setTeamMembers] = useState<User[]>([]);
+  const [mentionSuggesions, setMentionSuggesions] = useState<User[]>([]);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -63,6 +69,25 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
     });
   }, [id]);
 
+  useDebounce(
+    () => {
+      const indexOfMentionStart = messageToSend.indexOf("@");
+      if (indexOfMentionStart === -1) return setShowMentionSuggesions(false);
+      let isUserTypingPersonName = messageToSend.indexOf(" ", indexOfMentionStart) === -1;
+      if (isUserTypingPersonName) {
+        setShowMentionSuggesions(true);
+        const name = messageToSend.substring(indexOfMentionStart + 1);
+        if (name.length === 0) return setShowMentionSuggesions(false);
+        const foundMembers = teamMembers.filter((user) => user.name.toUpperCase().indexOf(name.toUpperCase()) !== -1);
+        setMentionSuggesions(foundMembers);
+      } else {
+        setShowMentionSuggesions(false);
+      }
+    },
+    100,
+    [messageToSend]
+  );
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (messageToSend.length === 0) return enqueueSnackbar("Please enter a message");
@@ -73,6 +98,10 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
+    Promise.all(members.filter((memberID) => memberID !== getUserID()).map(async (memberID) => await getUserById(memberID))).then((users) =>
+      setTeamMembers(users)
+    );
+
     updateFeed()
       .then(() => {
         setLoading(false);
@@ -99,7 +128,7 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [id, updateFeed]);
+  }, [id, members, updateFeed]);
 
   useEffect(() => {
     feedRef.current?.scroll({
@@ -127,7 +156,20 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
               {feed}
             </div>
             <form onSubmit={handleSubmit}>
-              <div className="pt-8 pr-8">
+              <div className="pt-8 pr-8 relative">
+                <div className="absolute">
+                  {showMentionSuggesions &&
+                    mentionSuggesions.map((user) => (
+                      <SearchListItem
+                        key={user.id}
+                        name={user.name}
+                        email={user.email}
+                        onClick={() => {
+                          // TODO: auto complete
+                        }}
+                      />
+                    ))}
+                </div>
                 <Textfield
                   onChange={setMessageToSend}
                   backgroundColor="#292929"
