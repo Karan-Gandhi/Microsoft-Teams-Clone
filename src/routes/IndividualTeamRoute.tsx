@@ -71,13 +71,12 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 
   useDebounce(
     () => {
-      const indexOfMentionStart = messageToSend.indexOf("@");
+      const indexOfMentionStart = messageToSend.lastIndexOf("@");
       if (indexOfMentionStart === -1) return setShowMentionSuggesions(false);
       let isUserTypingPersonName = messageToSend.indexOf(" ", indexOfMentionStart) === -1;
       if (isUserTypingPersonName) {
         setShowMentionSuggesions(true);
         const name = messageToSend.substring(indexOfMentionStart + 1);
-        if (name.length === 0) return setShowMentionSuggesions(false);
         const foundMembers = teamMembers.filter((user) => user.name.toUpperCase().indexOf(name.toUpperCase()) !== -1);
         setMentionSuggesions(foundMembers);
       } else {
@@ -159,16 +158,20 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
               <div className="pt-8 pr-8 relative">
                 <div className="relative mb-2">
                   {showMentionSuggesions &&
-                    mentionSuggesions.map((user) => (
-                      <SearchListItem
-                        key={user.id}
-                        name={user.name}
-                        email={user.email}
-                        onClick={() => {
-                          // TODO: auto complete
-                        }}
-                      />
-                    ))}
+                    mentionSuggesions
+                      .filter((_, idx) => idx <= 4)
+                      .map((user) => (
+                        <SearchListItem
+                          key={user.id}
+                          name={user.name}
+                          email={user.email}
+                          onClick={() => {
+                            // TODO: auto complete
+                            const textBeforeMention = messageToSend.substring(0, messageToSend.lastIndexOf("@") + 1);
+                            setMessageToSend(textBeforeMention + user.name);
+                          }}
+                        />
+                      ))}
                 </div>
                 <Textfield
                   onChange={setMessageToSend}
