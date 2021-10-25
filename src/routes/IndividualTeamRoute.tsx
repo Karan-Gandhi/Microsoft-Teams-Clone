@@ -157,7 +157,7 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
             </div>
             <form onSubmit={handleSubmit}>
               <div className="pt-8 pr-8 relative">
-                <div className="absolute">
+                <div className="relative mb-2">
                   {showMentionSuggesions &&
                     mentionSuggesions.map((user) => (
                       <SearchListItem
