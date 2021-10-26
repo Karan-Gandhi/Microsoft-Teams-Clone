@@ -37,6 +37,8 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
   const [showMentionSuggesions, setShowMentionSuggesions] = useState<boolean>(false);
   const [teamMembers, setTeamMembers] = useState<User[]>([]);
   const [mentionSuggesions, setMentionSuggesions] = useState<User[]>([]);
+  const [mentionText, setMenitonText] = useState<string[]>([]);
+  const textfieldRef = useRef<HTMLInputElement>(null);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -97,8 +99,11 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    Promise.all(members.filter((memberID) => memberID !== getUserID()).map(async (memberID) => await getUserById(memberID))).then((users) =>
-      setTeamMembers(users)
+    Promise.all(members.filter((memberID) => memberID !== getUserID()).map(async (memberID) => await getUserById(memberID))).then(
+      (users) => {
+        setTeamMembers(users);
+        setMenitonText(users.map((user) => "@" + user.name));
+      }
     );
 
     updateFeed()
@@ -166,19 +171,22 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
                           name={user.name}
                           email={user.email}
                           onClick={() => {
-                            // TODO: auto complete
-                            const textBeforeMention = messageToSend.substring(0, messageToSend.lastIndexOf("@") + 1);
-                            setMessageToSend(textBeforeMention + user.name);
+                            const mentionStart = messageToSend.lastIndexOf("@");
+                            const textBeforeMention = messageToSend.substring(0, mentionStart + 1);
+                            setMessageToSend(textBeforeMention + user.name + " ");
+                            textfieldRef.current?.focus();
                           }}
                         />
                       ))}
                 </div>
                 <Textfield
+                  highlightText={mentionText}
                   onChange={setMessageToSend}
                   backgroundColor="#292929"
                   placeholder="Start a new Conversation"
                   className="py-4 px-4"
                   value={messageToSend}
+                  textfieldRef={textfieldRef}
                 />
               </div>
             </form>
