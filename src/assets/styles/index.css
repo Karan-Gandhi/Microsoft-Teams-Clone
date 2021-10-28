@@ -144,3 +144,7 @@ span.nav-link-black:hover::after {
   background-color: darkgrey;
   outline: 1px solid slategrey;
 }
+
+span {
+  white-space: pre-wrap;
+}
