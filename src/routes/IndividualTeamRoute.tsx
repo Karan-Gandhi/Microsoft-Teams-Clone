@@ -193,6 +193,7 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
                   className="py-4 px-4"
                   value={messageToSend}
                   textfieldRef={textfieldRef}
+                  showHighlights
                 />
               </div>
             </form>

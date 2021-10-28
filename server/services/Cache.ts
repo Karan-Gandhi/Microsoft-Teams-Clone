@@ -18,7 +18,6 @@ export default class Cache<U> {
 
   public getItem(id: string): U | null {
     if (this.itemExists(id)) {
-      console.log("cache read");
       return this.data.get(id)?.data as U;
     } else return null;
   }
@@ -42,7 +41,6 @@ export default class Cache<U> {
   }
 
   private writeFile() {
-    console.log("cache write");
     const obj = Object.fromEntries(this.data);
     fs.writeFileSync(this.fileName, JSON.stringify(obj));
   }
@@ -52,7 +50,6 @@ export default class Cache<U> {
     if (json.length === 0) return;
     const data = new Map<string, CacheItemInterface<string, U>>(Object.entries(JSON.parse(json)));
     data.forEach((value, key) => this.data.set(key, new CacheItem(value.id, value._data, value.dateCreated)));
-    console.log(this.data);
   }
 }
 
