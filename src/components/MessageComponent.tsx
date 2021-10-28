@@ -10,13 +10,13 @@ interface MessageComponentProps {
   members: string[];
 }
 
+// TODO: Complete mention highlighting
 const MessageComponent: React.FC<MessageComponentProps> = ({ sender, content, dateCreated, members }) => {
   const avatarSrc = getAvatarSrc(sender, 48);
   if (sender === getUserName()) sender = "You";
-  const intervals = members.map((text) => [
-    content.toUpperCase().indexOf(text.toUpperCase()),
-    content.toUpperCase().indexOf(text.toUpperCase()) + text.length,
-  ]);
+  // const intervals = members.map((text) => {
+  //   return [content.toUpperCase().indexOf(text.toUpperCase()), content.toUpperCase().indexOf(text.toUpperCase()) + text.length];
+  // });
 
   return (
     <div className={`flex items-center gap-4 ${sender === "You" ? "flex-row" : "flex-row"}`}>
@@ -31,11 +31,12 @@ const MessageComponent: React.FC<MessageComponentProps> = ({ sender, content, da
         </div>
         <div className="px-4 py-2 mb-3 pr-8" style={{ backgroundColor: "#242424" }}>
           <span>
-            {content.split("").map((text, idx) => (
+            {content}
+            {/* {content.split("").map((text, idx) => (
               <span key={idx.toString()} style={isWithinIntervals(intervals, idx) ? { color: "#9ea2ff" } : {}}>
                 {text}
               </span>
-            ))}
+            ))} */}
           </span>
         </div>
       </div>

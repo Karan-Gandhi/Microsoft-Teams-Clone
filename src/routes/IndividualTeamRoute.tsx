@@ -58,7 +58,7 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
                   content={currentMessage.content}
                   sender={currentMessage.name}
                   dateCreated={feedItem.dateCreated}
-                  members={teamMembers.map((user) => "@" + user.name)}
+                  members={teamMembers.map((user) => "@" + user.name.replaceAll(" ", "_"))}
                 />
               );
             } else if (feedItem.type === FeedType.UserJoin) {
@@ -101,12 +101,12 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
   };
 
   useEffect(() => {
-    Promise.all(members.filter((memberID) => memberID !== getUserID()).map(async (memberID) => await getUserById(memberID))).then(
-      (users) => {
+    Promise.all(members.filter((memberID) => memberID !== getUserID()).map(async (memberID) => await getUserById(memberID)))
+      .then((users) => {
         setTeamMembers(users);
-        setMenitonText(users.map((user) => "@" + user.name));
-      }
-    );
+        setMenitonText(users.map((user) => "@" + user.name.replaceAll(" ", "_")));
+      })
+      .catch((error) => {});
   }, [members]);
 
   useEffect(() => {
@@ -179,7 +179,7 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
                           onClick={() => {
                             const mentionStart = messageToSend.lastIndexOf("@");
                             const textBeforeMention = messageToSend.substring(0, mentionStart + 1);
-                            setMessageToSend(textBeforeMention + user.name + " ");
+                            setMessageToSend(textBeforeMention + user.name.replaceAll(" ", "_") + " ");
                             textfieldRef.current?.focus();
                           }}
                         />
