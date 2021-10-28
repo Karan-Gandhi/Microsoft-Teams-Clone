@@ -20,21 +20,22 @@ const Textfield: React.FC<TextfieldProps> = ({
   type = "text",
   className = "",
   placeholder = "",
-  onChange = () => {},
+  onChange,
   label = "",
   hintText = "",
   backgroundColor = "#ecf2f7",
-  onSubmit = () => {},
+  onSubmit,
   value,
   textfieldRef,
-  highlightText = [],
+  highlightText,
 }) => {
   const [inputId] = useState<string>(`input-textfield-${Math.random()}`);
-  const intervals = highlightText.map((text) => [
-    (value || "").toUpperCase().indexOf(text.toUpperCase()),
-    ((value || "").toUpperCase().indexOf(text.toUpperCase()) || 0) + text.length,
-  ]);
-  console.log(intervals, highlightText);
+  let intervals: number[][] = [];
+  if (highlightText)
+    intervals = highlightText.map((text) => [
+      (value || "").toUpperCase().indexOf(text.toUpperCase()),
+      ((value || "").toUpperCase().indexOf(text.toUpperCase()) || 0) + text.length,
+    ]);
 
   return (
     <div className="flex flex-col w-full mb-2">
@@ -57,9 +58,9 @@ const Textfield: React.FC<TextfieldProps> = ({
           className={`px-4 py-2 rounded-lg w-full ${className}`}
           placeholder={placeholder}
           type={type}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={onChange && ((e) => onChange(e.target.value))}
           onKeyDown={(e) => {
-            if (e.key === "Enter") onSubmit(e.currentTarget.value);
+            if (e.key === "Enter" && onSubmit) onSubmit(e.currentTarget.value);
           }}
           value={value}
           ref={textfieldRef}

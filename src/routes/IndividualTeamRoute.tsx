@@ -56,6 +56,7 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
                   content={currentMessage.content}
                   sender={currentMessage.name}
                   dateCreated={feedItem.dateCreated}
+                  members={teamMembers.map((user) => "@" + user.name)}
                 />
               );
             } else if (feedItem.type === FeedType.UserJoin) {
@@ -69,7 +70,7 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
         )
       );
     });
-  }, [id]);
+  }, [id, teamMembers]);
 
   useDebounce(
     () => {
