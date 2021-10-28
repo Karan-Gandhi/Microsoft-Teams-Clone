@@ -30,6 +30,8 @@ interface IndividualTeamRouteProps {
 const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, members, admin }) => {
   const feedRef = useRef<HTMLDivElement>(null);
 
+  console.log("Update");
+
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [messageToSend, setMessageToSend] = useState<string>("");
@@ -99,13 +101,16 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
   };
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
     Promise.all(members.filter((memberID) => memberID !== getUserID()).map(async (memberID) => await getUserById(memberID))).then(
       (users) => {
         setTeamMembers(users);
         setMenitonText(users.map((user) => "@" + user.name));
       }
     );
+  }, [members]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
 
     updateFeed()
       .then(() => {

@@ -26,19 +26,18 @@ const TeamsRoute: React.FC<TeamsRouteProps> = () => {
             })
           )
         );
-
-        setTeamRoutes(
-          await Promise.all(
-            teams.data.teams.map(async (teamID) => {
-              const data = (await getTeamByID(teamID)).data;
-              return (
-                <Route key={data.id} path={`/teams/${teamID}`} exact>
-                  <IndividualTeamRoute {...data} />
-                </Route>
-              );
-            })
-          )
+        const _teamRoutes = await Promise.all(
+          teams.data.teams.map(async (teamID) => {
+            const data = (await getTeamByID(teamID)).data;
+            return (
+              <Route key={data.id} path={`/teams/${teamID}`} exact>
+                <IndividualTeamRoute {...data} />
+              </Route>
+            );
+          })
         );
+
+        setTeamRoutes(_teamRoutes);
 
         setLoading(false);
       })
