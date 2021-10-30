@@ -3,8 +3,9 @@ import { config } from "dotenv";
 import cors from "cors";
 import AuthRouter from "./routes/AuthRoutes";
 import APIRouter from "./routes/APIRoutes";
-import createWebSocketServer, { addEvent } from "./services/WebSocket";
+import createWebSocketServer, { addEvent, createRoomIfNotExists, emitInRoom, joinRoom } from "./services/WebSocket";
 import { SocketMessageID } from "./types/SocketServer/SocketMessage";
+import Meeting from "./types/Meeting";
 
 const PORT = 5000;
 const app = express();
@@ -25,5 +26,10 @@ const server = app.listen(PORT, () => console.log("[S] Server started at port: "
 const websocketServer = createWebSocketServer(server);
 
 websocketServer.on("connection", (socket) => {
-  addEvent(socket, SocketMessageID.JOIN, (data) => {});
+  addEvent<Meeting>(SocketMessageID.JOIN_MEETING, socket, (data, user) => {
+    createRoomIfNotExists(data.meetingID);
+    joinRoom(data.meetingID, socket);
+    emitInRoom(data.meetingID, SocketMessageID.USER_JOINED_MEETING, { user });
+  });
+  addEvent(SocketMessageID.SEND_MESSAGE_TO_MEETING, socket, (data) => {});
 });

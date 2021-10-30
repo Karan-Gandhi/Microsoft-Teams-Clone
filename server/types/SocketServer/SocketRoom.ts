@@ -1,3 +1,1 @@
-export type RoomID = string;
-
-export default interface SocketRoom {}
+export type SocketRoomID = string;

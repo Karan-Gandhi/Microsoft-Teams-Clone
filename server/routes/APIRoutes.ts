@@ -1,8 +1,8 @@
 import * as jwt from "jsonwebtoken";
 import express from "express";
-import User from "../types/User";
 import TeamsRouter from "./TeamsRoutes";
 import UserRouter from "./UserRoutes";
+import MeetingRouter from "./MeetingRoutes";
 
 const router = express.Router();
 
@@ -32,5 +32,6 @@ router.get("/", (_, res) => {
 
 router.use("/teams", TeamsRouter);
 router.use("/users", UserRouter);
+router.use("/meetings", MeetingRouter);
 
 export default router;

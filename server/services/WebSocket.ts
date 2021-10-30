@@ -1,11 +1,12 @@
 import { Server } from "http";
 import { Socket } from "net";
 import WebSocket from "ws";
-
 import User from "../types/User";
-import { createSocketMessage, SocketMessageID } from "../types/SocketServer/SocketMessage";
-import { RoomID } from "../types/SocketServer/SocketRoom";
+import SocketMessage, { createSocketMessage, SocketMessageID } from "../types/SocketServer/SocketMessage";
+import { SocketRoomID } from "../types/SocketServer/SocketRoom";
 import { verifyAccessToken } from "../utils/AuthUtils";
+
+const rooms = new Map<SocketRoomID, WebSocket[]>();
 
 const createWebSocketServer = (expressServer: Server, path?: string) => {
   const websocketServer = new WebSocket.Server({ noServer: true, path });
@@ -20,10 +21,11 @@ const createWebSocketServer = (expressServer: Server, path?: string) => {
   return websocketServer;
 };
 
-export const addEvent = <T>(socket: WebSocket, mid: SocketMessageID, callback: (data: T, user: User) => any) => {
+export const addEvent = <T>(mid: SocketMessageID, socket: WebSocket, callback: (data: T, user: User) => any) => {
   socket.on("message", (data) => {
     try {
       const message = createSocketMessage<T>(data);
+      if (!message.Authorization) return socket.close();
       verifyAccessToken(message.Authorization, (error, user) => {
         if (error) return socket.close();
         delete user?.iat;
@@ -36,8 +38,28 @@ export const addEvent = <T>(socket: WebSocket, mid: SocketMessageID, callback: (
   });
 };
 
-export const createRoom = (id: RoomID) => {};
+export const createRoomIfNotExists = (roomID: SocketRoomID) => {
+  if (!rooms.has(roomID)) rooms.set(roomID, []);
+};
 
-export const joinRoom = (id: RoomID, socket: WebSocket) => {};
+export const joinRoom = (id: SocketRoomID, socket: WebSocket) => {
+  const room = rooms.get(id);
+  if (room) room.push(socket);
+};
+
+export const deleteRoom = (id: SocketRoomID) => {
+  rooms.delete(id);
+};
+
+export const emitInRoom = <T>(id: SocketRoomID, mid: SocketMessageID, data: T) => {
+  const room = rooms.get(id);
+  const socketMessage: SocketMessage<T> = { id: mid, body: data };
+  if (room) room.forEach((socket) => socket.send(JSON.stringify(socketMessage)));
+};
+
+export const removeSocketFromRoom = (id: SocketRoomID, socket: WebSocket) => {
+  const room = rooms.get(id);
+  if (room) room.splice(room.indexOf(socket), 1);
+};
 
 export default createWebSocketServer;
