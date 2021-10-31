@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { addData, readData } from "../services/Firestore";
+import { deleteRoom } from "../services/WebSocket";
 import FirestoreCollections from "../types/FirestoreCollections";
 import Meeting, { MeetingID } from "../types/Meeting";
 import { TeamID } from "../types/Team";
@@ -16,7 +17,7 @@ export const startMeeting = async (meetingID: MeetingID) => {
   onGoingMeetings.set(meetingID, await getMeetingByID(meetingID));
 };
 
-export const joinMeeting = async (meetingID: MeetingID, userID: UserID) => {
+export const joinMeeting = (meetingID: MeetingID, userID: UserID) => {
   const meeting = onGoingMeetings.get(meetingID);
   if (meeting) {
     meeting.participants = meeting.participants || [];
@@ -51,4 +52,28 @@ export const createMeeting = async (name: string, time: number, teamID: TeamID) 
 
 export const generateMeetingID = (): MeetingID => {
   return uuidv4();
+};
+
+export const startMeetingIfNotStarted = async (meetingID: MeetingID) => {
+  if (!meetingIsStarted(meetingID)) {
+    await startMeeting(meetingID);
+  }
+};
+
+export const leaveMeeting = (meetingID: MeetingID, userID: UserID) => {
+  const meeting = onGoingMeetings.get(meetingID);
+  if (meeting) {
+    meeting.participants = meeting.participants || [];
+    const index = meeting.participants.indexOf(userID);
+    if (index > -1) {
+      meeting.participants.splice(index, 1);
+
+      if (meeting.participants.length === 0) {
+        onGoingMeetings.delete(meetingID);
+        deleteRoom(meetingID);
+      }
+    }
+  } else {
+    throw new Error("Meeting not started");
+  }
 };

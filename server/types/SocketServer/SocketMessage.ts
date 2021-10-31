@@ -2,9 +2,15 @@ import WebSocket from "ws";
 import { Token } from "../Tokens";
 
 export enum SocketMessageID {
-  JOIN_MEETING, // Join a meeting
-  SEND_MESSAGE_TO_MEETING, // Send a message to a meeting
-  USER_JOINED_MEETING, // User joined a meeting
+  JOIN_MEETING,
+  LEAVE_MEETING,
+  SEND_MESSAGE_TO_MEETING,
+  USER_JOINED_MEETING,
+  USER_LEFT_MEETING,
+  SEND_AUDIO,
+  SEND_VIDEO,
+  EMIT_VIDEO,
+  EMIT_AUDIO,
 }
 
 export default interface SocketMessage<T> {

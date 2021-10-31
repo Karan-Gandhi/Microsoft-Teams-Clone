@@ -62,4 +62,13 @@ export const removeSocketFromRoom = (id: SocketRoomID, socket: WebSocket) => {
   if (room) room.splice(room.indexOf(socket), 1);
 };
 
+export const getSocketRoom = (socket: WebSocket) => {
+  let res = null;
+  rooms.forEach((room, id) => {
+    if (room.includes(socket)) res = id;
+  });
+
+  return res;
+};
+
 export default createWebSocketServer;

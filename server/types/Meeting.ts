@@ -11,6 +11,13 @@ export default interface Meeting {
   participants?: UserID[];
 }
 
+export interface MeetingParticipantsMessage {
+  meetingID: MeetingID;
+  userName: string;
+  userID: UserID;
+  message: string;
+}
+
 export interface MeetingMessage {
   meetingID: string;
   start: number;
