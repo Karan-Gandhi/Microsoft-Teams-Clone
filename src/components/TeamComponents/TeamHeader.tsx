@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import GroupIcon from "@mui/icons-material/Group";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddIcon from "@mui/icons-material/Add";
-import { getUserID } from "../utils/UserUtils";
-import { UserID } from "../types/User";
-import { TeamID } from "../types/Team";
-import AdminSettingsDialogue from "./Dialogues/AdminSettingsDialogue";
-import Button from "./Button";
+import { getUserID } from "../../utils/UserUtils";
+import { UserID } from "../../types/User";
+import { TeamID } from "../../types/Team";
+import AdminSettingsDialogue from "../Dialogues/AdminSettingsDialogue";
+import Button from "../Button";
+import MembersDialogue from "../Dialogues/MembersDialogue";
+import CreateMeetingDialogue from "../Dialogues/CreateMeetingDialogue";
 import TeamHeaderItem from "./TeamHeaderItem";
-import MembersDialogue from "./Dialogues/MembersDialogue";
-import CreateMeetingDialogue from "./Dialogues/CreateMeetingDialogue";
 
 interface TeamHeaderProps {
   setTabIndex: React.Dispatch<React.SetStateAction<number>>;

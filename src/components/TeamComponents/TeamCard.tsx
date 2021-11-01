@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { TeamID } from "../types/Team";
-import { getAvatarSrc } from "../utils/AuthUtils";
+import { TeamID } from "../../types/Team";
+import { getAvatarSrc } from "../../utils/AuthUtils";
 
 interface TeamCardProps {
   id: TeamID;

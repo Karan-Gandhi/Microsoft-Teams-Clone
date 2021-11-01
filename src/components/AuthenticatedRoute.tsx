@@ -3,7 +3,7 @@ import { Redirect, Route, RouteProps } from "react-router";
 import { userIsLoggedIn } from "../api/Auth";
 import Loader from "./DefaultLoader";
 import MainSidebar from "./MainSidebar";
-import TeamsSidebar from "./TeamsSidebar";
+import TeamsSidebar from "./TeamComponents/TeamsSidebar";
 
 interface AuthenticatedRouteProps extends RouteProps {
   noTeamsSidebar?: boolean;

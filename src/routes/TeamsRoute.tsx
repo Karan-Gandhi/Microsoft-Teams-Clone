@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Route } from "react-router";
 import AddIcon from "@mui/icons-material/Add";
 import DefaultLoader from "../components/DefaultLoader";
-import TeamCard from "../components/TeamCard";
+import TeamCard from "../components/TeamComponents/TeamCard";
 import { getTeamByID, getUserTeams } from "../utils/TeamUtils";
 import JoinTeamDialoge from "../components/Dialogues/JoinTeamDialoge";
 import IndividualTeamRoute from "./IndividualTeamRoute";

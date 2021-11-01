@@ -1,7 +1,7 @@
-import { UserID } from "../types/User";
-import { getAvatarSrc } from "../utils/AuthUtils";
-import { getFormattedDate } from "../utils/BrowserUtils";
-import { getUserName } from "../utils/UserUtils";
+import { UserID } from "../../types/User";
+import { getAvatarSrc } from "../../utils/AuthUtils";
+import { getFormattedDate } from "../../utils/BrowserUtils";
+import { getUserName } from "../../utils/UserUtils";
 
 interface MessageComponentProps {
   sender: UserID;

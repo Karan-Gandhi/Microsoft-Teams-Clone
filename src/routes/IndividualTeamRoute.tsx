@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import DefaultLoader from "../components/DefaultLoader";
-import JoinMessageComponent from "../components/JoinMessageComponent";
-import LeaveMessageComponent from "../components/LeaveMessageComponent";
+import JoinMessageComponent from "../components/MessageComponents/JoinMessageComponent";
+import LeaveMessageComponent from "../components/MessageComponents/LeaveMessageComponent";
 import MeetingMessageComponent from "../components/MeetingMessageComponent";
-import MessageComponent from "../components/MessageComponent";
+import MessageComponent from "../components/MessageComponents/MessageComponent";
 import SearchListItem from "../components/SearchListItem";
-import TeamHeadder from "../components/TeamHeader";
-import TeamWelcomeMessage from "../components/TeamWelcomeMessage";
+import TeamHeadder from "../components/TeamComponents/TeamHeader";
+import TeamWelcomeMessage from "../components/TeamComponents/TeamWelcomeMessage";
 import Textfield from "../components/Textfield";
 import useDebounce from "../hooks/useDebounce";
 import { useSnackbar } from "../Snackbar";
