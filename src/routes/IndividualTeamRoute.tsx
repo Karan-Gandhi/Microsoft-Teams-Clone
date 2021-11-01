@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import DefaultLoader from "../components/DefaultLoader";
 import JoinMessageComponent from "../components/JoinMessageComponent";
 import LeaveMessageComponent from "../components/LeaveMessageComponent";
+import MeetingMessageComponent from "../components/MeetingMessageComponent";
 import MessageComponent from "../components/MessageComponent";
 import SearchListItem from "../components/SearchListItem";
 import TeamHeadder from "../components/TeamHeader";
@@ -12,9 +13,11 @@ import { useSnackbar } from "../Snackbar";
 import { FeedType } from "../types/FeedItem";
 import JoinMessage from "../types/JoinMessage";
 import LeaveMessage from "../types/LeaveMessage";
+import { MeetingMessage } from "../types/Meeting";
 import Message from "../types/Message";
 import { TeamID } from "../types/Team";
 import User, { UserID } from "../types/User";
+import { getMeetingById } from "../utils/MeetingUtils";
 import { getTeamFeed, sendMessageOnTeam } from "../utils/TeamUtils";
 import { getUserById, getUserID } from "../utils/UserUtils";
 
@@ -65,7 +68,19 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
             } else if (feedItem.type === FeedType.UserLeave) {
               const currentMessage = feedItem.content as LeaveMessage;
               return <LeaveMessageComponent key={idx.toString()} {...currentMessage} dateCreated={feedItem.dateCreated} />;
-            } else return <div key={idx.toString()}>Meeting</div>;
+            } else if (feedItem.type === FeedType.Meeting) {
+              const currentMessage = feedItem.content as MeetingMessage;
+              const meeting = await getMeetingById(currentMessage.meetingID);
+              return (
+                <MeetingMessageComponent
+                  key={idx.toString()}
+                  dateCreated={feedItem.dateCreated}
+                  meetingTime={currentMessage.start}
+                  meetingTitle={currentMessage.name}
+                  sender={(await getUserById(meeting.presenterID)).name}
+                />
+              );
+            }
           })
         )
       );

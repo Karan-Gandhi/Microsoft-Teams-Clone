@@ -1,7 +1,6 @@
 import * as express from "express";
 import User from "../types/User";
-import { createMeeting } from "../utils/MeetingUtils";
-import { getTeamMeetings } from "../utils/TeamsUtils";
+import { createMeeting, getMeetingByID } from "../utils/MeetingUtils";
 
 const router = express.Router();
 
@@ -12,10 +11,10 @@ router.post("/create", async (req, res) => {
   res.json(meeting);
 });
 
-router.get("/:teamID", async (req, res) => {
-  const { teamID } = req.params;
-  const meetings = await getTeamMeetings(teamID);
-  res.json({ meetings });
+router.get("/:meetingID", async (req, res) => {
+  const { meetingID } = req.params;
+  const meeting = await getMeetingByID(meetingID);
+  res.json(meeting);
 });
 
 export default router;

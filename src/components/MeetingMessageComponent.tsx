@@ -3,14 +3,14 @@ import { getAvatarSrc } from "../utils/AuthUtils";
 import { getFormattedDate } from "../utils/BrowserUtils";
 import { getUserName } from "../utils/UserUtils";
 
-interface MeetingMessageProps {}
+interface MeetingMessageProps {
+  sender: string;
+  meetingTitle: string;
+  dateCreated: number;
+  meetingTime: number;
+}
 
-const MeetingMessage: React.FC<MeetingMessageProps> = () => {
-  let sender = "Karan Gandhi 1";
-  const meetingTitle = "Group Draft Session";
-  const dateCreated = 1634543421405;
-  const meetingTime = 1634543421405;
-
+const MeetingMessageComponent: React.FC<MeetingMessageProps> = ({ sender, meetingTime, meetingTitle, dateCreated }) => {
   const avatarSrc = getAvatarSrc(sender, 48);
   if (sender === getUserName()) sender = "You";
   return (
@@ -46,4 +46,4 @@ const MeetingMessage: React.FC<MeetingMessageProps> = () => {
   );
 };
 
-export default MeetingMessage;
+export default MeetingMessageComponent;
