@@ -1,12 +1,12 @@
 import { useState } from "react";
 import CreateIcon from "@mui/icons-material/Create";
 import GroupIcon from "@mui/icons-material/Group";
-import { useSnackbar } from "../Snackbar";
-import { getTeamByID, joinTeam } from "../utils/TeamUtils";
-import CreateTeamDialogue from "./CreateTeamDialogue";
+import { useSnackbar } from "../../Snackbar";
+import { getTeamByID, joinTeam } from "../../utils/TeamUtils";
+import PrimaryButton from "../PrimaryButton";
+import Textfield from "../Textfield";
 import Dialogue from "./Dialogue";
-import PrimaryButton from "./PrimaryButton";
-import Textfield from "./Textfield";
+import CreateTeamDialogue from "./CreateTeamDialogue";
 
 interface JoinTeamDialogeProps {
   dialogueIsOpen?: boolean;

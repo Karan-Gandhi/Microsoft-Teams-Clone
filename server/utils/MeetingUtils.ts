@@ -1,11 +1,14 @@
 import { v4 as uuidv4 } from "uuid";
 import { addData, readData } from "../services/Firestore";
 import { deleteRoom } from "../services/WebSocket";
+import { FeedType } from "../types/FeedItem";
 import FirestoreCollections from "../types/FirestoreCollections";
 import Meeting, { MeetingID } from "../types/Meeting";
 import { TeamID } from "../types/Team";
 import { UserID } from "../types/User";
-import { addMeeting } from "./TeamsUtils";
+import { addFeedItem, addMeeting } from "./TeamsUtils";
+
+const MEETING_DOES_NOT_EXIST = new Error("Meeting dosen't exist");
 
 const onGoingMeetings = new Map<MeetingID, Meeting>();
 
@@ -31,20 +34,25 @@ export const joinMeeting = (meetingID: MeetingID, userID: UserID) => {
 };
 
 export const getMeetingByID = async (meetingID: MeetingID): Promise<Meeting> => {
-  return await readData<Meeting>(FirestoreCollections.MEETINGS, meetingID);
+  const meeting = await readData<Meeting>(FirestoreCollections.MEETINGS, meetingID);
+  if (!meeting) throw MEETING_DOES_NOT_EXIST;
+  return meeting;
 };
 
 export const updateMeeting = async (meeting: Meeting) => {
   return await addData(FirestoreCollections.MEETINGS, meeting.meetingID, meeting);
 };
 
-export const createMeeting = async (name: string, time: number, teamID: TeamID) => {
+export const createMeeting = async (name: string, time: number, presenterID: UserID, teamID: TeamID) => {
   const meeting: Meeting = {
     teamID,
+    presenterID,
     meetingID: generateMeetingID(),
     meetingName: name,
     meetingTime: time,
   };
+
+  await addFeedItem(teamID, { meetingID: meeting.meetingID, name, start: time }, FeedType.Meeting);
   await addData(FirestoreCollections.MEETINGS, meeting.meetingID, meeting);
   await addMeeting(teamID, meeting.meetingID);
   return meeting;

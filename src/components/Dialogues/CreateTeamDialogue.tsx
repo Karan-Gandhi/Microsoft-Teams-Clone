@@ -1,14 +1,14 @@
 import { useState } from "react";
-import useDebounce from "../hooks/useDebounce";
-import { useSnackbar } from "../Snackbar";
-import User, { UserID } from "../types/User";
-import { createTeam } from "../utils/TeamUtils";
-import { searchUserByEmail } from "../utils/UserUtils";
-import Chip from "./Chip";
+import useDebounce from "../../hooks/useDebounce";
+import { useSnackbar } from "../../Snackbar";
+import User, { UserID } from "../../types/User";
+import { createTeam } from "../../utils/TeamUtils";
+import { searchUserByEmail } from "../../utils/UserUtils";
+import Chip from "../Chip";
+import PrimaryButton from "../PrimaryButton";
+import SearchListItem from "../SearchListItem";
+import Textfield from "../Textfield";
 import Dialogue from "./Dialogue";
-import PrimaryButton from "./PrimaryButton";
-import SearchListItem from "./SearchListItem";
-import Textfield from "./Textfield";
 
 const DEBOUNCE_TIME_INTERVAL = 0.25e3;
 

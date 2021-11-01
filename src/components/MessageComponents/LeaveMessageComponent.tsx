@@ -1,5 +1,5 @@
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
-import LeaveMessage from "../types/LeaveMessage";
+import LeaveMessage from "../../types/LeaveMessage";
 
 interface LeaveMessageComponentProps extends LeaveMessage {
   dateCreated: number;

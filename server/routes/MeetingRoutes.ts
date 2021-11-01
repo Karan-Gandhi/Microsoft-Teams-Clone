@@ -1,19 +1,24 @@
 import * as express from "express";
-import { createMeeting } from "../utils/MeetingUtils";
-import { getTeamMeetings } from "../utils/TeamsUtils";
+import User from "../types/User";
+import { createMeeting, getMeetingByID } from "../utils/MeetingUtils";
 
 const router = express.Router();
 
-router.post("/createMeeting", async (req, res) => {
+router.post("/create", async (req, res) => {
   const { name, time, teamID } = req.body;
-  const meeting = await createMeeting(name, time, teamID);
+  const user = JSON.parse(req.user as string) as User;
+  const meeting = await createMeeting(name, time, user.id, teamID);
   res.json(meeting);
 });
 
-router.get("/:teamID", async (req, res) => {
-  const { teamID } = req.params;
-  const meetings = await getTeamMeetings(teamID);
-  res.json({ meetings });
+router.get("/:meetingID", async (req, res) => {
+  const { meetingID } = req.params;
+  try {
+    const meeting = await getMeetingByID(meetingID);
+    res.json(meeting);
+  } catch {
+    res.sendStatus(404);
+  }
 });
 
 export default router;
