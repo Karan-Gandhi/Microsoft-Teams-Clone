@@ -13,8 +13,12 @@ router.post("/create", async (req, res) => {
 
 router.get("/:meetingID", async (req, res) => {
   const { meetingID } = req.params;
-  const meeting = await getMeetingByID(meetingID);
-  res.json(meeting);
+  try {
+    const meeting = await getMeetingByID(meetingID);
+    res.json(meeting);
+  } catch {
+    res.sendStatus(404);
+  }
 });
 
 export default router;

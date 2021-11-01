@@ -4,7 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DefaultLoader from "../components/DefaultLoader";
 import TeamCard from "../components/TeamCard";
 import { getTeamByID, getUserTeams } from "../utils/TeamUtils";
-import JoinTeamDialoge from "../components/JoinTeamDialoge";
+import JoinTeamDialoge from "../components/Dialogues/JoinTeamDialoge";
 import IndividualTeamRoute from "./IndividualTeamRoute";
 
 interface TeamsRouteProps {}

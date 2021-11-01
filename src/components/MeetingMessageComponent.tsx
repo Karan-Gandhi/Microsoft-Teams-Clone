@@ -1,21 +1,23 @@
 import PhotoCameraFrontIcon from "@mui/icons-material/PhotoCameraFront";
+import { MeetingID } from "../types/Meeting";
 import { getAvatarSrc } from "../utils/AuthUtils";
 import { getFormattedDate } from "../utils/BrowserUtils";
 import { getUserName } from "../utils/UserUtils";
 import PrimaryButton from "./PrimaryButton";
 
 interface MeetingMessageComponentProps {
+  meetingID: MeetingID;
   sender: string;
   meetingTitle: string;
   dateCreated: number;
   meetingTime: number;
 }
 
-const MeetingMessageComponent: React.FC<MeetingMessageComponentProps> = ({ sender, meetingTime, meetingTitle, dateCreated }) => {
+const MeetingMessageComponent: React.FC<MeetingMessageComponentProps> = ({ sender, meetingTime, meetingTitle, dateCreated, meetingID }) => {
   const avatarSrc = getAvatarSrc(sender, 48);
   if (sender === getUserName()) sender = "You";
 
-  const showJoinButton = meetingTime < Date.now();
+  const showJoinButton = meetingTime <= Date.now();
 
   return (
     <div className="my-4 flex flex-col rounded-xl" style={{ backgroundColor: "#292929" }}>
@@ -36,7 +38,7 @@ const MeetingMessageComponent: React.FC<MeetingMessageComponentProps> = ({ sende
         </div>
         {showJoinButton && (
           <div className="flex">
-            <PrimaryButton>Join</PrimaryButton>
+            <PrimaryButton onClick={() => (window.location.href = "/meetings/" + meetingID)}>Join</PrimaryButton>
           </div>
         )}
       </div>

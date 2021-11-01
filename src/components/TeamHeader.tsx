@@ -5,11 +5,11 @@ import AddIcon from "@mui/icons-material/Add";
 import { getUserID } from "../utils/UserUtils";
 import { UserID } from "../types/User";
 import { TeamID } from "../types/Team";
-import AdminSettingsDialogue from "./AdminSettingsDialogue";
+import AdminSettingsDialogue from "./Dialogues/AdminSettingsDialogue";
 import Button from "./Button";
 import TeamHeaderItem from "./TeamHeaderItem";
-import MembersDialogue from "./MembersDialogue";
-import CreateMeetingDialogue from "./CreateMeetingDialogue";
+import MembersDialogue from "./Dialogues/MembersDialogue";
+import CreateMeetingDialogue from "./Dialogues/CreateMeetingDialogue";
 
 interface TeamHeaderProps {
   setTabIndex: React.Dispatch<React.SetStateAction<number>>;

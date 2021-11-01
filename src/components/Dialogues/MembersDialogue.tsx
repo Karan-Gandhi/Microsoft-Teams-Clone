@@ -1,8 +1,8 @@
-import { TeamID } from "../types/Team";
-import { leaveUserFromTeam } from "../utils/UserUtils";
+import { TeamID } from "../../types/Team";
+import { leaveUserFromTeam } from "../../utils/UserUtils";
+import MemberTable from "../MemberTable";
+import PrimaryButton from "../PrimaryButton";
 import Dialogue from "./Dialogue";
-import MemberTable from "./MemberTable";
-import PrimaryButton from "./PrimaryButton";
 
 interface MembersDialogueProps {
   setDialogueOpen: (value: boolean) => any;

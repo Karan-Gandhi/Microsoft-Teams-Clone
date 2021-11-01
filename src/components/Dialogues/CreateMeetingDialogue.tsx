@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useSnackbar } from "../Snackbar";
-import { TeamID } from "../types/Team";
-import { currentFormattedDate, getFutureFormattedTime } from "../utils/BrowserUtils";
-import { createMeeting } from "../utils/MeetingUtils";
+import { useSnackbar } from "../../Snackbar";
+import { TeamID } from "../../types/Team";
+import { currentFormattedDate, getFutureFormattedTime } from "../../utils/BrowserUtils";
+import { createMeeting } from "../../utils/MeetingUtils";
+import PrimaryButton from "../PrimaryButton";
+import PrimaryTextfield from "../PrimaryTextfield";
 import Dialogue, { DialogueProps } from "./Dialogue";
-import PrimaryButton from "./PrimaryButton";
-import PrimaryTextfield from "./PrimaryTextfield";
 
 interface CreateMeetingDialogueProps extends DialogueProps {
   teamID: TeamID;

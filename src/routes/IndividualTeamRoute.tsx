@@ -78,6 +78,7 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
                   meetingTime={currentMessage.start}
                   meetingTitle={currentMessage.name}
                   sender={(await getUserById(meeting.presenterID)).name}
+                  meetingID={meeting.meetingID}
                 />
               );
             }

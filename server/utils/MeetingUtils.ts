@@ -8,6 +8,8 @@ import { TeamID } from "../types/Team";
 import { UserID } from "../types/User";
 import { addFeedItem, addMeeting } from "./TeamsUtils";
 
+const MEETING_DOES_NOT_EXIST = new Error("Meeting dosen't exist");
+
 const onGoingMeetings = new Map<MeetingID, Meeting>();
 
 export const meetingIsStarted = (meetingID: MeetingID): boolean => {
@@ -32,7 +34,9 @@ export const joinMeeting = (meetingID: MeetingID, userID: UserID) => {
 };
 
 export const getMeetingByID = async (meetingID: MeetingID): Promise<Meeting> => {
-  return await readData<Meeting>(FirestoreCollections.MEETINGS, meetingID);
+  const meeting = await readData<Meeting>(FirestoreCollections.MEETINGS, meetingID);
+  if (!meeting) throw MEETING_DOES_NOT_EXIST;
+  return meeting;
 };
 
 export const updateMeeting = async (meeting: Meeting) => {
