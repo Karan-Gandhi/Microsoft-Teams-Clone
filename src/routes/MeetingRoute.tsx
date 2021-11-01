@@ -3,7 +3,7 @@ import { RouteComponentProps } from "react-router";
 import DefaultLoader from "../components/DefaultLoader";
 import MeetingHeader from "../components/MeetingComponents/MeetingHeader";
 import Meeting, { MeetingID } from "../types/Meeting";
-import { getMeetingById } from "../utils/MeetingUtils";
+import { getMeetingById, joinMeeting } from "../utils/MeetingUtils";
 
 interface Match {
   id: MeetingID;
@@ -21,11 +21,14 @@ const MeetingRoute: React.FC<MeetingRouteProps> = ({ match }) => {
     getMeetingById(match.params.id)
       .then((meeting) => {
         setMeeting(meeting);
-        setLoading(false);
+        joinMeeting(meeting);
       })
       .catch((error) => {
         setLoading(false);
         // TODO: Send 404 page
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [match.params.id]);
 
@@ -35,10 +38,11 @@ const MeetingRoute: React.FC<MeetingRouteProps> = ({ match }) => {
         <DefaultLoader />
       </div>
     );
-  console.log(meeting);
+
   return (
     <div>
       <MeetingHeader
+        meetingID={meeting.meetingID}
         meetingName={meeting.meetingName}
         videoIsOn={videoIsOn}
         audioIsOn={audioIsOn}

@@ -7,11 +7,18 @@ import { joinMeeting, leaveMeeting, startMeetingIfNotStarted } from "./MeetingUt
 const addWebServerEvents = (server: WebSocket.Server) => {
   server.on("connection", (socket) => {
     addEvent<Meeting>(SocketMessageID.JOIN_MEETING, socket, async (data, user) => {
-      createRoomIfNotExists(data.meetingID);
-      joinRoom(data.meetingID, socket);
-      emitInRoom(data.meetingID, SocketMessageID.USER_JOINED_MEETING, { user });
-      await startMeetingIfNotStarted(data.meetingID);
-      joinMeeting(data.meetingID, user.id);
+      try {
+        createRoomIfNotExists(data.meetingID);
+        joinRoom(data.meetingID, socket);
+        delete user.password;
+        delete user.teams;
+        emitInRoom(data.meetingID, SocketMessageID.USER_JOINED_MEETING, { user });
+        await startMeetingIfNotStarted(data.meetingID);
+        joinMeeting(data.meetingID, user.id);
+        console.log("[WS] User joined the meeting: ", user, data);
+      } catch (err) {
+        console.log(err);
+      }
     });
 
     addEvent<MeetingParticipantsMessage>(SocketMessageID.SEND_MESSAGE_TO_MEETING, socket, (data) => {
@@ -19,6 +26,9 @@ const addWebServerEvents = (server: WebSocket.Server) => {
     });
 
     addEvent<Meeting>(SocketMessageID.LEAVE_MEETING, socket, async (data, user) => {
+      console.log("[WS] User left the meeting: ", user, data);
+      delete user.password;
+      delete user.teams;
       emitInRoom(data.meetingID, SocketMessageID.USER_LEFT_MEETING, { user });
       removeSocketFromRoom(data.meetingID, socket);
       leaveMeeting(data.meetingID, user.id);

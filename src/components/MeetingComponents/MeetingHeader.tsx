@@ -7,16 +7,26 @@ import MicOffIcon from "@mui/icons-material/MicOff";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import IconButton from "../IconButton";
 import Button from "../Button";
+import { leaveMeeting } from "../../utils/MeetingUtils";
+import { MeetingID } from "../../types/Meeting";
 
 interface MeetingHeaderProps {
   meetingName: string;
+  meetingID: MeetingID;
   videoIsOn?: boolean;
   audioIsOn?: boolean;
   toggleVideo: (value: boolean) => any;
   toggleAudio: (value: boolean) => any;
 }
 
-const MeetingHeader: React.FC<MeetingHeaderProps> = ({ meetingName, videoIsOn = false, audioIsOn = false, toggleAudio, toggleVideo }) => {
+const MeetingHeader: React.FC<MeetingHeaderProps> = ({
+  meetingName,
+  videoIsOn = false,
+  audioIsOn = false,
+  toggleAudio,
+  toggleVideo,
+  meetingID,
+}) => {
   return (
     <div className="flex w-full py-4 px-8 items-center" style={{ backgroundColor: "#292828" }}>
       <div className="text-xl flex-grow">
@@ -45,6 +55,9 @@ const MeetingHeader: React.FC<MeetingHeaderProps> = ({ meetingName, videoIsOn = 
           noPadding
           noRounded
           className="px-4 py-2 rounded-md"
+          onClick={async () => {
+            await leaveMeeting(meetingID);
+          }}
         >
           <div className="flex flex-row gap-2">
             <div>

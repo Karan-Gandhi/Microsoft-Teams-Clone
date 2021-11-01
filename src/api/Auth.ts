@@ -108,3 +108,5 @@ export const logout = async () => {
     throw error;
   }
 };
+
+export const getAccessToken = () => getCookie(CookieNames.ACCESS_TOKEN_COOKIE_NAME);
