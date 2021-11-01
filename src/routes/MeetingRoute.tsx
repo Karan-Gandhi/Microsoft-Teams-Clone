@@ -3,7 +3,9 @@ import { RouteComponentProps } from "react-router";
 import DefaultLoader from "../components/DefaultLoader";
 import MeetingHeader from "../components/MeetingComponents/MeetingHeader";
 import Meeting, { MeetingID } from "../types/Meeting";
+import { SocketMessageID } from "../types/SocketServer/SocketMessage";
 import { getMeetingById, joinMeeting } from "../utils/MeetingUtils";
+import { addEvent } from "../utils/WebSocketUtils";
 
 interface Match {
   id: MeetingID;
@@ -16,6 +18,7 @@ const MeetingRoute: React.FC<MeetingRouteProps> = ({ match }) => {
   const [isLoading, setLoading] = useState<boolean>(true);
   const [videoIsOn, setVideoOn] = useState<boolean>(false);
   const [audioIsOn, setAudioOn] = useState<boolean>(false);
+  const [showChat, setShowChat] = useState<boolean>(false);
 
   useEffect(() => {
     getMeetingById(match.params.id)
