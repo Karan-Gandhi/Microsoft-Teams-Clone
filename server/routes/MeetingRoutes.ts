@@ -1,12 +1,14 @@
 import * as express from "express";
+import User from "../types/User";
 import { createMeeting } from "../utils/MeetingUtils";
 import { getTeamMeetings } from "../utils/TeamsUtils";
 
 const router = express.Router();
 
-router.post("/createMeeting", async (req, res) => {
+router.post("/create", async (req, res) => {
   const { name, time, teamID } = req.body;
-  const meeting = await createMeeting(name, time, teamID);
+  const user = JSON.parse(req.user as string) as User;
+  const meeting = await createMeeting(name, time, user.id, teamID);
   res.json(meeting);
 });
 

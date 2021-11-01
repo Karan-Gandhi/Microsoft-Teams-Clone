@@ -1,6 +1,6 @@
 import { UserID } from "../types/User";
 import { getAvatarSrc } from "../utils/AuthUtils";
-import { getFormattedDate, isWithinIntervals } from "../utils/BrowserUtils";
+import { getFormattedDate } from "../utils/BrowserUtils";
 import { getUserName } from "../utils/UserUtils";
 
 interface MessageComponentProps {

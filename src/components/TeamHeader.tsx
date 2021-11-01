@@ -9,6 +9,7 @@ import AdminSettingsDialogue from "./AdminSettingsDialogue";
 import Button from "./Button";
 import TeamHeaderItem from "./TeamHeaderItem";
 import MembersDialogue from "./MembersDialogue";
+import CreateMeetingDialogue from "./CreateMeetingDialogue";
 
 interface TeamHeaderProps {
   setTabIndex: React.Dispatch<React.SetStateAction<number>>;
@@ -23,6 +24,7 @@ const TeamHeader: React.FC<TeamHeaderProps> = ({ setTabIndex, adminID, teamName,
   const [showAdminPanel, setShowAdminPanel] = useState<boolean>(false);
   const [showMembersPanel, setShowMembersPanel] = useState<boolean>(false);
   const [showAdminSettings, setShowAdminSettings] = useState<boolean>(false);
+  const [showCreateMeetingDialogue, setShowCreateMeetingDialogue] = useState<boolean>(false);
 
   useEffect(() => setTabIndex(currentTabIndex), [currentTabIndex, setTabIndex]);
   useEffect(() => {
@@ -41,8 +43,9 @@ const TeamHeader: React.FC<TeamHeaderProps> = ({ setTabIndex, adminID, teamName,
           hoverBackgroudColor="#000000aa"
           className="px-4 py-2 flex items-center justify-center gap-2"
           noPadding
+          onClick={() => setShowCreateMeetingDialogue(true)}
         >
-          <span>Create a new Meeting</span>
+          <span>Schedule a new Meeting</span>
           <AddIcon />
         </Button>
         {showAdminSettings && <SettingsIcon className="cursor-pointer" onClick={() => setShowAdminPanel(true)} />}
@@ -60,6 +63,12 @@ const TeamHeader: React.FC<TeamHeaderProps> = ({ setTabIndex, adminID, teamName,
           teamName={teamName}
           teamID={teamID}
           totalMembers={totalMembers}
+        />
+        <CreateMeetingDialogue
+          teamID={teamID}
+          title="Schedule a meeting"
+          setDialogueOpen={setShowCreateMeetingDialogue}
+          dialogueIsOpen={showCreateMeetingDialogue}
         />
       </div>
     </div>

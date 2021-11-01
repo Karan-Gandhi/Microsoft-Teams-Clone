@@ -30,8 +30,6 @@ interface IndividualTeamRouteProps {
 const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, members, admin }) => {
   const feedRef = useRef<HTMLDivElement>(null);
 
-  console.log("Update");
-
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [messageToSend, setMessageToSend] = useState<string>("");

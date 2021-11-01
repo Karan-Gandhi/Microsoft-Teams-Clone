@@ -17,6 +17,8 @@ enum APIRoutes {
   ADD_USER_TO_TEAM = "/api/teams/addUser/",
   REMOVE_USER_FROM_TEAM = "/api/teams/removeUser/",
   USER_LEAVE_TEAM = "/api/users/leaveTeam/",
+  CREATE_MEETING = "/api/meetings/create",
+  GET_TEAM_MEETINGS = "/api/meetings/",
 }
 
 export default APIRoutes;

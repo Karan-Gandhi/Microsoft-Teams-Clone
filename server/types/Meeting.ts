@@ -5,6 +5,7 @@ export type MeetingID = string;
 
 export default interface Meeting {
   teamID: TeamID;
+  presenterID: UserID;
   meetingID: MeetingID;
   meetingName: string;
   meetingTime: number;
@@ -19,6 +20,7 @@ export interface MeetingParticipantsMessage {
 }
 
 export interface MeetingMessage {
-  meetingID: string;
+  meetingID: MeetingID;
+  name: string;
   start: number;
 }
