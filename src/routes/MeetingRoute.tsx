@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router";
 import DefaultLoader from "../components/DefaultLoader";
+import MeetingChat from "../components/MeetingComponents/MeetingChat";
 import MeetingHeader from "../components/MeetingComponents/MeetingHeader";
 import MeetingParticipants from "../components/MeetingComponents/MeetingParticipants";
 import Meeting, { MeetingID } from "../types/Meeting";
@@ -63,6 +64,7 @@ const MeetingRoute: React.FC<MeetingRouteProps> = ({ match }) => {
       <div className="flex flex-grow">
         <div className="flex-grow h-full">Meeting video</div>
         {showParticipants && <MeetingParticipants toggleParticipants={setShowParticipants} meetingID={meeting.meetingID} />}
+        <MeetingChat toggleChat={setShowChat} showChat={showChat} meetingID={meeting.meetingID} />
       </div>
     </div>
   );

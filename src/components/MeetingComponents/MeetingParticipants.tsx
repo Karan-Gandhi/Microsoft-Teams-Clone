@@ -10,7 +10,7 @@ interface MeetingParticipantsProps {
   toggleParticipants: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const UPDATE_MEETING_PARTICIPANTS_RATE = 0.3e3;
+const UPDATE_MEETING_PARTICIPANTS_RATE = 1e3;
 
 const MeetingParticipants: React.FC<MeetingParticipantsProps> = ({ toggleParticipants, meetingID }) => {
   const [participants, setParticipants] = useState<User[]>([]);
@@ -40,7 +40,7 @@ const MeetingParticipants: React.FC<MeetingParticipantsProps> = ({ togglePartici
   }, [participants]);
 
   return (
-    <div className="px-8 py-8" style={{ backgroundColor: "#141414" }}>
+    <div className="px-8 py-8 flex flex-col" style={{ backgroundColor: "#141414" }}>
       <div className="flex w-full mb-4">
         <div className="text-xl font-medium mr-32 flex-grow">
           <span>Participants ({participants.length})</span>
@@ -50,7 +50,7 @@ const MeetingParticipants: React.FC<MeetingParticipantsProps> = ({ togglePartici
         </div>
       </div>
 
-      <div>{participantList}</div>
+      <div className="flex-grow h-1 overflow-auto pr-8">{participantList}</div>
     </div>
   );
 };
