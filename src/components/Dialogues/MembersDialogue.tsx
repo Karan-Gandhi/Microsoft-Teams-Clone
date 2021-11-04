@@ -1,4 +1,5 @@
 import { TeamID } from "../../types/Team";
+import { redirectTo } from "../../utils/BrowserUtils";
 import { leaveUserFromTeam } from "../../utils/UserUtils";
 import MemberTable from "../MemberTable";
 import PrimaryButton from "../PrimaryButton";
@@ -24,7 +25,7 @@ const MembersDialogue: React.FC<MembersDialogueProps> = ({ teamName, teamID, tot
           <PrimaryButton
             onClick={async () => {
               await leaveUserFromTeam(teamID);
-              window.location.href = "/";
+              redirectTo("/");
             }}
           >
             Leave Team

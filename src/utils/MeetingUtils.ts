@@ -1,11 +1,12 @@
 import { fetchUsingGET, fetchUsingPOST } from "../api/APIControler";
 import APIRoutes from "../api/APIRoutes";
 import { CreateMeetingRequest } from "../api/Requests";
-import { CreateMeetingResponse, GetMeetingByIdResponse } from "../api/Responses";
+import { CreateMeetingResponse, GetMeetingByIdResponse, GetMeetingParticipantsResponse } from "../api/Responses";
 import Meeting, { MeetingID } from "../types/Meeting";
-import { SocketMessageID } from "../types/SocketServer/SocketMessage";
+import SocketMessage, { SocketMessageID } from "../types/SocketServer/SocketMessage";
 import { TeamID } from "../types/Team";
-import { sendMessage } from "./WebSocketUtils";
+import User from "../types/User";
+import { addEvent, sendMessage } from "./WebSocketUtils";
 
 export const createMeeting = async (name: string, time: number, teamID: TeamID) =>
   await fetchUsingPOST<CreateMeetingRequest, CreateMeetingResponse>(APIRoutes.CREATE_MEETING, { name, time, teamID });
@@ -19,4 +20,12 @@ export const joinMeeting = (meeting: Meeting) => {
 
 export const leaveMeeting = async (meetingID: MeetingID) => {
   sendMessage<Meeting>(SocketMessageID.LEAVE_MEETING, await getMeetingById(meetingID));
+};
+
+export const getMeetingParticipants = async (meetingID: MeetingID) =>
+  (await fetchUsingGET<GetMeetingParticipantsResponse>(APIRoutes.GET_MEETING_PARTICIPANTS, [meetingID])).data;
+
+export const subscribeToMeetingParticipantsChanges = async (callback: (data: SocketMessage<User>) => any) => {
+  addEvent<User>(SocketMessageID.USER_JOINED_MEETING, callback);
+  addEvent<User>(SocketMessageID.USER_LEFT_MEETING, callback);
 };

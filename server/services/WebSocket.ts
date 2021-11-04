@@ -71,4 +71,9 @@ export const getSocketRoom = (socket: WebSocket) => {
   return res;
 };
 
+export const sendMessageToSocket = <T>(socket: WebSocket, mid: SocketMessageID, data: T) => {
+  const socketMessage: SocketMessage<T> = { id: mid, body: data };
+  socket.send(JSON.stringify(socketMessage));
+};
+
 export default createWebSocketServer;

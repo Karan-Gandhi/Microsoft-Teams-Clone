@@ -1,7 +1,7 @@
 import PhotoCameraFrontIcon from "@mui/icons-material/PhotoCameraFront";
 import { MeetingID } from "../types/Meeting";
 import { getAvatarSrc } from "../utils/AuthUtils";
-import { getFormattedDate } from "../utils/BrowserUtils";
+import { getFormattedDate, redirectTo } from "../utils/BrowserUtils";
 import { getUserName } from "../utils/UserUtils";
 import PrimaryButton from "./PrimaryButton";
 
@@ -38,7 +38,7 @@ const MeetingMessageComponent: React.FC<MeetingMessageComponentProps> = ({ sende
         </div>
         {showJoinButton && (
           <div className="flex">
-            <PrimaryButton onClick={() => (window.location.href = "/meetings/" + meetingID)}>Join</PrimaryButton>
+            <PrimaryButton onClick={() => redirectTo("/meetings/" + meetingID)}>Join</PrimaryButton>
           </div>
         )}
       </div>

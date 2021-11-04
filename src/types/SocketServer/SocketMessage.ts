@@ -10,6 +10,7 @@ export enum SocketMessageID {
   SEND_VIDEO,
   EMIT_VIDEO,
   EMIT_AUDIO,
+  GET_PARTICIPANTS,
 }
 
 export default interface SocketMessage<T> {

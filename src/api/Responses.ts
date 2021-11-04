@@ -33,3 +33,7 @@ export interface GetTeamMembersResponse {
 
 export type CreateMeetingResponse = Meeting;
 export type GetMeetingByIdResponse = Meeting;
+
+export interface GetMeetingParticipantsResponse {
+  participants: User[];
+}

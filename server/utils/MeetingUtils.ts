@@ -85,3 +85,12 @@ export const leaveMeeting = (meetingID: MeetingID, userID: UserID) => {
     throw new Error("Meeting not started");
   }
 };
+
+export const getMeetingParticipants = (meetingID: MeetingID) => {
+  const meeting = onGoingMeetings.get(meetingID);
+  if (meeting) {
+    return meeting.participants || [];
+  } else {
+    throw new Error("Meeting not started");
+  }
+};
