@@ -33,7 +33,7 @@ export const addEvent = <T>(mid: SocketMessageID, socket: WebSocket, callback: (
         if (message.id === mid) callback(message.body, user as User);
       });
     } catch {
-      socket.close(); // the socket will cloas if it recieves badly formated text and prevent the server from crashing
+      socket.close(); // the socket will close if it recieves badly formated text and prevent the server from crashing
     }
   });
 };

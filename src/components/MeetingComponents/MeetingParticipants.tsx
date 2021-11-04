@@ -1,8 +1,13 @@
 import CloseIcon from "@mui/icons-material/Close";
 import React, { useEffect, useState } from "react";
 import { MeetingID } from "../../types/Meeting";
+import { SocketMessageID } from "../../types/SocketServer/SocketMessage";
 import User from "../../types/User";
-import { getMeetingParticipants } from "../../utils/MeetingUtils";
+import {
+  getMeetingParticipants,
+  subscribeToMeetingParticipantsChanges,
+  unsubscribeToMeetingParticipantsChanges,
+} from "../../utils/MeetingUtils";
 import SearchListItem from "../SearchListItem";
 
 interface MeetingParticipantsProps {
@@ -10,26 +15,31 @@ interface MeetingParticipantsProps {
   toggleParticipants: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const UPDATE_MEETING_PARTICIPANTS_RATE = 1e3;
-
 const MeetingParticipants: React.FC<MeetingParticipantsProps> = ({ toggleParticipants, meetingID }) => {
   const [participants, setParticipants] = useState<User[]>([]);
   const [participantList, setParticipantList] = useState<React.ReactNode>(null);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
     getMeetingParticipants(meetingID).then((data) => {
       setParticipants(data.participants);
-      interval = setInterval(() => {
-        getMeetingParticipants(meetingID).then((data) => {
-          setParticipants(data.participants);
-        });
-      }, UPDATE_MEETING_PARTICIPANTS_RATE);
     });
 
-    return () => {
-      if (interval) clearInterval(interval);
-    };
+    let keys = subscribeToMeetingParticipantsChanges((message) => {
+      if (message.id === SocketMessageID.USER_JOINED_MEETING) {
+        setParticipants((prevState) => [...prevState, message.body]);
+      } else {
+        setParticipants((prevState) => {
+          const newState = [...prevState];
+          newState.splice(
+            newState.findIndex((prevParticipant) => prevParticipant.id === message.body.id),
+            1
+          );
+          return newState;
+        });
+      }
+    });
+
+    return () => unsubscribeToMeetingParticipantsChanges(keys);
   }, [meetingID]);
 
   useEffect(() => {

@@ -28,6 +28,7 @@ const MeetingChat: React.FC<MeetingChatProps> = ({ toggleChat, showChat, meeting
   }, [enqueueSnackbar]);
 
   useEffect(() => {
+    // TODO: Complete this
     // eslint-disable-next-line react/no-array-index-key
     setMessageList(messages.map((currentMessage, idx) => <div key={idx}>{JSON.stringify(currentMessage)}</div>));
   }, [messages]);

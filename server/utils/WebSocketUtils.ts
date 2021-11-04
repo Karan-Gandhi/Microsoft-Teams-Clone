@@ -15,7 +15,6 @@ const addWebServerEvents = (server: WebSocket.Server) => {
         emitInRoom(data.meetingID, SocketMessageID.USER_JOINED_MEETING, { ...user });
         await startMeetingIfNotStarted(data.meetingID);
         joinMeeting(data.meetingID, user.id);
-        console.log("[WS] User joined the meeting: ", user, data);
       } catch (err) {
         console.log(err);
       }
@@ -26,7 +25,6 @@ const addWebServerEvents = (server: WebSocket.Server) => {
     });
 
     addEvent<Meeting>(SocketMessageID.LEAVE_MEETING, socket, async (data, user) => {
-      console.log("[WS] User left the meeting: ", user, data);
       delete user.password;
       delete user.teams;
       emitInRoom(data.meetingID, SocketMessageID.USER_LEFT_MEETING, { ...user });
@@ -36,6 +34,7 @@ const addWebServerEvents = (server: WebSocket.Server) => {
 
     socket.on("disconnect", () => {
       const roomID = getSocketRoom(socket);
+      socket.removeAllListeners();
       if (roomID) {
         removeSocketFromRoom(roomID, socket);
       }
