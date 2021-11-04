@@ -2,7 +2,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import React, { useEffect, useState } from "react";
 import { useSnackbar } from "../../Snackbar";
 import { MeetingID, MeetingParticipantsMessage } from "../../types/Meeting";
-import { sendMessageInMeeting, subscribeToMeetingMessages } from "../../utils/MeetingUtils";
+import { sendMessageInMeeting, subscribeToMeetingMessages, unsubscribeToMeetingMessages } from "../../utils/MeetingUtils";
+import { getUserID } from "../../utils/UserUtils";
 import PrimaryTextfield from "../PrimaryTextfield";
 
 interface MeetingChatProps {
@@ -18,20 +19,18 @@ const MeetingChat: React.FC<MeetingChatProps> = ({ toggleChat, showChat, meeting
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    subscribeToMeetingMessages((data) => {
-      enqueueSnackbar(data.body.userName + " sent a message");
-      if (!showChat) return;
-      console.log(data.body.userName);
+    let key = subscribeToMeetingMessages((data) => {
+      if (data.body.userID !== getUserID()) enqueueSnackbar(data.body.userName + " sent a message");
       setMessages((prevMessages) => [...prevMessages, data.body]);
     });
-  }, [enqueueSnackbar, showChat]);
+
+    return () => unsubscribeToMeetingMessages(key);
+  }, [enqueueSnackbar]);
 
   useEffect(() => {
-    if (!showChat) return;
-
     // eslint-disable-next-line react/no-array-index-key
     setMessageList(messages.map((currentMessage, idx) => <div key={idx}>{JSON.stringify(currentMessage)}</div>));
-  }, [messages, showChat]);
+  }, [messages]);
 
   if (!showChat) return <div className="absolute" />;
   return (

@@ -7,7 +7,7 @@ import SocketMessage, { SocketMessageID } from "../types/SocketServer/SocketMess
 import { TeamID } from "../types/Team";
 import User, { UserID } from "../types/User";
 import { getUserID, getUserName } from "./UserUtils";
-import { addEvent, sendMessage } from "./WebSocketUtils";
+import { addEvent, removeEvent, sendMessage } from "./WebSocketUtils";
 
 export const createMeeting = async (name: string, time: number, teamID: TeamID) =>
   await fetchUsingPOST<CreateMeetingRequest, CreateMeetingResponse>(APIRoutes.CREATE_MEETING, { name, time, teamID });
@@ -27,8 +27,15 @@ export const getMeetingParticipants = async (meetingID: MeetingID) =>
   (await fetchUsingGET<GetMeetingParticipantsResponse>(APIRoutes.GET_MEETING_PARTICIPANTS, [meetingID])).data;
 
 export const subscribeToMeetingParticipantsChanges = (callback: (data: SocketMessage<User>) => any) => {
-  addEvent<User>(SocketMessageID.USER_JOINED_MEETING, callback);
-  addEvent<User>(SocketMessageID.USER_LEFT_MEETING, callback);
+  let key1 = addEvent<User>(SocketMessageID.USER_JOINED_MEETING, callback);
+  let key2 = addEvent<User>(SocketMessageID.USER_LEFT_MEETING, callback);
+
+  return [key1, key2];
+};
+
+export const unsubscribeToMeetingParticipantsChanges = (keys: string[]) => {
+  removeEvent(keys[0]);
+  removeEvent(keys[1]);
 };
 
 export const sendMessageInMeeting = (message: string, meetingID: MeetingID) => {
@@ -43,5 +50,9 @@ export const sendMessageInMeeting = (message: string, meetingID: MeetingID) => {
 };
 
 export const subscribeToMeetingMessages = (callback: (data: SocketMessage<MeetingParticipantsMessage>) => any) => {
-  addEvent<MeetingParticipantsMessage>(SocketMessageID.SEND_MESSAGE_TO_MEETING, callback);
+  return addEvent<MeetingParticipantsMessage>(SocketMessageID.SEND_MESSAGE_TO_MEETING, callback);
+};
+
+export const unsubscribeToMeetingMessages = (key: string) => {
+  removeEvent(key);
 };
