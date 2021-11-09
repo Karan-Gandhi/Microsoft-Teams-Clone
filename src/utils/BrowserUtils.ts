@@ -64,3 +64,5 @@ export const getFutureFormattedTime = (minutesDelay: number) => {
   date.setMinutes(date.getMinutes() + minutesDelay);
   return `${makeNumberTwoDigit(date.getHours())}:${makeNumberTwoDigit(date.getMinutes())}:00`;
 };
+
+export const redirectTo = (link: string) => (window.location.href = link);

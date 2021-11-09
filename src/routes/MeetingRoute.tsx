@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { RouteComponentProps } from "react-router";
 import DefaultLoader from "../components/DefaultLoader";
+import MeetingChat from "../components/MeetingComponents/MeetingChat";
 import MeetingHeader from "../components/MeetingComponents/MeetingHeader";
+import MeetingParticipants from "../components/MeetingComponents/MeetingParticipants";
 import Meeting, { MeetingID } from "../types/Meeting";
-import { getMeetingById, joinMeeting } from "../utils/MeetingUtils";
+import { getMeetingById, joinMeeting, leaveMeeting } from "../utils/MeetingUtils";
 
 interface Match {
   id: MeetingID;
@@ -16,6 +18,8 @@ const MeetingRoute: React.FC<MeetingRouteProps> = ({ match }) => {
   const [isLoading, setLoading] = useState<boolean>(true);
   const [videoIsOn, setVideoOn] = useState<boolean>(false);
   const [audioIsOn, setAudioOn] = useState<boolean>(false);
+  const [showChat, setShowChat] = useState<boolean>(false);
+  const [showParticipants, setShowParticipants] = useState<boolean>(false);
 
   useEffect(() => {
     getMeetingById(match.params.id)
@@ -32,6 +36,12 @@ const MeetingRoute: React.FC<MeetingRouteProps> = ({ match }) => {
       });
   }, [match.params.id]);
 
+  useEffect(() => {
+    return () => {
+      if (meeting) leaveMeeting(meeting.meetingID);
+    };
+  }, [meeting]);
+
   if (isLoading || !meeting)
     return (
       <div className="w-full h-screen">
@@ -40,7 +50,7 @@ const MeetingRoute: React.FC<MeetingRouteProps> = ({ match }) => {
     );
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <MeetingHeader
         meetingID={meeting.meetingID}
         meetingName={meeting.meetingName}
@@ -48,7 +58,18 @@ const MeetingRoute: React.FC<MeetingRouteProps> = ({ match }) => {
         audioIsOn={audioIsOn}
         toggleAudio={setAudioOn}
         toggleVideo={setVideoOn}
+        toggleChat={setShowChat}
+        toggleParticipants={setShowParticipants}
       />
+      <div className="flex flex-grow">
+        <div className="flex-grow h-full">Meeting video</div>
+        <MeetingParticipants
+          showMeetingParticipants={showParticipants}
+          toggleParticipants={setShowParticipants}
+          meetingID={meeting.meetingID}
+        />
+        <MeetingChat toggleChat={setShowChat} showChat={showChat} meetingID={meeting.meetingID} />
+      </div>
     </div>
   );
 };

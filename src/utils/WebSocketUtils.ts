@@ -1,11 +1,30 @@
 import { getAccessToken } from "../api/Auth";
 import SocketMessage, { SocketMessageID } from "../types/SocketServer/SocketMessage";
 
+interface Listener<T> {
+  key: string;
+  id: SocketMessageID;
+  callback: (message: SocketMessage<T>) => any;
+}
+
 export const getWebSocketUrl = (): string => {
   return "ws://localhost:5000";
 };
 
 const webSocket = new WebSocket(getWebSocketUrl());
+const listeners: Listener<any>[] = [];
+
+webSocket.onmessage = (ev) => {
+  try {
+    const message: SocketMessage<any> = JSON.parse(ev.data);
+
+    listeners.forEach((listener) => {
+      if (listener.id === message.id) listener.callback(message);
+    });
+  } catch {
+    webSocket.close();
+  }
+};
 
 export const sendMessage = <T>(mid: SocketMessageID, data: T) => {
   const message: SocketMessage<T> = { id: mid, Authorization: getAccessToken(), body: data };
@@ -13,10 +32,14 @@ export const sendMessage = <T>(mid: SocketMessageID, data: T) => {
 };
 
 export const addEvent = <T>(mid: SocketMessageID, callback: (message: SocketMessage<T>) => any) => {
-  webSocket.addEventListener("message", (ev) => {
-    const message: SocketMessage<T> = JSON.parse(ev.data);
-    if (message.id === mid) {
-      callback(message);
-    }
-  });
+  const key = `${mid}-${Math.random()}`;
+  listeners.push({ id: mid, callback, key });
+  return key;
+};
+
+export const removeEvent = (key: string) => {
+  listeners.splice(
+    listeners.findIndex((listener) => listener.key === key),
+    1
+  );
 };

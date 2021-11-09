@@ -2,6 +2,7 @@ import { useState } from "react";
 import useDebounce from "../../hooks/useDebounce";
 import { useSnackbar } from "../../Snackbar";
 import User, { UserID } from "../../types/User";
+import { redirectTo } from "../../utils/BrowserUtils";
 import { createTeam } from "../../utils/TeamUtils";
 import { searchUserByEmail } from "../../utils/UserUtils";
 import Chip from "../Chip";
@@ -39,7 +40,7 @@ const CreateTeamDialogue: React.FC<CreateTeamDialogueProps> = ({ setShowCreateTe
     try {
       const { data } = await createTeam(teamName, addedUsers);
       enqueueSnackbar("Sucessfully created Team");
-      window.location.href = "/teams/" + data.id;
+      redirectTo("/teams/" + data.id);
     } catch {
       enqueueSnackbar("Error creating team");
     }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import CreateIcon from "@mui/icons-material/Create";
 import GroupIcon from "@mui/icons-material/Group";
 import { useSnackbar } from "../../Snackbar";
+import { redirectTo } from "../../utils/BrowserUtils";
 import { getTeamByID, joinTeam } from "../../utils/TeamUtils";
 import PrimaryButton from "../PrimaryButton";
 import Textfield from "../Textfield";
@@ -26,7 +27,7 @@ const JoinTeamDialoge: React.FC<JoinTeamDialogeProps> = ({ dialogueIsOpen = fals
       await getTeamByID(teamCode);
       await joinTeam(teamCode);
       enqueueSnackbar("Sucessfully joined team");
-      window.location.href = "/teams/" + teamCode;
+      redirectTo("/teams/" + teamCode);
     } catch {
       enqueueSnackbar("No such team found, please re-enter the code");
     }

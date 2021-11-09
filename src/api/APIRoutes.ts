@@ -19,6 +19,7 @@ enum APIRoutes {
   USER_LEAVE_TEAM = "/api/users/leaveTeam/",
   CREATE_MEETING = "/api/meetings/create",
   GET_MEETING_BY_ID = "/api/meetings/",
+  GET_MEETING_PARTICIPANTS = "/api/meetings/participants/",
 }
 
 export default APIRoutes;

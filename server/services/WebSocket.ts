@@ -33,7 +33,7 @@ export const addEvent = <T>(mid: SocketMessageID, socket: WebSocket, callback: (
         if (message.id === mid) callback(message.body, user as User);
       });
     } catch {
-      socket.close(); // the socket will cloas if it recieves badly formated text and prevent the server from crashing
+      socket.close(); // the socket will close if it recieves badly formated text and prevent the server from crashing
     }
   });
 };
@@ -71,4 +71,26 @@ export const getSocketRoom = (socket: WebSocket) => {
   return res;
 };
 
+export const sendMessageToSocket = <T>(socket: WebSocket, mid: SocketMessageID, data: T) => {
+  const socketMessage: SocketMessage<T> = { id: mid, body: data };
+  socket.send(JSON.stringify(socketMessage));
+};
+
 export default createWebSocketServer;
+
+// (() => {
+//   (function report() {
+//     const usage = process.memoryUsage();
+//     const newUsage: { [key: string]: string } = {};
+//     // usage.
+//     for (let key of Object.keys(usage)) {
+//       newUsage[key] = Math.round((usage[key as "arrayBuffers" | "external" | "heapTotal" | "heapUsed" | "rss"] || 0) / 1024 / 1024) + "MB";
+//     }
+
+//     console.log(new Date());
+//     console.log("  MEM:", newUsage);
+//     console.log("");
+
+//     setTimeout(report, 5000);
+//   })();
+// })();

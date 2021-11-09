@@ -12,30 +12,29 @@ const addWebServerEvents = (server: WebSocket.Server) => {
         joinRoom(data.meetingID, socket);
         delete user.password;
         delete user.teams;
-        emitInRoom(data.meetingID, SocketMessageID.USER_JOINED_MEETING, { user });
+        emitInRoom(data.meetingID, SocketMessageID.USER_JOINED_MEETING, { ...user });
         await startMeetingIfNotStarted(data.meetingID);
         joinMeeting(data.meetingID, user.id);
-        console.log("[WS] User joined the meeting: ", user, data);
       } catch (err) {
         console.log(err);
       }
     });
 
     addEvent<MeetingParticipantsMessage>(SocketMessageID.SEND_MESSAGE_TO_MEETING, socket, (data) => {
-      emitInRoom(data.meetingID, SocketMessageID.SEND_MESSAGE_TO_MEETING, { message: data });
+      emitInRoom(data.meetingID, SocketMessageID.SEND_MESSAGE_TO_MEETING, { ...data });
     });
 
     addEvent<Meeting>(SocketMessageID.LEAVE_MEETING, socket, async (data, user) => {
-      console.log("[WS] User left the meeting: ", user, data);
       delete user.password;
       delete user.teams;
-      emitInRoom(data.meetingID, SocketMessageID.USER_LEFT_MEETING, { user });
+      emitInRoom(data.meetingID, SocketMessageID.USER_LEFT_MEETING, { ...user });
       removeSocketFromRoom(data.meetingID, socket);
       leaveMeeting(data.meetingID, user.id);
     });
 
     socket.on("disconnect", () => {
       const roomID = getSocketRoom(socket);
+      socket.removeAllListeners();
       if (roomID) {
         removeSocketFromRoom(roomID, socket);
       }
