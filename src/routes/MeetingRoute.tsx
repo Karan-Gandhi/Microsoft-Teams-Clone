@@ -63,7 +63,11 @@ const MeetingRoute: React.FC<MeetingRouteProps> = ({ match }) => {
       />
       <div className="flex flex-grow">
         <div className="flex-grow h-full">Meeting video</div>
-        {showParticipants && <MeetingParticipants toggleParticipants={setShowParticipants} meetingID={meeting.meetingID} />}
+        <MeetingParticipants
+          showMeetingParticipants={showParticipants}
+          toggleParticipants={setShowParticipants}
+          meetingID={meeting.meetingID}
+        />
         <MeetingChat toggleChat={setShowChat} showChat={showChat} meetingID={meeting.meetingID} />
       </div>
     </div>

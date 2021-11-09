@@ -77,3 +77,20 @@ export const sendMessageToSocket = <T>(socket: WebSocket, mid: SocketMessageID, 
 };
 
 export default createWebSocketServer;
+
+// (() => {
+//   (function report() {
+//     const usage = process.memoryUsage();
+//     const newUsage: { [key: string]: string } = {};
+//     // usage.
+//     for (let key of Object.keys(usage)) {
+//       newUsage[key] = Math.round((usage[key as "arrayBuffers" | "external" | "heapTotal" | "heapUsed" | "rss"] || 0) / 1024 / 1024) + "MB";
+//     }
+
+//     console.log(new Date());
+//     console.log("  MEM:", newUsage);
+//     console.log("");
+
+//     setTimeout(report, 5000);
+//   })();
+// })();

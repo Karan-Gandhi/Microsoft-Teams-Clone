@@ -14,7 +14,6 @@ import {
   removeUser,
   userBelongsToTeam,
 } from "../utils/TeamsUtils";
-import { getUserTeams } from "../utils/UserUtils";
 
 const router = express.Router();
 
@@ -35,7 +34,7 @@ router.use(async (req, res, next) => {
 router.get("/", async (req, res) => {
   const user = JSON.parse(req.user as string) as User;
   // returns all the teams that the user belongs to
-  res.json({ teams: await getUserTeams(user.id) });
+  res.json({ teams: user.teams });
 });
 
 router.post("/createTeam", async (req, res) => {

@@ -12,10 +12,11 @@ import SearchListItem from "../SearchListItem";
 
 interface MeetingParticipantsProps {
   meetingID: MeetingID;
+  showMeetingParticipants: boolean;
   toggleParticipants: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MeetingParticipants: React.FC<MeetingParticipantsProps> = ({ toggleParticipants, meetingID }) => {
+const MeetingParticipants: React.FC<MeetingParticipantsProps> = ({ toggleParticipants, meetingID, showMeetingParticipants }) => {
   const [participants, setParticipants] = useState<User[]>([]);
   const [participantList, setParticipantList] = useState<React.ReactNode>(null);
 
@@ -48,6 +49,8 @@ const MeetingParticipants: React.FC<MeetingParticipantsProps> = ({ togglePartici
       participants.map((participant, idx) => <SearchListItem name={participant.name} email={participant.email} key={idx} noDot />)
     );
   }, [participants]);
+
+  if (!showMeetingParticipants) return <div className="absolute" />;
 
   return (
     <div className="px-8 py-8 flex flex-col" style={{ backgroundColor: "#141414" }}>
