@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import { getTeamByID, getUserTeams } from "../utils/TeamUtils";
+import { getTeamByID, getUserTeams } from "../../utils/TeamUtils";
 import TeamsSidebarItem from "./TeamsSidebarItem";
 
 interface TeamsSidebarProps {

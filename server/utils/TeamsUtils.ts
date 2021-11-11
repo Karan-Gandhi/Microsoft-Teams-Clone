@@ -105,3 +105,18 @@ export const userBelongsToTeam = async (teamID: TeamID, userID: UserID) => {
   if (team.members.findIndex((memberID) => memberID === userID) === -1) return false;
   else return true;
 };
+
+export const addMeeting = async (teamID: TeamID, meetingID: string) => {
+  const team = await getTeamById(teamID);
+  if (team.meetings) {
+    team.meetings.push(meetingID);
+  } else {
+    team.meetings = [meetingID];
+  }
+  await updateTeamData(teamID, team);
+};
+
+export const getTeamMeetings = async (teamID: TeamID) => {
+  const team = await getTeamById(teamID);
+  return team.meetings;
+};

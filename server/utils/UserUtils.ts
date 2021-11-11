@@ -1,11 +1,15 @@
-import { addData, getSnapshotWhere, readData } from "../services/Firestore";
+import { addData, getSnapshotWhere, readData, readDataNoCache } from "../services/Firestore";
 import { FeedType } from "../types/FeedItem";
 import FirestoreCollections from "../types/FirestoreCollections";
 import { TeamID } from "../types/Team";
 import User, { UserID } from "../types/User";
 import { addFeedItem } from "./TeamsUtils";
 
-export const getUserByID = async (userID: UserID) => await readData<User>(FirestoreCollections.USERS, userID);
+export const getUserByID = async (userID: UserID) => {
+  const user = await readData<User>(FirestoreCollections.USERS, userID);
+  if (!user.teams || !user.password) return await readDataNoCache<User>(FirestoreCollections.USERS, userID);
+  return user;
+};
 
 export const updateUserData = async (userID: UserID, userData: User) => await addData(FirestoreCollections.USERS, userID, userData);
 

@@ -3,11 +3,13 @@ import { Redirect, Route, RouteProps } from "react-router";
 import { userIsLoggedIn } from "../api/Auth";
 import Loader from "./DefaultLoader";
 import MainSidebar from "./MainSidebar";
-import TeamsSidebar from "./TeamsSidebar";
+import TeamsSidebar from "./TeamComponents/TeamsSidebar";
 
-interface AuthenticatedRouteProps extends RouteProps {}
+interface AuthenticatedRouteProps extends RouteProps {
+  noTeamsSidebar?: boolean;
+}
 
-const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({ component: Component, ...rest }) => {
+const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({ noTeamsSidebar = false, component: Component, ...rest }) => {
   const [isLoading, setLoading] = useState<boolean>(true);
   const [teamsIsLoaded, setTeamsIsLoaded] = useState<boolean>(true);
   const [redirectToLogin, setRedirectToLogin] = useState<boolean>(false);
@@ -36,7 +38,7 @@ const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({ component: Comp
           return (
             <div className="w-screen h-screen flex text-white">
               <MainSidebar />
-              <TeamsSidebar onLoaded={() => setTeamsIsLoaded(true)} />
+              {!noTeamsSidebar && <TeamsSidebar onLoaded={() => setTeamsIsLoaded(true)} />}
               <div className="w-full h-full">
                 {/* @ts-ignore */}
                 <Component {...props} />

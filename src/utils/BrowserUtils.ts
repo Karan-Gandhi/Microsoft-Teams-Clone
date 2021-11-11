@@ -48,3 +48,21 @@ export const hashString = (s: string) => {
 
 export const isWithinIntervals = (intervals: number[][], target: number) =>
   intervals.filter((interval) => interval[0] <= target && interval[1] > target && interval[0] !== -1 && interval[1] !== -1).length >= 1;
+
+export const currentFormattedDate = () => {
+  const date = new Date();
+  return `${date.getFullYear()}-${makeNumberTwoDigit(date.getMonth() + 1)}-${makeNumberTwoDigit(date.getDay())}`;
+};
+
+export const currentFormattedTime = () => {
+  const date = new Date();
+  return `${makeNumberTwoDigit(date.getHours())}:${makeNumberTwoDigit(date.getMinutes())}:${makeNumberTwoDigit(date.getSeconds())}`;
+};
+
+export const getFutureFormattedTime = (minutesDelay: number) => {
+  const date = new Date();
+  date.setMinutes(date.getMinutes() + minutesDelay);
+  return `${makeNumberTwoDigit(date.getHours())}:${makeNumberTwoDigit(date.getMinutes())}:00`;
+};
+
+export const redirectTo = (link: string) => (window.location.href = link);

@@ -1,3 +1,4 @@
+import Meeting from "../types/Meeting";
 import Team, { TeamID } from "../types/Team";
 import { AccessToken, RefreshToken } from "../types/Tokens";
 import User, { UserID } from "../types/User";
@@ -28,4 +29,11 @@ export type GetUserDetailsResponse = User;
 
 export interface GetTeamMembersResponse {
   members: UserID[];
+}
+
+export type CreateMeetingResponse = Meeting;
+export type GetMeetingByIdResponse = Meeting;
+
+export interface GetMeetingParticipantsResponse {
+  participants: User[];
 }

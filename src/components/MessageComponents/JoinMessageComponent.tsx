@@ -1,5 +1,5 @@
 import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
-import JoinMessage from "../types/JoinMessage";
+import JoinMessage from "../../types/JoinMessage";
 
 interface JoinMessageComponentProps extends JoinMessage {
   dateCreated: number;

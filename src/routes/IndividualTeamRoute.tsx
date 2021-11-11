@@ -1,20 +1,23 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import DefaultLoader from "../components/DefaultLoader";
-import JoinMessageComponent from "../components/JoinMessageComponent";
-import LeaveMessageComponent from "../components/LeaveMessageComponent";
-import MessageComponent from "../components/MessageComponent";
+import JoinMessageComponent from "../components/MessageComponents/JoinMessageComponent";
+import LeaveMessageComponent from "../components/MessageComponents/LeaveMessageComponent";
+import MeetingMessageComponent from "../components/MeetingMessageComponent";
+import MessageComponent from "../components/MessageComponents/MessageComponent";
 import SearchListItem from "../components/SearchListItem";
-import TeamHeadder from "../components/TeamHeader";
-import TeamWelcomeMessage from "../components/TeamWelcomeMessage";
+import TeamHeadder from "../components/TeamComponents/TeamHeader";
+import TeamWelcomeMessage from "../components/TeamComponents/TeamWelcomeMessage";
 import Textfield from "../components/Textfield";
 import useDebounce from "../hooks/useDebounce";
 import { useSnackbar } from "../Snackbar";
 import { FeedType } from "../types/FeedItem";
 import JoinMessage from "../types/JoinMessage";
 import LeaveMessage from "../types/LeaveMessage";
+import { MeetingMessage } from "../types/Meeting";
 import Message from "../types/Message";
 import { TeamID } from "../types/Team";
 import User, { UserID } from "../types/User";
+import { getMeetingById } from "../utils/MeetingUtils";
 import { getTeamFeed, sendMessageOnTeam } from "../utils/TeamUtils";
 import { getUserById, getUserID } from "../utils/UserUtils";
 
@@ -29,8 +32,6 @@ interface IndividualTeamRouteProps {
 
 const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, members, admin }) => {
   const feedRef = useRef<HTMLDivElement>(null);
-
-  console.log("Update");
 
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [isLoading, setLoading] = useState<boolean>(true);
@@ -67,7 +68,20 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
             } else if (feedItem.type === FeedType.UserLeave) {
               const currentMessage = feedItem.content as LeaveMessage;
               return <LeaveMessageComponent key={idx.toString()} {...currentMessage} dateCreated={feedItem.dateCreated} />;
-            } else return <div key={idx.toString()}>Meeting</div>;
+            } else if (feedItem.type === FeedType.Meeting) {
+              const currentMessage = feedItem.content as MeetingMessage;
+              const meeting = await getMeetingById(currentMessage.meetingID);
+              return (
+                <MeetingMessageComponent
+                  key={idx.toString()}
+                  dateCreated={feedItem.dateCreated}
+                  meetingTime={currentMessage.start}
+                  meetingTitle={currentMessage.name}
+                  sender={(await getUserById(meeting.presenterID)).name}
+                  meetingID={meeting.meetingID}
+                />
+              );
+            }
           })
         )
       );
@@ -193,6 +207,7 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
                   className="py-4 px-4"
                   value={messageToSend}
                   textfieldRef={textfieldRef}
+                  showHighlights
                 />
               </div>
             </form>

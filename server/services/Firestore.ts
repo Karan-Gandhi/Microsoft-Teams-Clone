@@ -34,6 +34,27 @@ export const readData: {
   }
 };
 
+export const readDataNoCache: {
+  <T>(collection: string): Promise<T[]>;
+  <T>(collection: string, document: string): Promise<T>;
+} = async <T>(collection: string, document?: string) => {
+  if (!!document) {
+    const doc = await db.collection(collection).doc(document).get();
+    if (!doc.exists) {
+      return null;
+    }
+    const data = doc.data() as T;
+    firebaseCache.addItem(collectionAndDocumentToId(collection, document), data);
+    return data;
+  } else {
+    const snapshots = await db.collection(collection).get();
+    const res: T[] = [];
+    snapshots.forEach((snapshot) => res.push(snapshot.data() as T));
+    firebaseCache.addItem(collection, res);
+    return res;
+  }
+};
+
 export const deleteData = async (collection: string, document?: string) => {
   if (!!document) {
     firebaseCache.deleteIfPresent(collectionAndDocumentToId(collection, document));

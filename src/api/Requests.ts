@@ -41,3 +41,9 @@ export interface AddMemberToTeamRequest {
 export interface RemoveUserFromTeamRequest {
   userID: UserID;
 }
+
+export interface CreateMeetingRequest {
+  name: string;
+  time: number;
+  teamID: TeamID;
+}

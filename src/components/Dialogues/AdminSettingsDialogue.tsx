@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import { TeamID } from "../types/Team";
-import Dialogue from "./Dialogue";
-import PrimaryTextfield from "./PrimaryTextfield";
-import MemberTable from "./MemberTable";
+import { TeamID } from "../../types/Team";
+import PrimaryTextfield from "../PrimaryTextfield";
+import MemberTable from "../MemberTable";
 import AddMembersDialogue from "./AddMembersDialogue";
+import Dialogue from "./Dialogue";
 
 interface AdminSettingsDialogueProps {
   setDialogueOpen: (value: boolean) => any;

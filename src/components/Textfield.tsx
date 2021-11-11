@@ -14,6 +14,7 @@ export interface TextfieldProps {
   focus?: boolean;
   textfieldRef?: React.ForwardedRef<HTMLInputElement>;
   highlightText?: string[];
+  showHighlights?: boolean;
 }
 
 const Textfield: React.FC<TextfieldProps> = ({
@@ -28,6 +29,7 @@ const Textfield: React.FC<TextfieldProps> = ({
   value,
   textfieldRef,
   highlightText,
+  showHighlights = false,
 }) => {
   const [inputId] = useState<string>(`input-textfield-${Math.random()}`);
   let intervals: number[][] = [];
@@ -45,13 +47,15 @@ const Textfield: React.FC<TextfieldProps> = ({
         </label>
       )}
       <div className="relative">
-        <div className="absolute h-full px-4 py-2 my-2">
-          {value?.split("").map((element, idx) => (
-            <span key={idx.toString()} style={(isWithinIntervals(intervals, idx) && { background: "black", opacity: 0.5 }) || {}}>
-              {element}
-            </span>
-          ))}
-        </div>
+        {showHighlights && (
+          <div className="absolute h-full px-4 py-2 my-2">
+            {value?.split("").map((element, idx) => (
+              <span key={idx.toString()} style={(isWithinIntervals(intervals, idx) && { background: "black", opacity: 0.5 }) || {}}>
+                {element}
+              </span>
+            ))}
+          </div>
+        )}
         <input
           id={inputId}
           style={{ backgroundColor }}
