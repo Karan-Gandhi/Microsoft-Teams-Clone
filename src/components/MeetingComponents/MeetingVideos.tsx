@@ -6,6 +6,7 @@ interface MeetingVideosProps {}
 
 const MeetingVideos: React.FC<MeetingVideosProps> = () => {
   const [availableVideos, setAvailableVideos] = useState<VideoEmitResponse[]>([]);
+  // const [participants, setParticipants]
 
   useEffect(() => {
     let key = subscribeToMeetingVideos((data) => {

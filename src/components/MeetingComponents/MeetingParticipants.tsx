@@ -1,13 +1,7 @@
 import CloseIcon from "@mui/icons-material/Close";
 import React, { useEffect, useState } from "react";
+import useParticipants from "../../hooks/useParticipants";
 import { MeetingID } from "../../types/Meeting";
-import { SocketMessageID } from "../../types/SocketServer/SocketMessage";
-import User from "../../types/User";
-import {
-  getMeetingParticipants,
-  subscribeToMeetingParticipantsChanges,
-  unsubscribeToMeetingParticipantsChanges,
-} from "../../utils/MeetingUtils";
 import SearchListItem from "../SearchListItem";
 
 interface MeetingParticipantsProps {
@@ -17,31 +11,32 @@ interface MeetingParticipantsProps {
 }
 
 const MeetingParticipants: React.FC<MeetingParticipantsProps> = ({ toggleParticipants, meetingID, showMeetingParticipants }) => {
-  const [participants, setParticipants] = useState<User[]>([]);
+  // const [participants, setParticipants] = useState<User[]>([]);
   const [participantList, setParticipantList] = useState<React.ReactNode>(null);
+  const participants = useParticipants(meetingID);
 
-  useEffect(() => {
-    getMeetingParticipants(meetingID).then((data) => {
-      setParticipants(data.participants);
-    });
+  // useEffect(() => {
+  //   getMeetingParticipants(meetingID).then((data) => {
+  //     setParticipants(data.participants);
+  //   });
 
-    let keys = subscribeToMeetingParticipantsChanges((message) => {
-      if (message.id === SocketMessageID.USER_JOINED_MEETING) {
-        setParticipants((prevState) => [...prevState, message.body]);
-      } else {
-        setParticipants((prevState) => {
-          const newState = [...prevState];
-          newState.splice(
-            newState.findIndex((prevParticipant) => prevParticipant.id === message.body.id),
-            1
-          );
-          return newState;
-        });
-      }
-    });
+  //   let keys = subscribeToMeetingParticipantsChanges((message) => {
+  //     if (message.id === SocketMessageID.USER_JOINED_MEETING) {
+  //       setParticipants((prevState) => [...prevState, message.body]);
+  //     } else {
+  //       setParticipants((prevState) => {
+  //         const newState = [...prevState];
+  //         newState.splice(
+  //           newState.findIndex((prevParticipant) => prevParticipant.id === message.body.id),
+  //           1
+  //         );
+  //         return newState;
+  //       });
+  //     }
+  //   });
 
-    return () => unsubscribeToMeetingParticipantsChanges(keys);
-  }, [meetingID]);
+  //   return () => unsubscribeToMeetingParticipantsChanges(keys);
+  // }, [meetingID]);
 
   useEffect(() => {
     setParticipantList(
