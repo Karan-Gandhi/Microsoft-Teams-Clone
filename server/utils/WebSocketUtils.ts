@@ -1,5 +1,13 @@
 import * as WebSocket from "ws";
-import { addEvent, createRoomIfNotExists, emitInRoom, getSocketRoom, joinRoom, removeSocketFromRoom } from "../services/WebSocket";
+import {
+  addEvent,
+  createRoomIfNotExists,
+  emitInRoom,
+  emitInRoomExcept,
+  getSocketRoom,
+  joinRoom,
+  removeSocketFromRoom,
+} from "../services/WebSocket";
 import Meeting, { MeetingParticipantsMessage } from "../types/Meeting";
 import { SocketMessageID } from "../types/SocketServer/SocketMessage";
 import { joinMeeting, leaveMeeting, startMeetingIfNotStarted } from "./MeetingUtils";
@@ -32,10 +40,14 @@ const addWebServerEvents = (server: WebSocket.Server) => {
       leaveMeeting(data.meetingID, user.id);
     });
 
+    addEvent<string>(SocketMessageID.SEND_VIDEO, socket, async (data, user) => {
+      emitInRoomExcept(getSocketRoom(socket), SocketMessageID.EMIT_VIDEO, { video: data, name: user.name, id: user.id }, socket);
+    });
+
     socket.on("disconnect", () => {
       const roomID = getSocketRoom(socket);
       socket.removeAllListeners();
-      if (roomID) {
+      if (roomID.length !== 0) {
         removeSocketFromRoom(roomID, socket);
       }
     });

@@ -57,13 +57,19 @@ export const emitInRoom = <T>(id: SocketRoomID, mid: SocketMessageID, data: T) =
   if (room) room.forEach((socket) => socket.send(JSON.stringify(socketMessage)));
 };
 
+export const emitInRoomExcept = <T>(id: SocketRoomID, mid: SocketMessageID, data: T, except: WebSocket) => {
+  const room = rooms.get(id);
+  const socketMessage: SocketMessage<T> = { id: mid, body: data };
+  if (room) room.forEach((socket) => socket !== except && socket.send(JSON.stringify(socketMessage)));
+};
+
 export const removeSocketFromRoom = (id: SocketRoomID, socket: WebSocket) => {
   const room = rooms.get(id);
   if (room) room.splice(room.indexOf(socket), 1);
 };
 
 export const getSocketRoom = (socket: WebSocket) => {
-  let res = null;
+  let res = "";
   rooms.forEach((room, id) => {
     if (room.includes(socket)) res = id;
   });

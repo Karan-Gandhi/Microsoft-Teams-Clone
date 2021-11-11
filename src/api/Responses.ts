@@ -37,3 +37,9 @@ export type GetMeetingByIdResponse = Meeting;
 export interface GetMeetingParticipantsResponse {
   participants: User[];
 }
+
+export interface VideoEmitResponse {
+  video: string;
+  name: string;
+  id: UserID;
+}
