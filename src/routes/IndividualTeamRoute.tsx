@@ -47,44 +47,43 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
 
   const updateFeed = useCallback(async () => {
     return getTeamFeed(id).then(async (data) => {
-      setFeed(
-        await Promise.all(
-          data.data.messages.map(async (feedItem, idx) => {
-            if (feedItem.type === FeedType.Message) {
-              const currentMessage = feedItem.content as Message;
+      let newFeed = await Promise.all(
+        data.data.messages.map(async (feedItem, idx) => {
+          if (feedItem.type === FeedType.Message) {
+            const currentMessage = feedItem.content as Message;
 
-              return (
-                <MessageComponent
-                  key={idx.toString()}
-                  content={currentMessage.content}
-                  sender={currentMessage.name}
-                  dateCreated={feedItem.dateCreated}
-                  members={teamMembers.map((user) => "@" + user.name.replaceAll(" ", "_"))}
-                />
-              );
-            } else if (feedItem.type === FeedType.UserJoin) {
-              const currentMessage = feedItem.content as JoinMessage;
-              return <JoinMessageComponent key={idx.toString()} {...currentMessage} dateCreated={feedItem.dateCreated} />;
-            } else if (feedItem.type === FeedType.UserLeave) {
-              const currentMessage = feedItem.content as LeaveMessage;
-              return <LeaveMessageComponent key={idx.toString()} {...currentMessage} dateCreated={feedItem.dateCreated} />;
-            } else if (feedItem.type === FeedType.Meeting) {
-              const currentMessage = feedItem.content as MeetingMessage;
-              const meeting = await getMeetingById(currentMessage.meetingID);
-              return (
-                <MeetingMessageComponent
-                  key={idx.toString()}
-                  dateCreated={feedItem.dateCreated}
-                  meetingTime={currentMessage.start}
-                  meetingTitle={currentMessage.name}
-                  sender={(await getUserById(meeting.presenterID)).name}
-                  meetingID={meeting.meetingID}
-                />
-              );
-            }
-          })
-        )
+            return (
+              <MessageComponent
+                key={idx.toString()}
+                content={currentMessage.content}
+                sender={currentMessage.name}
+                dateCreated={feedItem.dateCreated}
+                members={teamMembers.map((user) => "@" + user.name.replaceAll(" ", "_"))}
+              />
+            );
+          } else if (feedItem.type === FeedType.UserJoin) {
+            const currentMessage = feedItem.content as JoinMessage;
+            return <JoinMessageComponent key={idx.toString()} {...currentMessage} dateCreated={feedItem.dateCreated} />;
+          } else if (feedItem.type === FeedType.UserLeave) {
+            const currentMessage = feedItem.content as LeaveMessage;
+            return <LeaveMessageComponent key={idx.toString()} {...currentMessage} dateCreated={feedItem.dateCreated} />;
+          } else if (feedItem.type === FeedType.Meeting) {
+            const currentMessage = feedItem.content as MeetingMessage;
+            const meeting = await getMeetingById(currentMessage.meetingID);
+            return (
+              <MeetingMessageComponent
+                key={idx.toString()}
+                dateCreated={feedItem.dateCreated}
+                meetingTime={currentMessage.start}
+                meetingTitle={currentMessage.name}
+                sender={(await getUserById(meeting.presenterID)).name}
+                meetingID={meeting.meetingID}
+              />
+            );
+          }
+        })
       );
+      setFeed(newFeed);
     });
   }, [id, teamMembers]);
 
@@ -147,7 +146,9 @@ const IndividualTeamRoute: React.FC<IndividualTeamRouteProps> = ({ id, name, mem
           await updateFeed();
         }, FEED_REFRESH_TIME);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        if (interval) clearInterval(interval);
+      });
 
     return () => {
       if (interval) clearInterval(interval);

@@ -6,7 +6,7 @@ import { addData, deleteData, readDataWhere } from "../services/Firestore";
 import { AccessToken, AccessTokenTypes, RefreshToken, Token } from "../types/Tokens";
 import { EmailAlreadyExistError, InvalidEmailOrPassword } from "./AuthErrors";
 
-const ACCESS_TOKEN_EXPIRY_TIME = "10d";
+const ACCESS_TOKEN_EXPIRY_TIME = "10m";
 
 export const loginWithEmailAndPassword = async (email: string, password: string) => {
   const existingUsers = await readDataWhere<User>(FirestoreCollections.USERS, "email", "==", email);
