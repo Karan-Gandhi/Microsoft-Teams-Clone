@@ -44,6 +44,14 @@ const addWebServerEvents = (server: WebSocket.Server) => {
       emitInRoomExcept(getSocketRoom(socket), SocketMessageID.EMIT_VIDEO, { video: data, name: user.name, id: user.id }, socket);
     });
 
+    addEvent<string>(SocketMessageID.VIDEO_ON, socket, async (data, user) => {
+      emitInRoomExcept(getSocketRoom(socket), SocketMessageID.EMIT_VIDEO, { video: data, name: user.name, id: user.id }, socket);
+    });
+
+    addEvent<string>(SocketMessageID.VIDEO_OFF, socket, async (data, user) => {
+      emitInRoomExcept(getSocketRoom(socket), SocketMessageID.EMIT_VIDEO, { video: data, name: user.name, id: user.id }, socket);
+    });
+
     socket.on("disconnect", () => {
       const roomID = getSocketRoom(socket);
       socket.removeAllListeners();

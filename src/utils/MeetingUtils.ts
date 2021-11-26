@@ -51,7 +51,22 @@ export const unsubscribeToMeetingMessages = (key: string) => removeEvent(key);
 
 export const sendVideoToServer = (data: string) => sendMessage<string>(SocketMessageID.SEND_VIDEO, data);
 
-export const subscribeToMeetingVideos = (callback: (data: SocketMessage<VideoEmitResponse>) => any) =>
-  addEvent<VideoEmitResponse>(SocketMessageID.EMIT_VIDEO, callback);
+export const subscribeToMeetingVideos = (callback: (data: SocketMessage<VideoEmitResponse>) => any) => [
+  addEvent<VideoEmitResponse>(SocketMessageID.EMIT_VIDEO, callback),
+  addEvent<VideoEmitResponse>(SocketMessageID.VIDEO_ON, callback),
+  addEvent<VideoEmitResponse>(SocketMessageID.VIDEO_OFF, callback),
+];
 
-export const unsubscribeToMeetingVideos = (key: string) => removeEvent(key);
+export const unsubscribeToMeetingVideos = (keys: string[]) => {
+  removeEvent(keys[0]);
+  removeEvent(keys[1]);
+  removeEvent(keys[2]);
+};
+
+export const turnOnVideo = () => {
+  sendMessage<VideoEmitResponse>(SocketMessageID.VIDEO_ON, { id: getUserID() as UserID, name: getUserName() as string, video: "" });
+};
+
+export const turnOffVideo = () => {
+  sendMessage<VideoEmitResponse>(SocketMessageID.VIDEO_OFF, { id: getUserID() as UserID, name: getUserName() as string, video: "" });
+};

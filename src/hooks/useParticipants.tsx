@@ -11,8 +11,6 @@ import {
 const useParticipants = (meetingID: MeetingID, onUserJoin?: (user: User) => any, onUserLeave?: (user: User) => any) => {
   const [participants, setParticipants] = useState<User[]>([]);
 
-  console.log(participants);
-
   useEffect(() => {
     getMeetingParticipants(meetingID).then((data) => {
       setParticipants(data.participants);

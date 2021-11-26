@@ -4,7 +4,6 @@ import DefaultLoader from "../components/DefaultLoader";
 import MeetingChat from "../components/MeetingComponents/MeetingChat";
 import MeetingHeader from "../components/MeetingComponents/MeetingHeader";
 import MeetingParticipants from "../components/MeetingComponents/MeetingParticipants";
-import MeetingVideo from "../components/MeetingComponents/MeetingVideo";
 import MeetingVideos from "../components/MeetingComponents/MeetingVideos";
 import Meeting, { MeetingID } from "../types/Meeting";
 import { getMeetingById, joinMeeting, leaveMeeting } from "../utils/MeetingUtils";
@@ -65,8 +64,7 @@ const MeetingRoute: React.FC<MeetingRouteProps> = ({ match }) => {
       />
       <div className="flex flex-grow">
         <div className="flex-grow h-full">
-          <MeetingVideos />
-          <MeetingVideo videoIsOn={videoIsOn} />
+          <MeetingVideos meetingID={meeting.meetingID} />
         </div>
         <MeetingParticipants
           showMeetingParticipants={showParticipants}

@@ -11,37 +11,13 @@ interface MeetingParticipantsProps {
 }
 
 const MeetingParticipants: React.FC<MeetingParticipantsProps> = ({ toggleParticipants, meetingID, showMeetingParticipants }) => {
-  // const [participants, setParticipants] = useState<User[]>([]);
   const [participantList, setParticipantList] = useState<React.ReactNode>(null);
   const participants = useParticipants(meetingID);
-
-  // useEffect(() => {
-  //   getMeetingParticipants(meetingID).then((data) => {
-  //     setParticipants(data.participants);
-  //   });
-
-  //   let keys = subscribeToMeetingParticipantsChanges((message) => {
-  //     if (message.id === SocketMessageID.USER_JOINED_MEETING) {
-  //       setParticipants((prevState) => [...prevState, message.body]);
-  //     } else {
-  //       setParticipants((prevState) => {
-  //         const newState = [...prevState];
-  //         newState.splice(
-  //           newState.findIndex((prevParticipant) => prevParticipant.id === message.body.id),
-  //           1
-  //         );
-  //         return newState;
-  //       });
-  //     }
-  //   });
-
-  //   return () => unsubscribeToMeetingParticipantsChanges(keys);
-  // }, [meetingID]);
 
   useEffect(() => {
     setParticipantList(
       // eslint-disable-next-line react/no-array-index-key
-      participants.map((participant, idx) => <SearchListItem name={participant.name} email={participant.email} key={idx} noDot />)
+      participants.map((participant, idx) => <SearchListItem name={participant.name} email="" key={idx} noDot />)
     );
   }, [participants]);
 
