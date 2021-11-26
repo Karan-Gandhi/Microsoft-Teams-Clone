@@ -29,6 +29,7 @@ const CreateMeetingDialogue: React.FC<CreateMeetingDialogueProps> = ({ teamID, .
     try {
       await createMeeting(meetingName, meetingDateTime.getTime(), teamID);
       enqueueSnackbar("Sucessfully scheduled a meeting");
+      rest.setDialogueOpen(false);
     } catch {
       enqueueSnackbar("Failed to create meeting");
     }

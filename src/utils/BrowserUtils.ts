@@ -51,7 +51,7 @@ export const isWithinIntervals = (intervals: number[][], target: number) =>
 
 export const currentFormattedDate = () => {
   const date = new Date();
-  return `${date.getFullYear()}-${makeNumberTwoDigit(date.getMonth() + 1)}-${makeNumberTwoDigit(date.getDay())}`;
+  return `${date.getFullYear()}-${makeNumberTwoDigit(date.getMonth() + 1)}-${makeNumberTwoDigit(date.getDate())}`;
 };
 
 export const currentFormattedTime = () => {
