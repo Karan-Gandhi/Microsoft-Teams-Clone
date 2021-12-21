@@ -20,9 +20,9 @@ const addWebServerEvents = (server: WebSocket.Server) => {
         joinRoom(data.meetingID, socket);
         delete user.password;
         delete user.teams;
-        emitInRoom(data.meetingID, SocketMessageID.USER_JOINED_MEETING, { ...user });
         await startMeetingIfNotStarted(data.meetingID);
         joinMeeting(data.meetingID, user.id);
+        emitInRoom(data.meetingID, SocketMessageID.USER_JOINED_MEETING, { ...user });
       } catch (err) {
         console.log(err);
       }
@@ -35,9 +35,9 @@ const addWebServerEvents = (server: WebSocket.Server) => {
     addEvent<Meeting>(SocketMessageID.LEAVE_MEETING, socket, async (data, user) => {
       delete user.password;
       delete user.teams;
-      emitInRoom(data.meetingID, SocketMessageID.USER_LEFT_MEETING, { ...user });
       removeSocketFromRoom(data.meetingID, socket);
       leaveMeeting(data.meetingID, user.id);
+      emitInRoom(data.meetingID, SocketMessageID.USER_LEFT_MEETING, { ...user });
     });
 
     addEvent<string>(SocketMessageID.SEND_VIDEO, socket, async (data, user) => {
@@ -45,11 +45,11 @@ const addWebServerEvents = (server: WebSocket.Server) => {
     });
 
     addEvent<string>(SocketMessageID.VIDEO_ON, socket, async (data, user) => {
-      emitInRoomExcept(getSocketRoom(socket), SocketMessageID.EMIT_VIDEO, { video: data, name: user.name, id: user.id }, socket);
+      emitInRoomExcept(getSocketRoom(socket), SocketMessageID.VIDEO_ON, { video: data, name: user.name, id: user.id }, socket);
     });
 
     addEvent<string>(SocketMessageID.VIDEO_OFF, socket, async (data, user) => {
-      emitInRoomExcept(getSocketRoom(socket), SocketMessageID.EMIT_VIDEO, { video: data, name: user.name, id: user.id }, socket);
+      emitInRoomExcept(getSocketRoom(socket), SocketMessageID.VIDEO_OFF, { video: data, name: user.name, id: user.id }, socket);
     });
 
     socket.on("disconnect", () => {

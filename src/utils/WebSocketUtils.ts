@@ -11,7 +11,7 @@ export const getWebSocketUrl = (): string => {
   return "ws://localhost:5000";
 };
 
-const webSocket = new WebSocket(getWebSocketUrl());
+let webSocket = new WebSocket(getWebSocketUrl());
 const listeners: Listener<any>[] = [];
 
 webSocket.onmessage = (ev) => {
@@ -26,7 +26,25 @@ webSocket.onmessage = (ev) => {
   }
 };
 
+export const isOpen = () => webSocket.readyState === WebSocket.OPEN;
+
+export const reconnect = () => {
+  webSocket = new WebSocket(getWebSocketUrl());
+  webSocket.onmessage = (ev) => {
+    try {
+      const message: SocketMessage<any> = JSON.parse(ev.data);
+
+      listeners.forEach((listener) => {
+        if (listener.id === message.id) listener.callback(message);
+      });
+    } catch {
+      webSocket.close();
+    }
+  };
+};
+
 export const sendMessage = <T>(mid: SocketMessageID, data: T) => {
+  if (!isOpen()) reconnect();
   const message: SocketMessage<T> = { id: mid, Authorization: getAccessToken(), body: data };
   webSocket.send(JSON.stringify(message));
 };

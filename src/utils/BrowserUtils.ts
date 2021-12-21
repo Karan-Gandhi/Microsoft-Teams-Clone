@@ -1,4 +1,5 @@
 import Cookies from "js-cookie";
+import { compress, decompress } from "lz-string";
 
 export enum CookieNames {
   ACCESS_TOKEN_COOKIE_NAME = "access_token",
@@ -66,3 +67,9 @@ export const getFutureFormattedTime = (minutesDelay: number) => {
 };
 
 export const redirectTo = (link: string) => (window.location.href = link);
+
+export const getMediaConstraints = (video: boolean, audio: boolean) => ({ video, audio });
+
+export const compressString = (str: string) => compress(str);
+
+export const uncompressString = (str: string) => decompress(str);

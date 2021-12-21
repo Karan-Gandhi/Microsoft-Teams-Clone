@@ -6,6 +6,7 @@ import Meeting, { MeetingID, MeetingParticipantsMessage } from "../types/Meeting
 import SocketMessage, { SocketMessageID } from "../types/SocketServer/SocketMessage";
 import { TeamID } from "../types/Team";
 import User, { UserID } from "../types/User";
+import { compressString } from "./BrowserUtils";
 import { getUserID, getUserName } from "./UserUtils";
 import { addEvent, removeEvent, sendMessage } from "./WebSocketUtils";
 

@@ -21,7 +21,6 @@ const MembersDialogue: React.FC<MembersDialogueProps> = ({ teamName, teamID, tot
           <MemberTable teamID={teamID} />
         </div>
         <div className="py-2 mt-8">
-          {/* TODO: complete the leave team thing */}
           <PrimaryButton
             onClick={async () => {
               await leaveUserFromTeam(teamID);

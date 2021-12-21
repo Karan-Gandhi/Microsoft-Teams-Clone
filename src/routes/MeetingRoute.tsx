@@ -64,7 +64,7 @@ const MeetingRoute: React.FC<MeetingRouteProps> = ({ match }) => {
       />
       <div className="flex flex-grow">
         <div className="flex-grow h-full">
-          <MeetingVideos meetingID={meeting.meetingID} />
+          <MeetingVideos meetingID={meeting.meetingID} videoIsOn={videoIsOn} audioIsOn={audioIsOn} />
         </div>
         <MeetingParticipants
           showMeetingParticipants={showParticipants}
