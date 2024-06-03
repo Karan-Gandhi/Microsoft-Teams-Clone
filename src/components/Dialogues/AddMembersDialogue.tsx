@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import useDebounce from "../hooks/useDebounce";
-import { useSnackbar } from "../Snackbar";
-import { TeamID } from "../types/Team";
-import User, { UserID } from "../types/User";
-import { addMemberToTeam, getTeamMembers, removeUserFromTeam } from "../utils/TeamUtils";
-import { getUserById, getUserID, searchUserByEmail } from "../utils/UserUtils";
-import DefaultLoader from "./DefaultLoader";
+import useDebounce from "../../hooks/useDebounce";
+import { useSnackbar } from "../../Snackbar";
+import { TeamID } from "../../types/Team";
+import User, { UserID } from "../../types/User";
+import { addMemberToTeam, getTeamMembers, removeUserFromTeam } from "../../utils/TeamUtils";
+import { getUserById, getUserID, searchUserByEmail } from "../../utils/UserUtils";
+import DefaultLoader from "../DefaultLoader";
+import MemberTable from "../MemberTable";
+import PrimaryButton from "../PrimaryButton";
+import SearchListItem from "../SearchListItem";
+import Textfield from "../Textfield";
 import Dialogue from "./Dialogue";
-import MemberTable from "./MemberTable";
-import PrimaryButton from "./PrimaryButton";
-import SearchListItem from "./SearchListItem";
-import Textfield from "./Textfield";
 
 const DEBOUNCE_TIME_INTERVAL = 0.25e3;
 

@@ -5,12 +5,14 @@ import Button from "../components/Button";
 import { useSnackbar } from "../Snackbar";
 import { validate } from "../utils/AuthUtils";
 import { createUserWithEmailAndPassword, userIsLoggedIn } from "../api/Auth";
+import DefaultLoader from "../components/DefaultLoader";
 
 interface SignupRouteProps {}
 
 const SignupRoute: React.FC<SignupRouteProps> = () => {
   const { enqueueSnackbar } = useSnackbar();
 
+  const [isLoading, setLoading] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -31,16 +33,26 @@ const SignupRoute: React.FC<SignupRouteProps> = () => {
       const validationSuccess = validate((errorMessage) => enqueueSnackbar(errorMessage), email, password, name, confirmPassword);
 
       if (validationSuccess) {
+        setLoading(true);
         createUserWithEmailAndPassword(name, email, password)
           .then((status) => setUserLoggedIn(status || false))
           .catch((error) => {
             if (error.message === "Network Error") return enqueueSnackbar("No internet connection");
             enqueueSnackbar(error.message);
-          });
+          })
+          .finally(() => setLoading(false));
       }
     },
     [enqueueSnackbar, email, password, name, confirmPassword]
   );
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-screen">
+        <DefaultLoader />
+      </div>
+    );
+  }
 
   if (userLoggedIn) {
     return <Redirect to="/teams" />;

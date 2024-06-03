@@ -54,3 +54,7 @@ export const getRefreshToken = (user: User): RefreshToken => {
 export const revokeRefreshToken = (token: RefreshToken) => {
   deleteData(FirestoreCollections.REFRESH_TOKENS, token);
 };
+
+export const verifyAccessToken = (token: Token, callback: jwt.VerifyCallback) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string, callback);
+};

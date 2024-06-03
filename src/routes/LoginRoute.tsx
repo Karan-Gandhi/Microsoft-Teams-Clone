@@ -32,15 +32,16 @@ const LoginRoute: React.FC<LoginRouteProps> = () => {
       const validationSuccess = validate((errorMessage) => enqueueSnackbar(errorMessage), email, password);
 
       if (validationSuccess) {
+        setLoading(true);
         loginWithEmailAndPassword(email, password)
           .then((status) => setUserLoggedIn(status))
           .catch((error) => {
             if (error.message === "Network Error") {
-              // eslint-disable-next-line indent
               return enqueueSnackbar("No internet connection");
             }
             enqueueSnackbar("Invalid email or password");
-          });
+          })
+          .finally(() => setLoading(false));
       }
     },
     [enqueueSnackbar, email, password]
